@@ -1,0 +1,35 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+inst/doc
+
+*pdf
+*xlsx
+
+# R package .gitignore
+
+# R specific
+*.Rproj.user/
+*.Rhistory
+.RData
+.Rproj
+
+# CRAN checks
+/cran/*
+
+# Ignore package builds
+/*.tar.gz
+/*.Rcheck/
+
+# Ignore package install
+/inst/doc/
+/inst/example/
+/inst/shiny/
+/inst/tests/
+
+# Ignore cache files
+/cache/
+*.utf8.md
+

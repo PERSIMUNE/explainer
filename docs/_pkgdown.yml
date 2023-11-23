@@ -1,0 +1,24 @@
+# File: _pkgdown.yml
+
+home:
+  title: "explaineR package"
+  description: >
+    Welcome to the documentation for the explainer package! This package provides comprehensive access to advanced machine learning methods in the R environment. It enables the interpretation of complex models through Shapley analysis, multi-measure model evaluation, model fairness, etc. Additionally, it offers enhanced visualizations with interactive elements.
+
+  # Override the README header
+  strip_header: true
+
+  # Dev badges
+  dev_badges: true
+
+  # Custom sidebar structure
+  sidebar:
+    structure: [toc, authors, custom, links, license, community, citation, dev]
+    components:
+
+      links:
+        title: "External Links"
+        text: |
+          - [PERSIMUNE](https://www.persimune.dk/)
+
+

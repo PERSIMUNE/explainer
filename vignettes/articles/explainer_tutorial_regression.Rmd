@@ -1,0 +1,109 @@
+---
+title: "regression model interpretation using explainer package"
+author: "Ramtin Zargari Marandi"
+# output: html_document
+output: 
+  html_document:
+    bibliography: references.bib
+    citation_package: natbib
+---
+
+```{r}
+Sys.setenv(LANG = "en") # change R language to English!
+RNGkind("L'Ecuyer-CMRG") # change to L'Ecuyer-CMRG in case it uses default "Mersenne-Twister"
+
+library("explainer")
+# library("magrittr")
+# Set seed for reproducibility
+seed <- 246
+set.seed(seed)
+
+# Set TRUE if you have a dataset; if not, set it to FALSE
+data_availablity <- FALSE
+
+# If we have a dataset to use here...
+if (data_availablity == FALSE) {
+  # Load the BreastCancer data from the mlbench package
+  data("BreastCancer", package = "mlbench")
+
+  # Keep only the predictor variables and outcome
+  mydata <- BreastCancer[, -1] # 1 is ID
+
+  # Remove rows with missing values
+  mydata <- na.omit(mydata)
+
+  # Create a vector of sex categories
+  sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+
+  # Create a vector of age categories (instead of a continuous variable in the previous code)
+  mydata$age <- sample(seq(18, 60), size = nrow(mydata), replace = TRUE)
+
+  # Add a sex column to the mydata data frame (for fairness analysis)
+  mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+
+  mydata$Class <- NULL
+  mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
+  # Keep the target column as "Class"
+  target_col <- "Cl.thickness"
+}
+
+# Create a regression task
+maintask <- mlr3::TaskRegr$new(id = "my_regression_task",
+                               backend = mydata,
+                               target = target_col)
+
+# Create a train-test split
+set.seed(seed)
+splits <- mlr3::partition(maintask)
+
+# Add a learner (machine learning model base)
+# library("mlr3learners")
+library("mlr3extralearners")
+
+# mlr_learners$get("regr.randomForest")
+# Here we use random forest for example (you can use any other available model)
+mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response") # , id = "mymodel"
+
+# Train the model
+mylrn$train(maintask, splits$train)
+
+# Make predictions on new data
+reg_model_outputs <- mylrn$predict(maintask, splits$test)
+head(data.table::as.data.table(reg_model_outputs))
+
+```
+
+```{r}
+# enhanced SHAP plot
+SHAP_output <- eSHAP_plot_reg(task = maintask,
+           trained_model = mylrn,
+           splits = splits,
+           sample.size = 30,
+           seed = seed,
+           subset = .8)
+
+# display the SHAP plot
+SHAP_output[[1]]
+```
+
+### regression model evaluation
+
+```{r}
+# Regression model evaluation
+regressmdl_eval_results <- regressmdl_eval(task = maintask,
+           trained_model = mylrn,
+           splits = splits)
+
+# display the results
+regressmdl_eval_results
+```
+
+Mean Squared Error (MSE): Measures the average of the squared differences between predicted and actual values. Smaller MSE values indicate better model performance, but it is sensitive to outliers.
+
+Root Mean Squared Error (RMSE): The square root of MSE, providing a measure of the average absolute errors. Lower RMSE values signify better model accuracy.
+
+Mean Absolute Error (MAE): Calculates the average of the absolute differences between predicted and actual values. MAE is less sensitive to outliers than MSE and RMSE.
+
+R-squared (R²): Represents the proportion of the variance in the target variable that the model explains. R² ranges from 0 to 1, where higher values indicate a better fit to the data.
+
+When evaluating a regression model, aim to minimize MSE, RMSE, and MAE while maximizing R-squared to achieve the most accurate and precise predictions. A combination of these metrics provides a comprehensive assessment of the model's performance and suitability for the given task.

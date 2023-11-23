@@ -1,0 +1,39 @@
+Package: explainer
+Title: Machine Learning Model Explainer
+Version: 1.0.0
+Authors@R: 
+    person("Ramtin", "Zargari Marandi", , "ramtin.zargari.marandi@regionh.dk", role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0001-9233-1656"))
+Description: It enables detailed interpretation of complex classification and regression models through Shapley analysis including data-driven characterization of subgroups of individuals. Furthermore, it facilitates multi-measure model evaluation, model fairness, and decision curve analysis. Additionally, it offers enhanced visualizations with interactive elements.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports:
+  cvms,
+  data.table,
+  dplyr,
+  egg,
+  ggplot2,
+  ggpmisc,
+  ggpubr,
+  magrittr,
+  plotly,
+  tibble,
+  tidyr,
+  writexl
+Suggests:
+  cowplot,
+  mlr3,
+  mlr3learners,
+  knitr,
+  broom,
+  iml,
+  forcats,
+  mlr3viz,
+  plotROC,
+  psych,
+  reshape2
+
+
+
