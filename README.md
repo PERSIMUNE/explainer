@@ -38,7 +38,7 @@ library(explainer)
 
 ## Documentation
 
-- [Official Documentation](./index.html)
+- [Official Documentation](docs/index.html)
 
 
 ## Contributing
