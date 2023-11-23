@@ -38,7 +38,7 @@ library(explainer)
 
 ## Documentation
 
-- [Official Documentation](docs/index.html)
+- [Official Documentation](https://persimune.github.io/explainer/)
 
 
 ## Contributing
