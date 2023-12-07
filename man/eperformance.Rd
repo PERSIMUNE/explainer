@@ -35,7 +35,7 @@ data_availablity <- FALSE
 # if we have a dataset to use here
 
 
-if (data_availablity==FALSE){
+if (data_availablity == FALSE){
   # if you don't have a dataset you can try the following publicly available dataset
   # load the BreastCancer data from the mlbench package
   data("BreastCancer", package = "mlbench")
@@ -53,30 +53,38 @@ if (data_availablity==FALSE){
   mydata <- na.omit(mydata)
 
   # create a vector of sex categories
-  sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+  sex <- sample(
+    c("Male", "Female"),
+    size = nrow(mydata),
+    replace = TRUE
+  )
 
   # create a vector of sex categories
-  mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+  mydata$age <- as.numeric(sample(
+    seq(18,60),
+    size = nrow(mydata),
+    replace = TRUE
+  ))
 
   # add a sex column to the mydata data frame (for fairness analysis)
   mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 }
 
 # create a classification task
-maintask <- mlr3::TaskClassif$new(id = "my_classification_task",
-                                  backend = mydata,
-                                  target = target_col,
-                                  positive = positive_class)
+maintask <- mlr3::TaskClassif$new(
+  id = "my_classification_task",
+  backend = mydata,
+  target = target_col,
+  positive = positive_class
+)
 
 # create a train-test split
 set.seed(seed)
 splits <- mlr3::partition(maintask)
 
 # add a learner (machine learning model base)
-# library("mlr3learners")
-library("mlr3extralearners")
 
-# mlr_learners$get("classif.randomForest")
+mlr3extralearners::mlr_learners$get("classif.randomForest")
 # here we use random forest for example (you can use any other available model)
 mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob") # , id = "mymodel"
 

@@ -50,14 +50,25 @@ mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 mydata$Class <- NULL
 mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
 target_col <- "Cl.thickness"
-maintask <- mlr3::TaskRegr$new(id = "my_regression_task",backend = mydata,target = target_col)
+maintask <- mlr3::TaskRegr$new(
+  id = "my_regression_task",
+  backend = mydata,
+  target = target_col
+)
 set.seed(seed)
 splits <- mlr3::partition(maintask)
-library("mlr3extralearners")
+mlr3extralearners::mlr_learners$get("classif.randomForest")
 mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response")
 mylrn$train(maintask, splits$train)
 reg_model_outputs <- mylrn$predict(maintask, splits$test)
-SHAP_output <- eSHAP_plot_reg(task = maintask, trained_model = mylrn, splits = splits, sample.size = 30, seed = seed, subset = 0.8)
+SHAP_output <- eSHAP_plot_reg(
+  task = maintask,
+  trained_model = mylrn,
+  splits = splits,
+  sample.size = 30,
+  seed = seed,
+  subset = 0.8
+)
 myplot <- SHAP_output[[1]]
 }
 }

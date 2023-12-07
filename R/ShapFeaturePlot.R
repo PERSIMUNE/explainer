@@ -20,27 +20,59 @@
 #' positive_class <- "malignant"
 #' mydata <- BreastCancer[, -1]
 #' mydata <- na.omit(mydata)
-#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-#' mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
-#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
-#' maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+#' sex <- sample(
+#'   c("Male", "Female"),
+#'   size = nrow(mydata),
+#'   replace = TRUE
+#' )
+#' mydata$age <- as.numeric(sample(
+#'   seq(18,60),
+#'   size = nrow(mydata),
+#'   replace = TRUE
+#' ))
+#' mydata$sex <- factor(
+#'   sex,
+#'   levels = c("Male", "Female"),
+#'   labels = c(1, 0)
+#' )
+#' maintask <- mlr3::TaskClassif$new(
+#'   id = "my_classification_task",
+#'   backend = mydata,
+#'   target = target_col,
+#'   positive = positive_class
+#' )
 #' splits <- mlr3::partition(maintask)
-#' library("mlr3extralearners")
-#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+#' mlr3extralearners::mlr_learners$get("classif.randomForest")
+#' mylrn <- mlr3::lrn(
+#'   "classif.randomForest",
+#'   predict_type = "prob"
+#' )
 #' mylrn$train(maintask, splits$train)
-#' SHAP_output <- eSHAP_plot(task = maintask, trained_model = mylrn, splits = splits, sample.size = 30, seed = seed, subset = 0.8)
+#' SHAP_output <- eSHAP_plot(
+#'   task = maintask,
+#'   trained_model = mylrn,
+#'   splits = splits,
+#'   sample.size = 30,
+#'   seed = seed,
+#'   subset = 0.8
+#' )
 #' shap_Mean_long <- SHAP_output[[3]]
 #' myplot <- ShapFeaturePlot(shap_Mean_long)
 #' }
-ShapFeaturePlot <- function(shap_Mean_long) {
+ShapFeaturePlot <- function(shap_Mean_long){
+  # utils::globalVariables(c("f_val", "Phi", "correct_prediction"))
+  f_val <- NULL
+  Phi <- NULL
+  correct_prediction <- NULL
   SHAP_vs_FVAL_plt <- ggplot(shap_Mean_long, aes(x = f_val, y = Phi)) +
     geom_point(aes(shape = correct_prediction), size = 1, alpha = 0.5) +
     stat_smooth(method = "lm", formula = y ~ x) +
-    xlab("normalized feature values [0 1]") +
-    ylab("SHAP values") +
+    ggplot2::xlab("normalized feature values [0 1]") +
+    ggplot2::ylab("SHAP values") +
     facet_wrap(~ feature, scales = "free_y") +
-    egg::theme_article()
+    egg::theme_article() # base_size = 8
 
   SHAP_vs_FVAL_plt <- ggplotly(SHAP_vs_FVAL_plt)
+  # display the plot
   return(SHAP_vs_FVAL_plt)
 }

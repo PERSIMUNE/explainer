@@ -31,17 +31,39 @@ target_col <- "Class"
 positive_class <- "malignant"
 mydata <- BreastCancer[, -1]
 mydata <- na.omit(mydata)
-sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
-mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
-maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+sex <- sample(
+  c("Male", "Female"),
+  size = nrow(mydata),
+  replace = TRUE
+)
+mydata$age <- as.numeric(sample(
+  seq(18,60),
+  size = nrow(mydata),
+  replace = TRUE
+))
+mydata$sex <- factor(
+  sex,
+  levels = c("Male", "Female"),
+  labels = c(1, 0)
+)
+maintask <- mlr3::TaskClassif$new(
+  id = "my_classification_task",
+  backend = mydata,
+  target = target_col,
+  positive = positive_class
+)
 splits <- mlr3::partition(maintask)
-library("mlr3extralearners")
-mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+mlr3extralearners::mlr_learners$get("classif.randomForest")
+mylrn <- mlr3::lrn(
+  "classif.randomForest",
+  predict_type = "prob"
+)
 mylrn$train(maintask, splits$train)
-myplot <- eDecisionCurve(task = maintask,
-              trained_model = mylrn,
-              splits = splits,
-              seed = seed)
+myplot <- eDecisionCurve(
+  task = maintask,
+  trained_model = mylrn,
+  splits = splits,
+  seed = seed
+)
 }
 }

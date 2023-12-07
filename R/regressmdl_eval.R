@@ -19,19 +19,42 @@
 #' data("BreastCancer", package = "mlbench")
 #' mydata <- BreastCancer[, -1]
 #' mydata <- na.omit(mydata)
-#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-#' mydata$age <- sample(seq(18, 60), size = nrow(mydata), replace = TRUE)
-#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' sex <- sample(
+#'   c("Male", "Female"),
+#'   size = nrow(mydata),
+#'   replace = TRUE
+#' )
+#' mydata$age <- sample(
+#'   seq(18, 60),
+#'   size = nrow(mydata),
+#'   replace = TRUE
+#' )
+#' mydata$sex <- factor(
+#'   sex,
+#'   levels = c("Male", "Female"),
+#'   labels = c(1, 0)
+#' )
 #' mydata$Class <- NULL
 #' mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
 #' target_col <- "Cl.thickness"
-#' maintask <- mlr3::TaskRegr$new(id = "my_regression_task",backend = mydata,target = target_col)
+#' maintask <- mlr3::TaskRegr$new(
+#'   id = "my_regression_task",
+#'   backend = mydata,
+#'   target = target_col
+#' )
 #' set.seed(seed)
 #' splits <- mlr3::partition(maintask)
-#' library("mlr3extralearners")
-#' mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response")
+#' mlr3extralearners::mlr_learners$get("classif.randomForest")
+#' mylrn <- mlr3::lrn(
+#'   "regr.randomForest",
+#'   predict_type = "response"
+#' )
 #' mylrn$train(maintask, splits$train)
-#' regressmdl_eval_results <- regressmdl_eval(task = maintask, trained_model = mylrn, splits = splits)
+#' regressmdl_eval_results <- regressmdl_eval(
+#'   task = maintask,
+#'   trained_model = mylrn,
+#'   splits = splits
+#' )
 #' }
 #'
 #' @references
