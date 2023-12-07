@@ -11,8 +11,24 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # To see detailed examples, refer to the example tutorials in the package vignettes.
+#' \donttest{
+#' library("explainer")
+#' seed <- 246
+#' set.seed(seed)
+#' data("BreastCancer", package = "mlbench")
+#' target_col <- "Class"
+#' positive_class <- "malignant"
+#' mydata <- BreastCancer[, -1]
+#' mydata <- na.omit(mydata)
+#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#' mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+#' splits <- mlr3::partition(maintask)
+#' library("mlr3extralearners")
+#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+#' mylrn$train(maintask, splits$train)
+#' myplot <- eCM_plot(task = maintask, trained_model = mylrn, splits = splits)
 #' }
 eCM_plot <- function(task,
                      trained_model,
@@ -26,50 +42,15 @@ eCM_plot <- function(task,
   # plot the confusion matrix for the test set
   featset_total_test <- mydata[splits$test,]
   featset_total_test <- as.data.frame(featset_total_test)
-  pred_results <- trained_model$predict(task,splits$test)
+  pred_results <- trained_model$predict(task, splits$test)
   # plot confusion matrix
-  d_binomial <- tibble("Truth" = featset_total_test[,task$target_names],
+  d_binomial <- tibble("Truth" = featset_total_test[, task$target_names],
                        "Prediction" = pred_results$response)
   basic_table <- table(d_binomial)
   cfm <- broom::tidy(basic_table)
-  CM_plt_test <- cvms::plot_confusion_matrix(cfm,target_col = "Truth",
-                                       prediction_col = "Prediction",
-                                       counts_col = "n", palette = palette,
-                                       # font_counts = font(size = 2),
-                                       # font_normalized = font(size = 2),
-                                       # font_row_percentages = font(size = 2),
-                                       # font_col_percentages = font(size = 2),
-                                       theme_fn = ggplot2::theme_minimal,
-                                       add_sums = add_sums,
-                                       sums_settings = cvms::sum_tile_settings(
-                                         palette = "Oranges",
-                                         label = "Total",
-                                         tc_tile_border_color = "black"
-                                       ))
-  CM_plt_test[["labels"]][["x"]] <- 'Truth (observation)'
-  CM_plt_test[["labels"]][["y"]] <- 'Prediction (model output)'
-  CM_plt_test[["theme"]][["text"]][["size"]] <- 9
-  CM_plt_test[["theme"]][["axis.text"]][["size"]] <- 9
-  CM_plt_test[["theme"]][["text"]][["family"]] <- 'Helvetica'
-
-
-
-  # plot the confusion matrix for the train set
-  featset_total_train <- mydata[splits$train,]
-  featset_total_train <- as.data.frame(featset_total_train)
-  pred_results <- trained_model$predict(task,splits$train)
-  # plot confusion matrix
-  d_binomial <- tibble("Truth" = featset_total_train[,task$target_names],
-                       "Prediction" = pred_results$response)
-  basic_table <- table(d_binomial)
-  cfm <- broom::tidy(basic_table)
-  CM_plt_train <- cvms::plot_confusion_matrix(cfm,target_col = "Truth",
+  CM_plt_test <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
                                              prediction_col = "Prediction",
                                              counts_col = "n", palette = palette,
-                                             # font_counts = font(size = 2),
-                                             # font_normalized = font(size = 2),
-                                             # font_row_percentages = font(size = 2),
-                                             # font_col_percentages = font(size = 2),
                                              theme_fn = ggplot2::theme_minimal,
                                              add_sums = add_sums,
                                              sums_settings = cvms::sum_tile_settings(
@@ -77,6 +58,31 @@ eCM_plot <- function(task,
                                                label = "Total",
                                                tc_tile_border_color = "black"
                                              ))
+  CM_plt_test[["labels"]][["x"]] <- 'Truth (observation)'
+  CM_plt_test[["labels"]][["y"]] <- 'Prediction (model output)'
+  CM_plt_test[["theme"]][["text"]][["size"]] <- 9
+  CM_plt_test[["theme"]][["axis.text"]][["size"]] <- 9
+  CM_plt_test[["theme"]][["text"]][["family"]] <- 'Helvetica'
+
+  # plot the confusion matrix for the train set
+  featset_total_train <- mydata[splits$train,]
+  featset_total_train <- as.data.frame(featset_total_train)
+  pred_results <- trained_model$predict(task, splits$train)
+  # plot confusion matrix
+  d_binomial <- tibble("Truth" = featset_total_train[, task$target_names],
+                       "Prediction" = pred_results$response)
+  basic_table <- table(d_binomial)
+  cfm <- broom::tidy(basic_table)
+  CM_plt_train <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
+                                              prediction_col = "Prediction",
+                                              counts_col = "n", palette = palette,
+                                              theme_fn = ggplot2::theme_minimal,
+                                              add_sums = add_sums,
+                                              sums_settings = cvms::sum_tile_settings(
+                                                palette = "Oranges",
+                                                label = "Total",
+                                                tc_tile_border_color = "black"
+                                              ))
   CM_plt_train[["labels"]][["x"]] <- 'Truth (observation)'
   CM_plt_train[["labels"]][["y"]] <- 'Prediction (model output)'
   CM_plt_train[["theme"]][["text"]][["size"]] <- 9
@@ -84,11 +90,9 @@ eCM_plot <- function(task,
   CM_plt_train[["theme"]][["text"]][["family"]] <- 'Helvetica'
 
   CM_plt_both <- egg::ggarrange(CM_plt_train,
-                               CM_plt_test,
-                           labels = c("train set","test set"),
-                           # label.args = list(gp = grid::gpar(font = 1, cex = 0.5)),
-                           nrow = 1,
-                           ncol=2)
-  # list(CM_plt_test,CM_plt_train)
+                                CM_plt_test,
+                                labels = c("train set", "test set"),
+                                nrow = 1,
+                                ncol = 2)
   return(CM_plt_both)
 }

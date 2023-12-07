@@ -16,7 +16,16 @@ Normalized vector
 Scale the data to the range of 0 to 1. It uses the Hampel filter to adjust outliers, followed by min-max normalization.
 }
 \examples{
-\dontrun{
-range01(seq(-10:1000))
+\donttest{
+normalized_vector <- range01(seq(-10:1000))
 }
+
 }
+\references{
+Pearson, R. K. (1999). “Data cleaning for dynamic modeling and control”. European Control Conference, ETH Zurich, Switzerland.
+}
+\seealso{
+\code{\link[=eSHAP_plot]{eSHAP_plot()}}
+}
+\concept{data preprocessing}
+\keyword{internal}

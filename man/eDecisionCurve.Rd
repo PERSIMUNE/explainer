@@ -22,7 +22,26 @@ An interactive decision curve plot
 Decision curve analysis is a statistical method used in medical research to evaluate and compare the clinical utility of different diagnostic or predictive models. It assesses the net benefit of a model across a range of decision thresholds, aiding in the selection of the most informative and practical approach for guiding clinical decisions.
 }
 \examples{
-\dontrun{
-# To see detailed examples, refer to the example tutorials in the package vignettes.
+\donttest{
+library("explainer")
+seed <- 246
+set.seed(seed)
+data("BreastCancer", package = "mlbench")
+target_col <- "Class"
+positive_class <- "malignant"
+mydata <- BreastCancer[, -1]
+mydata <- na.omit(mydata)
+sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+splits <- mlr3::partition(maintask)
+library("mlr3extralearners")
+mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+mylrn$train(maintask, splits$train)
+myplot <- eDecisionCurve(task = maintask,
+              trained_model = mylrn,
+              splits = splits,
+              seed = seed)
 }
 }

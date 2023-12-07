@@ -2,7 +2,7 @@
 % Please edit documentation in R/SHAPclust.R
 \name{SHAPclust}
 \alias{SHAPclust}
-\title{clustered SHAP summary plot}
+\title{Clustered SHAP Summary Plot}
 \usage{
 SHAPclust(
   task,
@@ -20,7 +20,7 @@ SHAPclust(
 
 \item{trained_model}{an mlr3 trained learner object}
 
-\item{splits}{an split object from mlr3 that defines train and test sets}
+\item{splits}{an mlr3 object defining data splits for train and test sets}
 
 \item{shap_Mean_wide}{the data frame of SHAP values in wide format from eSHAP_plot.R}
 
@@ -33,10 +33,27 @@ SHAPclust(
 \item{subset}{what percentage of the instances to use from 0 to 1 where 1 means all}
 }
 \description{
-shap values are used to cluster data samples using Kmeans method that is to identify subgroups of individuals with specific patterns of feature contributions.
+SHAP values are used to cluster data samples using the Kmeans method to identify subgroups of individuals with specific patterns of feature contributions.
 }
 \examples{
-\dontrun{
-# To see detailed examples, refer to the example tutorials in the package vignettes.
+\donttest{
+library("explainer")
+seed <- 246
+set.seed(seed)
+data("BreastCancer", package = "mlbench")
+target_col <- "Class"
+positive_class <- "malignant"
+mydata <- BreastCancer[, -1]
+mydata <- na.omit(mydata)
+sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+splits <- mlr3::partition(maintask)
+library("mlr3extralearners")
+mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+mylrn$train(maintask, splits$train)
+SHAP_output <- eSHAP_plot(task = maintask, trained_model = mylrn, splits = splits, sample.size = 30, seed = seed, subset = 0.8)
+SHAP_plot_clusters <- SHAPclust(task = maintask, trained_model = mylrn, splits = splits, shap_Mean_wide = shap_Mean_wide, shap_Mean_long = shap_Mean_long, num_of_clusters = 4, seed = seed, subset = 0.8)
 }
 }

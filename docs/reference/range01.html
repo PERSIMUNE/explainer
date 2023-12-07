@@ -38,7 +38,13 @@
       <a href="../articles/explainer_tutorial_regression.html">regression model interpretation using explainer package</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/PERSIMUNE/explainer/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -48,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Data Scale to 0 and 1</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/PERSIMUNE/explainer/blob/HEAD/R/range01.R" class="external-link"><code>R/range01.R</code></a></small>
     <div class="hidden name"><code>range01.Rd</code></div>
     </div>
 
@@ -72,12 +78,21 @@
 
 <p>Normalized vector</p>
     </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Pearson, R. K. (1999). “Data cleaning for dynamic modeling and control”. European Control Conference, ETH Zurich, Switzerland.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="eSHAP_plot.html">eSHAP_plot()</a></code></p></div>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">range01</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">normalized_vector</span> <span class="op">&lt;-</span> <span class="fu">range01</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

@@ -16,8 +16,25 @@
 #' @return Model performance metrics for user-specified subgroups using Precision-Recall and ROC curves
 #'
 #' @examples
-#' \dontrun{
-#' # To see detailed examples, refer to the example tutorials in the package vignettes.
+#' \donttest{
+#' library("explainer")
+#' seed <- 246
+#' set.seed(seed)
+#' data("BreastCancer", package = "mlbench")
+#' target_col <- "Class"
+#' positive_class <- "malignant"
+#' mydata <- BreastCancer[, -1]
+#' mydata <- na.omit(mydata)
+#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#' mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+#' splits <- mlr3::partition(maintask)
+#' library("mlr3extralearners")
+#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+#' mylrn$train(maintask, splits$train)
+#' # sex is chosen for fairness analysis
+#' Fairness_results <- eFairness(task = maintask, trained_model = mylrn, splits = splits, target_variable = "sex", var_levels = c("Male", "Female"))
 #' }
 eFairness <- function(task,
                       trained_model,
@@ -25,55 +42,48 @@ eFairness <- function(task,
                       target_variable,
                       var_levels) {
 
-  # utils::globalVariables(c("truth", "pos_class_prob", "subgroups"))
   truth <- NULL
   pos_class_prob <- NULL
   subgroups <- NULL
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
 
-  # plot the confusion matrix for the test set
   featset_total <- mydata[splits$train,]
   featset_total <- as.data.frame(featset_total)
 
-  var_levels_codes <- levels(featset_total[,target_variable])
-  meas = c("classif.auc",
-           "classif.bacc",
-           "classif.mcc",
-           "classif.bbrier",
-           "classif.ppv",
-           "classif.npv",
-           "classif.specificity",
-           "classif.sensitivity",
-           "classif.prauc") #mlr3
+  var_levels_codes <- levels(featset_total[, target_variable])
+  meas <- c("classif.auc",
+            "classif.bacc",
+            "classif.mcc",
+            "classif.bbrier",
+            "classif.ppv",
+            "classif.npv",
+            "classif.specificity",
+            "classif.sensitivity",
+            "classif.prauc") #mlr3
 
-
-  # extract prediction results from mlr3 object and convert it to data.table as it is not a data.table
-  pred_results <- trained_model$predict(task,splits$train)
+  pred_results <- trained_model$predict(task, splits$train)
   pred_results <- as.data.table(pred_results)
-  set(pred_results, j = "subgroups" , value = featset_total[,target_variable])
-  pred_results$subgroups <- factor(pred_results$subgroups, levels = var_levels_codes,labels = var_levels)
-
+  set(pred_results, j = "subgroups", value = featset_total[, target_variable])
+  pred_results$subgroups <- factor(pred_results$subgroups, levels = var_levels_codes, labels = var_levels)
 
   colnames(pred_results)[4] <- "pos_class_prob"
 
-  # Plot ROC curves
   ROC_plt_dev <- ggplot(data = pred_results, aes(d = truth, m = pos_class_prob, color = subgroups)) +
     plotROC::geom_roc() +
     plotROC::style_roc()
 
-  # for test set
   featset_total_test <- mydata[splits$test,]
   featset_total_test <- as.data.frame(featset_total_test)
-  # extract prediction results from mlr3 object and convert it to data.table as it is not a data.table
-  pred_results <- trained_model$predict(task,splits$test)
+
+  pred_results <- trained_model$predict(task, splits$test)
   pred_results <- as.data.table(pred_results)
-  var_levels_codes <- levels(featset_total_test[,target_variable])
-  set(pred_results, j = "subgroups" , value = featset_total_test[,target_variable])
-  pred_results$subgroups <- factor(pred_results$subgroups, levels = var_levels_codes,labels = var_levels)
+  var_levels_codes <- levels(featset_total_test[, target_variable])
+  set(pred_results, j = "subgroups", value = featset_total_test[, target_variable])
+  pred_results$subgroups <- factor(pred_results$subgroups, levels = var_levels_codes, labels = var_levels)
 
   colnames(pred_results)[4] <- "pos_class_prob"
-  # Plot ROC curves
+
   ROC_plt_test <- ggplot(data = pred_results, aes(d = truth, m = pos_class_prob, color = subgroups)) +
     plotROC::geom_roc() +
     plotROC::style_roc()
@@ -86,30 +96,29 @@ eFairness <- function(task,
                                 legend = "right")
 
   prf_dev_list <- list()
-  for (i in 1:length(var_levels_codes)){
-    idx <- which(featset_total[,target_variable] == var_levels_codes[i])
-    pred_results <- trained_model$predict(task,splits$train[idx])
+  for (i in 1:length(var_levels_codes)) {
+    idx <- which(featset_total[, target_variable] == var_levels_codes[i])
+    pred_results <- trained_model$predict(task, splits$train[idx])
     prf_dev <- as.data.frame(pred_results$score(measures = mlr3::msrs(meas)))
-    prf_dev$`pred_results$score(measures = mlr3::msrs(meas))` <- round(prf_dev$`pred_results$score(measures = mlr3::msrs(meas))`,2)
-    rownames(prf_dev) <- gsub("classif.","",rownames(prf_dev))
+    prf_dev$`pred_results$score(measures = mlr3::msrs(meas))` <- round(prf_dev$`pred_results$score(measures = mlr3::msrs(meas))`, 2)
+    rownames(prf_dev) <- gsub("classif.", "", rownames(prf_dev))
     prf_dev_list[[i]] <- prf_dev
     colnames(prf_dev_list[[i]])[1] <- var_levels[i]
   }
-  # combine the lists into one data frame for performance metrics
+
   prf_dev_df <- as.data.frame(do.call(cbind, prf_dev_list))
 
   prf_test_list <- list()
-  for (i in 1:length(var_levels_codes)){
-    idx <- which(featset_total_test[,target_variable] == var_levels_codes[i])
-    pred_results <- trained_model$predict(task,splits$test[idx])
+  for (i in 1:length(var_levels_codes)) {
+    idx <- which(featset_total_test[, target_variable] == var_levels_codes[i])
+    pred_results <- trained_model$predict(task, splits$test[idx])
     prf_test <- as.data.frame(pred_results$score(measures = mlr3::msrs(meas)))
-    prf_test$`pred_results$score(measures = mlr3::msrs(meas))` <- round(prf_test$`pred_results$score(measures = mlr3::msrs(meas))`,2)
-    rownames(prf_test) <- gsub("classif.","",rownames(prf_test))
+    prf_test$`pred_results$score(measures = mlr3::msrs(meas))` <- round(prf_test$`pred_results$score(measures = mlr3::msrs(meas))`, 2)
+    rownames(prf_test) <- gsub("classif.", "", rownames(prf_test))
     prf_test_list[[i]] <- prf_test
     colnames(prf_test_list[[i]])[1] <- var_levels[i]
   }
 
-  # combine the lists into one data frame for performance metrics
   prf_test_df <- as.data.frame(do.call(cbind, prf_test_list))
 
   return(list(all_plts, prf_dev_df, prf_test_df))

@@ -1,9 +1,9 @@
-#' @title clustered SHAP summary plot
-#' @description shap values are used to cluster data samples using Kmeans method that is to identify subgroups of individuals with specific patterns of feature contributions.
+#' @title Clustered SHAP Summary Plot
+#' @description SHAP values are used to cluster data samples using the Kmeans method to identify subgroups of individuals with specific patterns of feature contributions.
 #'
 #' @param task an mlr3 task for binary classification
 #' @param trained_model an mlr3 trained learner object
-#' @param splits an split object from mlr3 that defines train and test sets
+#' @param splits an mlr3 object defining data splits for train and test sets
 #' @param shap_Mean_wide the data frame of SHAP values in wide format from eSHAP_plot.R
 #' @param shap_Mean_long the data frame of SHAP values in long format from eSHAP_plot.R
 #' @param num_of_clusters number of clusters to make based on SHAP values, default: 4
@@ -24,8 +24,25 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # To see detailed examples, refer to the example tutorials in the package vignettes.
+#' \donttest{
+#' library("explainer")
+#' seed <- 246
+#' set.seed(seed)
+#' data("BreastCancer", package = "mlbench")
+#' target_col <- "Class"
+#' positive_class <- "malignant"
+#' mydata <- BreastCancer[, -1]
+#' mydata <- na.omit(mydata)
+#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#' mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' maintask <- mlr3::TaskClassif$new(id = "my_classification_task",backend = mydata,target = target_col,positive = positive_class)
+#' splits <- mlr3::partition(maintask)
+#' library("mlr3extralearners")
+#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob")
+#' mylrn$train(maintask, splits$train)
+#' SHAP_output <- eSHAP_plot(task = maintask, trained_model = mylrn, splits = splits, sample.size = 30, seed = seed, subset = 0.8)
+#' SHAP_plot_clusters <- SHAPclust(task = maintask, trained_model = mylrn, splits = splits, shap_Mean_wide = shap_Mean_wide, shap_Mean_long = shap_Mean_long, num_of_clusters = 4, seed = seed, subset = 0.8)
 #' }
 SHAPclust <- function(task,
                       trained_model,
@@ -99,9 +116,9 @@ SHAPclust <- function(task,
 
   # Melt the data.table from wide to long format
   dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
-                  measure.vars = variables_for_long_format,
-                  variable.name = "variable",
-                  value.name = "value")
+                              measure.vars = variables_for_long_format,
+                              variable.name = "variable",
+                              value.name = "value")
   dt_long$fval <- NA
   dt_long_vars <- as.character(dt_long$variable)
   for (i in 1:nrow(dt_long)){

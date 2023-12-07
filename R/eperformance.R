@@ -17,187 +17,242 @@
 #' @return ROC and Precision-Recall curves with threshold information
 #'
 #' @examples
-#' \dontrun{
-#' # To see detailed examples, refer to the example tutorials in the package vignettes.
+#' \donttest{
+#' Sys.setenv(LANG = "en") # change R language to English!
+#' RNGkind("L'Ecuyer-CMRG") # change to L'Ecuyer-CMRG in case it uses default "Mersenne-Twister"
+#'
+#' library("explainer")
+#' # set seed for reproducibility
+#' seed <- 246
+#' set.seed(seed)
+#'
+#' # set TRUE if you have dataset if not set it to FALSE
+#' data_availablity <- FALSE
+#'
+#' # if we have a dataset to use here
+#'
+#'
+#' if (data_availablity==FALSE){
+#'   # if you don't have a dataset you can try the following publicly available dataset
+#'   # load the BreastCancer data from the mlbench package
+#'   data("BreastCancer", package = "mlbench")
+#'
+#'   # keep the target column as "Class"
+#'   target_col <- "Class"
+#'
+#'   # change the positive class to "malignant"
+#'   positive_class <- "malignant"
+#'
+#'   # keep only the predictor variables and outcome
+#'   mydata <- BreastCancer[, -1] # 1 is ID
+#'
+#'   # remove rows with missing values
+#'   mydata <- na.omit(mydata)
+#'
+#'   # create a vector of sex categories
+#'   sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#'
+#'   # create a vector of sex categories
+#'   mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+#'
+#'   # add a sex column to the mydata data frame (for fairness analysis)
+#'   mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 #' }
-
+#'
+#' # create a classification task
+#' maintask <- mlr3::TaskClassif$new(id = "my_classification_task",
+#'                                   backend = mydata,
+#'                                   target = target_col,
+#'                                   positive = positive_class)
+#'
+#' # create a train-test split
+#' set.seed(seed)
+#' splits <- mlr3::partition(maintask)
+#'
+#' # add a learner (machine learning model base)
+#' # library("mlr3learners")
+#' library("mlr3extralearners")
+#'
+#' # mlr_learners$get("classif.randomForest")
+#' # here we use random forest for example (you can use any other available model)
+#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob") # , id = "mymodel"
+#'
+#' # train the model
+#' mylrn$train(maintask, splits$train)
+#'
+#' # make predictions on new data
+#' mylrn$predict(maintask, splits$test)
+#' eperformance(task = maintask, trained_model = mylrn, splits = splits)
+#' }
 eperformance <- function(task,
                          trained_model,
                          splits) {
-  # utils::globalVariables(c("fpr", "tpr", "threshold", "x", "y", "scale_x_continuous", "scale_y_continuous", "ppv"))
   fpr <- NULL
   tpr <- NULL
   threshold <- NULL
   x <- NULL
   y <- NULL
   ppv <- NULL
-  # library(ggplot2)
+
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
 
-  # plot the confusion matrix for the dev set
   featset_total <- mydata[splits$train,]
   featset_total <- as.data.frame(featset_total)
-  # extract prediction results from mlr3 object and convert it to data.table as it is not a data.table
-  pred_results <- trained_model$predict(task,splits$train)
+
+  pred_results <- trained_model$predict(task, splits$train)
   pred_results_df <- data.table::as.data.table(pred_results)
   pred_results_df <- as.data.frame(pred_results_df)
-  truth <- featset_total[,task$target_names]
+  truth <- featset_total[, task$target_names]
   predicted_labels_dev <- pred_results$response
   PosClass <- task$positive
   NegClass <- task$negative
-  random_guess <- data.frame(x=c(0,1),y=c(0,1))
+  random_guess <- data.frame(x = c(0, 1), y = c(0, 1))
 
-  # compute AUC with calibration
   calprd <- c()
   TPR_dev <- c()
   FPR_dev <- c()
   PPV_dev <- c()
-  th_step = 1
+  th_step <- 1
 
-  for (th in seq(0,1.01,.01)){
-    for (i in 1:length(truth)){
-      if (pred_results_df[i,paste0("prob.",PosClass)]>=th){
+  for (th in seq(0, 1.01, .01)) {
+    for (i in 1:length(truth)) {
+      if (pred_results_df[i, paste0("prob.", PosClass)] >= th) {
         calprd[i] <- PosClass
       } else {
         calprd[i] <- NegClass
       }
     }
-    TPR_dev[th_step] = sum((calprd==PosClass & truth==PosClass)==T)/sum(truth==PosClass)
-    FPR_dev[th_step] = sum((calprd==PosClass & truth==NegClass)==T)/sum(truth==NegClass)
-    TP <- sum(calprd==PosClass & truth==PosClass)
-    FP <- sum(calprd==PosClass & truth==NegClass)
-    (PPV_dev[th_step] <- TP/(TP+FP))
-    th_step = th_step + 1
+    TPR_dev[th_step] <- sum((calprd == PosClass & truth == PosClass) == T) / sum(truth == PosClass)
+    FPR_dev[th_step] <- sum((calprd == PosClass & truth == NegClass) == T) / sum(truth == NegClass)
+    TP <- sum(calprd == PosClass & truth == PosClass)
+    FP <- sum(calprd == PosClass & truth == NegClass)
+    PPV_dev[th_step] <- TP / (TP + FP)
+    th_step <- th_step + 1
   }
 
   dev_roc_res <- data.frame(tpr = TPR_dev,
-                             fpr=FPR_dev,
-                             threshold = seq(0,1.01,.01))
+                            fpr = FPR_dev,
+                            threshold = seq(0, 1.01, .01))
   dev_roc_res <- dev_roc_res[complete.cases(dev_roc_res),]
 
-  dev_roc_plt <- ggplot(data = dev_roc_res, mapping = aes(fpr,tpr)) +
+  dev_roc_plt <- ggplot(data = dev_roc_res, mapping = aes(fpr, tpr)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    geom_line(size = 0.2, linetype = "dashed", colour='blue') +
-    scale_colour_gradient2(low = 'blue', high = 'red',mid = "green",midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
+    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
     geom_line(data = random_guess, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title= paste0("development set, N=",nrow(featset_total)),
+    labs(title = paste0("development set, N=", nrow(featset_total)),
          x = "False Positive Rate (FPR)",
          y = "True Positive Rate (TPR)") +
-    scale_x_continuous(limits = c(0,1),breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
-    scale_y_continuous(limits = c(0,1), breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   dev_roc_plt <- dev_roc_plt + theme(legend.position = c(0.8, 0.25))
   dev_roc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-    # Precision-recall curve dev set
-  Pnum <- length(which(truth==PosClass)) # number of positive cases in dev set
-  Tnum <- nrow(featset_total) # number of total cases in dev set
-  PRcurve.baseline <- data.frame(x=c(0,1),y=c(Pnum/Tnum,Pnum/Tnum)) # baseline for the PR curve
+  Pnum <- length(which(truth == PosClass))
+  Tnum <- nrow(featset_total)
+  PRcurve.baseline <- data.frame(x = c(0, 1), y = c(Pnum / Tnum, Pnum / Tnum))
 
   dev_PRroc_res <- data.frame(tpr = TPR_dev,
-                               ppv=PPV_dev,
-                               threshold = seq(0,1.01,.01))
+                              ppv = PPV_dev,
+                              threshold = seq(0, 1.01, .01))
   dev_PRroc_res <- dev_PRroc_res[complete.cases(dev_PRroc_res),]
-  dev_PRroc_plt <- ggplot(data = dev_PRroc_res, mapping = aes(tpr,ppv))+
+  dev_PRroc_plt <- ggplot(data = dev_PRroc_res, mapping = aes(tpr, ppv)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    scale_colour_gradient2(low = 'blue', high = 'red',mid = "green",midpoint = 0.5) +
-    geom_line(size = 0.2,linetype = "dashed",colour='blue') +
+    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
     geom_line(data = PRcurve.baseline, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title= paste0("development set, N=",nrow(featset_total)),
+    labs(title = paste0("development set, N=", nrow(featset_total)),
          x = "Recall",
          y = "Precision") +
-    scale_x_continuous(limits = c(0,1),breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
-    scale_y_continuous(limits = c(0,1), breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   dev_PRroc_plt <- dev_PRroc_plt + theme(legend.position = c(0.2, 0.25))
   dev_PRroc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-  ###############################################################
-  # plot the confusion matrix for the dev set
   test_set <- mydata[splits$test,]
   test_set <- as.data.frame(test_set)
-  # extract prediction results from mlr3 object and convert it to data.table as it is not a data.table
-  pred_results <- trained_model$predict(task,splits$test)
+
+  pred_results <- trained_model$predict(task, splits$test)
   pred_results_df <- data.table::as.data.table(pred_results)
   pred_results_df <- as.data.frame(pred_results_df)
-  truth <- test_set[,task$target_names]
+  truth <- test_set[, task$target_names]
   predicted_labels_test <- pred_results$response
   PosClass <- task$positive
   NegClass <- task$negative
-  random_guess <- data.frame(x=c(0,1),y=c(0,1))
+  random_guess <- data.frame(x = c(0, 1), y = c(0, 1))
 
-  # compute AUC with calibration
   calprd <- c()
   TPR_test <- c()
   FPR_test <- c()
   PPV_test <- c()
-  th_step = 1
+  th_step <- 1
 
-  for (th in seq(0,1.01,.01)){
-    for (i in 1:length(truth)){
-      if (pred_results_df[i,paste0("prob.",PosClass)]>=th){
+  for (th in seq(0, 1.01, .01)) {
+    for (i in 1:length(truth)) {
+      if (pred_results_df[i, paste0("prob.", PosClass)] >= th) {
         calprd[i] <- PosClass
       } else {
         calprd[i] <- NegClass
       }
     }
-    TPR_test[th_step] = sum((calprd==PosClass & truth==PosClass)==T)/sum(truth==PosClass)
-    FPR_test[th_step] = sum((calprd==PosClass & truth==NegClass)==T)/sum(truth==NegClass)
-    TP <- sum(calprd==PosClass & truth==PosClass)
-    FP <- sum(calprd==PosClass & truth==NegClass)
-    (PPV_test[th_step] <- TP/(TP+FP))
-    th_step = th_step + 1
+    TPR_test[th_step] = sum((calprd == PosClass & truth == PosClass) == T) / sum(truth == PosClass)
+    FPR_test[th_step] = sum((calprd == PosClass & truth == NegClass) == T) / sum(truth == NegClass)
+    TP <- sum(calprd == PosClass & truth == PosClass)
+    FP <- sum(calprd == PosClass & truth == NegClass)
+    PPV_test[th_step] <- TP / (TP + FP)
+    th_step <- th_step + 1
   }
 
-    test_roc_res <- data.frame(tpr = TPR_test,
-                            fpr=FPR_test,
-                            threshold = seq(0,1.01,.01))
-    test_roc_res <- test_roc_res[complete.cases(test_roc_res),]
-  test_roc_plt <- ggplot(data = test_roc_res, mapping = aes(fpr,tpr)) +
+  test_roc_res <- data.frame(tpr = TPR_test,
+                             fpr = FPR_test,
+                             threshold = seq(0, 1.01, .01))
+  test_roc_res <- test_roc_res[complete.cases(test_roc_res),]
+
+  test_roc_plt <- ggplot(data = test_roc_res, mapping = aes(fpr, tpr)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    geom_line(size = 0.2, linetype = "dashed", colour='blue') +
-    scale_colour_gradient2(low = 'blue', high = 'red',mid = "green",midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
+    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
     geom_line(data = random_guess, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title= paste0("test set, N=",nrow(test_set)),
+    labs(title = paste0("test set, N=", nrow(test_set)),
          x = "False Positive Rate (FPR)",
          y = "True Positive Rate (TPR)") +
-    scale_x_continuous(limits = c(0,1),breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
-    scale_y_continuous(limits = c(0,1), breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   test_roc_plt <- test_roc_plt + theme(legend.position = c(0.8, 0.25))
   test_roc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-    # Precision-recall curve dev set
-  Pnum <- length(which(truth==PosClass)) # number of positive cases in dev set
-  Tnum <- nrow(test_set) # number of total cases in dev set
-  PRcurve.baseline <- data.frame(x=c(0,1),y=c(Pnum/Tnum,Pnum/Tnum)) # baseline for the PR curve
+  Pnum <- length(which(truth == PosClass))
+  Tnum <- nrow(test_set)
+  PRcurve.baseline <- data.frame(x = c(0, 1), y = c(Pnum / Tnum, Pnum / Tnum))
 
   test_PRroc_res <- data.frame(tpr = TPR_test,
-                              ppv=PPV_test,
-                              threshold = seq(0,1.01,.01))
+                               ppv = PPV_test,
+                               threshold = seq(0, 1.01, .01))
   test_PRroc_res <- test_PRroc_res[complete.cases(test_PRroc_res),]
-  test_PRroc_plt <- ggplot(data = test_PRroc_res, mapping = aes(tpr,ppv))+
+  test_PRroc_plt <- ggplot(data = test_PRroc_res, mapping = aes(tpr, ppv)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    scale_colour_gradient2(low = 'blue', high = 'red',mid = "green",midpoint = 0.5) +
-    geom_line(size = 0.2,linetype = "dashed",colour='blue') +
+    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
     geom_line(data = PRcurve.baseline, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title= paste0("test set, N=",nrow(test_set)),
+    labs(title = paste0("test set, N=", nrow(test_set)),
          x = "Recall",
          y = "Precision") +
-    scale_x_continuous(limits = c(0,1),breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
-    scale_y_continuous(limits = c(0,1), breaks = seq(0, 1, 0.5),labels = seq(0, 1, 0.5)) +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   test_PRroc_plt <- test_PRroc_plt + theme(legend.position = c(0.2, 0.25))
   test_PRroc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-  all_plts <- ggpubr::ggarrange(plotlist = list(dev_PRroc_plt,dev_roc_plt,test_PRroc_plt,test_roc_plt),
+  all_plts <- ggpubr::ggarrange(plotlist = list(dev_PRroc_plt, dev_roc_plt, test_PRroc_plt, test_roc_plt),
                                 ncol = 2, nrow = 2,
                                 common.legend = TRUE,
                                 legend = "right")
 
-  # remove legend
-  dev_PRroc_plt <- dev_PRroc_plt + theme(legend.position="none")
+  dev_PRroc_plt <- dev_PRroc_plt + theme(legend.position = "none")
   dev_PRroc_plt <- ggplotly(dev_PRroc_plt)
   dev_roc_plt <- ggplotly(dev_roc_plt)
   fig_dev <- subplot(test_PRroc_plt, test_roc_plt) %>%
@@ -213,11 +268,7 @@ eperformance <- function(task,
       )
     )
 
-  # fig_dev <- subplot(test_PRroc_plt, test_roc_plt) %>%
-  #   layout(title = 'ROC plots on the development set')
-
-  # remove legend
-  test_PRroc_plt <- test_PRroc_plt + theme(legend.position="none")
+  test_PRroc_plt <- test_PRroc_plt + theme(legend.position = "none")
   test_PRroc_plt <- ggplotly(test_PRroc_plt)
   test_roc_plt <- ggplotly(test_roc_plt)
   fig_test <- subplot(test_PRroc_plt, test_roc_plt) %>%
@@ -233,8 +284,5 @@ eperformance <- function(task,
       )
     )
 
-  # fig_test <- subplot(test_PRroc_plt, test_roc_plt) %>%
-  #   layout(title = 'ROC plots on the test set')
-
-  return(list(all_plts,fig_dev,fig_test))
+  return(list(all_plts, fig_dev, fig_test))
 }

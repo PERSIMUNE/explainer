@@ -10,16 +10,25 @@
 #' @return Normalized vector
 #'
 #' @examples
-#' \dontrun{
-#' range01(seq(-10:1000))
+#' \donttest{
+#' normalized_vector <- range01(seq(-10:1000))
 #' }
+#'
+#' @references
+#' Pearson, R. K. (1999). “Data cleaning for dynamic modeling and control”. European Control Conference, ETH Zurich, Switzerland.
+#'
+#' @seealso
+#' [eSHAP_plot()]
+#'
+#' @keywords internal
+#' @family data preprocessing
 range01 <- function(x) {
   lower_bound <- median(x, na.rm = TRUE) - 3 * mad(x, na.rm = TRUE, constant = 1)
   upper_bound <- median(x, na.rm = TRUE) + 3 * mad(x, na.rm = TRUE, constant = 1)
 
   if (upper_bound != lower_bound) {
-    x[which(x > upper_bound)] <- upper_bound
-    x[which(x < lower_bound)] <- lower_bound
+    x[x > upper_bound] <- upper_bound
+    x[x < lower_bound] <- lower_bound
   }
 
   scaled_x <- (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))

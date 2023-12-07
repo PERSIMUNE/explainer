@@ -12,9 +12,36 @@
 #' @return Data frame containing regression evaluation measures
 #'
 #' @examples
-#' \dontrun{
-#' # To see detailed examples, refer to the example tutorials in the package vignettes.
+#' \donttest{
+#' library("explainer")
+#' seed <- 246
+#' set.seed(seed)
+#' data("BreastCancer", package = "mlbench")
+#' mydata <- BreastCancer[, -1]
+#' mydata <- na.omit(mydata)
+#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#' mydata$age <- sample(seq(18, 60), size = nrow(mydata), replace = TRUE)
+#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' mydata$Class <- NULL
+#' mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
+#' target_col <- "Cl.thickness"
+#' maintask <- mlr3::TaskRegr$new(id = "my_regression_task",backend = mydata,target = target_col)
+#' set.seed(seed)
+#' splits <- mlr3::partition(maintask)
+#' library("mlr3extralearners")
+#' mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response")
+#' mylrn$train(maintask, splits$train)
+#' regressmdl_eval_results <- regressmdl_eval(task = maintask, trained_model = mylrn, splits = splits)
 #' }
+#'
+#' @references
+#' Lang M, Binder M, Richter J, Schratz P, Pfisterer F, Coors S, Au Q, Casalicchio G, Kotthoff L, Bischl B. mlr3: A modern object-oriented machine learning framework in R. Journal of Open Source Software. 2019 Dec 11;4(44):1903.
+#'
+#' @seealso
+#' [eCM_plot()]
+#'
+#' @keywords internal
+#' @family regression evaluation
 regressmdl_eval <- function(task,
                             trained_model,
                             splits) {

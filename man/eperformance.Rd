@@ -20,7 +20,71 @@ ROC and Precision-Recall curves with threshold information
 This function generates Precision-Recall and ROC curves, including threshold information for binary classification models.
 }
 \examples{
-\dontrun{
-# To see detailed examples, refer to the example tutorials in the package vignettes.
+\donttest{
+Sys.setenv(LANG = "en") # change R language to English!
+RNGkind("L'Ecuyer-CMRG") # change to L'Ecuyer-CMRG in case it uses default "Mersenne-Twister"
+
+library("explainer")
+# set seed for reproducibility
+seed <- 246
+set.seed(seed)
+
+# set TRUE if you have dataset if not set it to FALSE
+data_availablity <- FALSE
+
+# if we have a dataset to use here
+
+
+if (data_availablity==FALSE){
+  # if you don't have a dataset you can try the following publicly available dataset
+  # load the BreastCancer data from the mlbench package
+  data("BreastCancer", package = "mlbench")
+
+  # keep the target column as "Class"
+  target_col <- "Class"
+
+  # change the positive class to "malignant"
+  positive_class <- "malignant"
+
+  # keep only the predictor variables and outcome
+  mydata <- BreastCancer[, -1] # 1 is ID
+
+  # remove rows with missing values
+  mydata <- na.omit(mydata)
+
+  # create a vector of sex categories
+  sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+
+  # create a vector of sex categories
+  mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+
+  # add a sex column to the mydata data frame (for fairness analysis)
+  mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+}
+
+# create a classification task
+maintask <- mlr3::TaskClassif$new(id = "my_classification_task",
+                                  backend = mydata,
+                                  target = target_col,
+                                  positive = positive_class)
+
+# create a train-test split
+set.seed(seed)
+splits <- mlr3::partition(maintask)
+
+# add a learner (machine learning model base)
+# library("mlr3learners")
+library("mlr3extralearners")
+
+# mlr_learners$get("classif.randomForest")
+# here we use random forest for example (you can use any other available model)
+mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob") # , id = "mymodel"
+
+# train the model
+mylrn$train(maintask, splits$train)
+
+# make predictions on new data
+mylrn$predict(maintask, splits$test)
+eperformance(task = maintask, trained_model = mylrn, splits = splits)
 }
 }

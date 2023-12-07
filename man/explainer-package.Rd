@@ -10,6 +10,15 @@
 
 It enables detailed interpretation of complex classification and regression models through Shapley analysis including data-driven characterization of subgroups of individuals. Furthermore, it facilitates multi-measure model evaluation, model fairness, and decision curve analysis. Additionally, it offers enhanced visualizations with interactive elements.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://persimune.github.io/explainer/}
+  \item \url{https://github.com/PERSIMUNE/explainer}
+  \item Report bugs at \url{https://github.com/PERSIMUNE/explainer/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Ramtin Zargari Marandi \email{ramtin.zargari.marandi@regionh.dk} (\href{https://orcid.org/0000-0001-9233-1656}{ORCID})
 
