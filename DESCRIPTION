@@ -7,7 +7,8 @@ Authors@R:
 Description: It enables detailed interpretation of complex classification and regression models through Shapley analysis including data-driven characterization of subgroups of individuals. Furthermore, it facilitates multi-measure model evaluation, model fairness, and decision curve analysis. Additionally, it offers enhanced visualizations with interactive elements.
 License: MIT + file LICENSE
 Encoding: UTF-8
-URL: https://persimune.github.io/explainer/
+URL: https://persimune.github.io/explainer/,
+    https://github.com/PERSIMUNE/explainer
 BugReports: https://github.com/PERSIMUNE/explainer/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
@@ -35,7 +36,9 @@ Suggests:
   mlr3viz,
   plotROC,
   psych,
-  reshape2
+  reshape2,
+  remotes,
+  mlbench
 
 
 

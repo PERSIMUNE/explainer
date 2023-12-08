@@ -24,7 +24,21 @@ Provides calculations of measures to evaluate regression models.
 library("explainer")
 seed <- 246
 set.seed(seed)
-data("BreastCancer", package = "mlbench")
+# Install and load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) {
+  install.packages("mlbench")
+  library(mlbench)
+}
+if (!requireNamespace("mlr3learners", quietly = TRUE)) {
+  install.packages("mlr3learners")
+  library(mlr3learners)
+}
+if (!requireNamespace("ranger", quietly = TRUE)) {
+  install.packages("ranger")
+  library(ranger)
+}
+# Load BreastCancer dataset
+utils::data("BreastCancer", package = "mlbench")
 mydata <- BreastCancer[, -1]
 mydata <- na.omit(mydata)
 sex <- sample(
@@ -50,11 +64,9 @@ maintask <- mlr3::TaskRegr$new(
   backend = mydata,
   target = target_col
 )
-set.seed(seed)
 splits <- mlr3::partition(maintask)
-mlr3extralearners::mlr_learners$get("classif.randomForest")
 mylrn <- mlr3::lrn(
-  "regr.randomForest",
+  "regr.ranger",
   predict_type = "response"
 )
 mylrn$train(maintask, splits$train)

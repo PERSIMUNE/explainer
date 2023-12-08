@@ -14,6 +14,7 @@ It enables detailed interpretation of complex classification and regression mode
 Useful links:
 \itemize{
   \item \url{https://persimune.github.io/explainer/}
+  \item \url{https://github.com/PERSIMUNE/explainer}
   \item Report bugs at \url{https://github.com/PERSIMUNE/explainer/issues}
 }
 

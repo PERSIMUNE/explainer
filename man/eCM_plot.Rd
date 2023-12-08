@@ -28,7 +28,22 @@ This function generates an enhanced confusion matrix plot using the CVMS package
 library("explainer")
 seed <- 246
 set.seed(seed)
-data("BreastCancer", package = "mlbench")
+
+# Load required libraries
+if (!requireNamespace("mlbench", quietly = TRUE)) {
+  install.packages("mlbench")
+  library(mlbench)
+}
+if (!requireNamespace("mlr3learners", quietly = TRUE)) {
+  install.packages("mlr3learners")
+  library(mlr3learners)
+}
+if (!requireNamespace("ranger", quietly = TRUE)) {
+  install.packages("ranger")
+  library(ranger)
+}
+# Load BreastCancer dataset
+utils::data("BreastCancer", package = "mlbench")
 target_col <- "Class"
 positive_class <- "malignant"
 mydata <- BreastCancer[, -1]
@@ -55,9 +70,8 @@ maintask <- mlr3::TaskClassif$new(
   positive = positive_class
 )
 splits <- mlr3::partition(maintask)
-mlr3extralearners::mlr_learners$get("classif.randomForest")
 mylrn <- mlr3::lrn(
-  "classif.randomForest",
+  "classif.ranger",
   predict_type = "prob"
 )
 mylrn$train(maintask, splits$train)

@@ -18,56 +18,55 @@
 #'
 #' @examples
 #' \donttest{
-#' Sys.setenv(LANG = "en") # change R language to English!
-#' RNGkind("L'Ecuyer-CMRG") # change to L'Ecuyer-CMRG in case it uses default "Mersenne-Twister"
+#' # Set environment variables for reproducibility
+#' Sys.setenv(LANG = "en") # Change R language to English!
+#' RNGkind("L'Ecuyer-CMRG") # Change to L'Ecuyer-CMRG instead of the default "Mersenne-Twister"
 #'
+#' # Load required libraries
 #' library("explainer")
-#' # set seed for reproducibility
+#'
+#' # Set seed for reproducibility
 #' seed <- 246
 #' set.seed(seed)
 #'
-#' # set TRUE if you have dataset if not set it to FALSE
-#' data_availablity <- FALSE
-#'
-#' # if we have a dataset to use here
-#'
-#'
-#' if (data_availablity == FALSE){
-#'   # if you don't have a dataset you can try the following publicly available dataset
-#'   # load the BreastCancer data from the mlbench package
-#'   data("BreastCancer", package = "mlbench")
-#'
-#'   # keep the target column as "Class"
-#'   target_col <- "Class"
-#'
-#'   # change the positive class to "malignant"
-#'   positive_class <- "malignant"
-#'
-#'   # keep only the predictor variables and outcome
-#'   mydata <- BreastCancer[, -1] # 1 is ID
-#'
-#'   # remove rows with missing values
-#'   mydata <- na.omit(mydata)
-#'
-#'   # create a vector of sex categories
-#'   sex <- sample(
-#'     c("Male", "Female"),
-#'     size = nrow(mydata),
-#'     replace = TRUE
-#'   )
-#'
-#'   # create a vector of sex categories
-#'   mydata$age <- as.numeric(sample(
-#'     seq(18,60),
-#'     size = nrow(mydata),
-#'     replace = TRUE
-#'   ))
-#'
-#'   # add a sex column to the mydata data frame (for fairness analysis)
-#'   mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#' # Install and load necessary packages
+#' if (!requireNamespace("mlbench", quietly = TRUE)) {
+#'   install.packages("mlbench")
+#'   library(mlbench)
 #' }
+#' if (!requireNamespace("mlr3learners", quietly = TRUE)) {
+#'   install.packages("mlr3learners")
+#'   library(mlr3learners)
+#' }
+#' if (!requireNamespace("ranger", quietly = TRUE)) {
+#'   install.packages("ranger")
+#'   library(ranger)
+#' }
+#' # Load BreastCancer dataset
+#' utils::data("BreastCancer", package = "mlbench")
 #'
-#' # create a classification task
+#' # Keep the target column as "Class"
+#' target_col <- "Class"
+#'
+#' # Change the positive class to "malignant"
+#' positive_class <- "malignant"
+#'
+#' # Keep only the predictor variables and outcome
+#' mydata <- BreastCancer[, -1] # 1 is ID
+#'
+#' # Remove rows with missing values
+#' mydata <- na.omit(mydata)
+#'
+#' # Create a vector of sex categories
+#' sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+#'
+#' # Create a vector of age categories
+#' mydata$age <- as.numeric(sample(seq(18, 60), size = nrow(mydata), replace = TRUE))
+#'
+#' # Add a sex column to the mydata data frame (for fairness analysis)
+#' mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+#'
+#' # Create a classification task
 #' maintask <- mlr3::TaskClassif$new(
 #'   id = "my_classification_task",
 #'   backend = mydata,
@@ -75,20 +74,18 @@
 #'   positive = positive_class
 #' )
 #'
-#' # create a train-test split
+#' # Create a train-test split
 #' set.seed(seed)
 #' splits <- mlr3::partition(maintask)
 #'
-#' # add a learner (machine learning model base)
+#' # Add a learner (machine learning model base)
+#' # Here we use random forest for example (you can use any other available model)
+#' mylrn <- mlr3::lrn("classif.ranger", predict_type = "prob")
 #'
-#' mlr3extralearners::mlr_learners$get("classif.randomForest")
-#' # here we use random forest for example (you can use any other available model)
-#' mylrn <- mlr3::lrn("classif.randomForest", predict_type = "prob") # , id = "mymodel"
-#'
-#' # train the model
+#' # Train the model
 #' mylrn$train(maintask, splits$train)
 #'
-#' # make predictions on new data
+#' # Make predictions on new data
 #' mylrn$predict(maintask, splits$test)
 #' eperformance(task = maintask, trained_model = mylrn, splits = splits)
 #' }

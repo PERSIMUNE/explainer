@@ -18,34 +18,29 @@ library("explainer")
 seed <- 246
 set.seed(seed)
 
-# Set TRUE if you have a dataset; if not, set it to FALSE
-data_availablity <- FALSE
+# Load the BreastCancer data from the mlbench package
+data("BreastCancer", package = "mlbench")
 
-# If we have a dataset to use here...
-if (data_availablity == FALSE) {
-  # Load the BreastCancer data from the mlbench package
-  data("BreastCancer", package = "mlbench")
+# Keep only the predictor variables and outcome
+mydata <- BreastCancer[, -1] # 1 is ID
 
-  # Keep only the predictor variables and outcome
-  mydata <- BreastCancer[, -1] # 1 is ID
+# Remove rows with missing values
+mydata <- na.omit(mydata)
 
-  # Remove rows with missing values
-  mydata <- na.omit(mydata)
+# Create a vector of sex categories
+sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
 
-  # Create a vector of sex categories
-  sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+# Create a vector of age categories (instead of a continuous variable in the previous code)
+mydata$age <- sample(seq(18, 60), size = nrow(mydata), replace = TRUE)
 
-  # Create a vector of age categories (instead of a continuous variable in the previous code)
-  mydata$age <- sample(seq(18, 60), size = nrow(mydata), replace = TRUE)
+# Add a sex column to the mydata data frame (for fairness analysis)
+mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 
-  # Add a sex column to the mydata data frame (for fairness analysis)
-  mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+mydata$Class <- NULL
+mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
+# Keep the target column as "Class"
+target_col <- "Cl.thickness"
 
-  mydata$Class <- NULL
-  mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
-  # Keep the target column as "Class"
-  target_col <- "Cl.thickness"
-}
 
 # Create a regression task
 maintask <- mlr3::TaskRegr$new(id = "my_regression_task",
@@ -58,12 +53,13 @@ splits <- mlr3::partition(maintask)
 
 # Add a learner (machine learning model base)
 # library("mlr3learners")
-library("mlr3extralearners")
+# library("mlr3extralearners")
 
 # mlr_learners$get("regr.randomForest")
 # Here we use random forest for example (you can use any other available model)
-mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response") # , id = "mymodel"
-
+# mylrn <- mlr3::lrn("regr.randomForest", predict_type = "response")
+library("mlr3learners")
+mylrn <- mlr3::lrn("regr.ranger", predict_type = "response")
 # Train the model
 mylrn$train(maintask, splits$train)
 

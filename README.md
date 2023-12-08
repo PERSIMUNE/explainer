@@ -43,7 +43,7 @@ library(explainer)
 
 ## Contributing
 
-If you want to contribute to the development of this package, please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+If you want to contribute to the development of this package, please read [CONTRIBUTING.md](https://github.com/PERSIMUNE/explainer/blob/main/github/CONTRIBUTING.md) for guidelines.
 
 ## Issues
 
@@ -51,7 +51,7 @@ If you encounter any issues or have suggestions, please [open an issue](https://
 
 ## License
 
-This package is released under the [MIT License](LICENSE.md).
+This package is released under the [MIT License](https://github.com/PERSIMUNE/explainer/blob/main/LICENSE.md).
 
 ## Citation
 
