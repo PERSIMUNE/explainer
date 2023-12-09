@@ -38,7 +38,8 @@ Suggests:
   psych,
   reshape2,
   remotes,
-  mlbench
+  mlbench,
+  ranger
 
 
 

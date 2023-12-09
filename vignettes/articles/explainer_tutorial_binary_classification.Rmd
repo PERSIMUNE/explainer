@@ -286,7 +286,7 @@ SHAP_plot_clusters <- SHAPclust(task = maintask,
          splits = splits,
          shap_Mean_wide = shap_Mean_wide,
          shap_Mean_long = shap_Mean_long,
-         num_of_clusters = 4,
+         num_of_clusters = 3,
          seed = seed,
          subset = .8)
 

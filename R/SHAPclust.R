@@ -112,6 +112,7 @@ SHAPclust <- function(task,
   feature <- NULL
   value <- NULL
   sample_num <- NULL
+  cluster <- NULL
   mydata <- task$data()
   # randomly subset the target variable and the corresponding rows
   if (subset < 1) {
@@ -164,10 +165,17 @@ SHAPclust <- function(task,
   variables_for_long_format <- variables_for_long_format[!variables_for_long_format %in% c(colnames(pred_results), "sample_num", "prediction_correctness", "cluster")]
 
   # Melt the data.table from wide to long format
+  # dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
+  #                             measure.vars = variables_for_long_format,
+  #                             variable.name = "variable",
+  #                             value.name = "value")
+
   dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
                               measure.vars = variables_for_long_format,
                               variable.name = "variable",
-                              value.name = "value")
+                              value.name = "value") %>%
+    tidyr::gather(key = "variable", value = "value", -sample_num, -prediction_correctness, -cluster)
+
   dt_long$fval <- NA
   dt_long_vars <- as.character(dt_long$variable)
   for (i in 1:nrow(dt_long)){
