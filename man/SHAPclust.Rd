@@ -94,6 +94,8 @@ SHAP_output <- eSHAP_plot(
   seed = seed,
   subset = 0.8
 )
+shap_Mean_wide <- SHAP_output[[2]]
+shap_Mean_long <- SHAP_output[[3]]
 SHAP_plot_clusters <- SHAPclust(
   task = maintask,
   trained_model = mylrn,

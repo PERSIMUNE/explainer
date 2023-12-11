@@ -82,6 +82,8 @@
 #'   seed = seed,
 #'   subset = 0.8
 #' )
+#' shap_Mean_wide <- SHAP_output[[2]]
+#' shap_Mean_long <- SHAP_output[[3]]
 #' SHAP_plot_clusters <- SHAPclust(
 #'   task = maintask,
 #'   trained_model = mylrn,
@@ -165,16 +167,16 @@ SHAPclust <- function(task,
   variables_for_long_format <- variables_for_long_format[!variables_for_long_format %in% c(colnames(pred_results), "sample_num", "prediction_correctness", "cluster")]
 
   # Melt the data.table from wide to long format
-  # dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
-  #                             measure.vars = variables_for_long_format,
-  #                             variable.name = "variable",
-  #                             value.name = "value")
-
   dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
                               measure.vars = variables_for_long_format,
                               variable.name = "variable",
-                              value.name = "value") %>%
-    tidyr::gather(key = "variable", value = "value", -sample_num, -prediction_correctness, -cluster)
+                              value.name = "value")
+
+  # dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
+  #                             measure.vars = variables_for_long_format,
+  #                             variable.name = "variable",
+  #                             value.name = "value") %>%
+  #   tidyr::gather(key = "variable", value = "value", -sample_num, -prediction_correctness, -cluster)
 
   dt_long$fval <- NA
   dt_long_vars <- as.character(dt_long$variable)

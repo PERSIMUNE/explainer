@@ -174,13 +174,17 @@
 <span>  subset <span class="op">=</span> <span class="fl">0.8</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">shap_Mean_wide</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">shap_Mean_long</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
 <span><span class="co"># Generate SHAP clusters and plot</span></span>
 <span><span class="va">SHAP_plot_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SHAPclust.html">SHAPclust</a></span><span class="op">(</span></span>
 <span>  task <span class="op">=</span> <span class="va">maintask</span>,</span>
 <span>  trained_model <span class="op">=</span> <span class="va">mylrn</span>,</span>
 <span>  splits <span class="op">=</span> <span class="va">splits</span>,</span>
-<span>  shap_Mean_wide <span class="op">=</span> <span class="va">shap_Mean_wide</span>,  <span class="co"># NOTE: shap_Mean_wide and shap_Mean_long variables are not defined in your provided code</span></span>
-<span>  shap_Mean_long <span class="op">=</span> <span class="va">shap_Mean_long</span>,  <span class="co"># NOTE: Make sure these variables are defined or adjust the code accordingly</span></span>
+<span>  shap_Mean_wide <span class="op">=</span> <span class="va">shap_Mean_wide</span>,</span>
+<span>  shap_Mean_long <span class="op">=</span> <span class="va">shap_Mean_long</span>,</span>
 <span>  num_of_clusters <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span>,</span>
 <span>  subset <span class="op">=</span> <span class="fl">0.8</span></span>

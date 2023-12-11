@@ -94,13 +94,17 @@ SHAP_output <- eSHAP_plot(
   subset = 0.8
 )
 
+shap_Mean_wide <- SHAP_output[[2]]
+
+shap_Mean_long <- SHAP_output[[3]]
+
 # Generate SHAP clusters and plot
 SHAP_plot_clusters <- SHAPclust(
   task = maintask,
   trained_model = mylrn,
   splits = splits,
-  shap_Mean_wide = shap_Mean_wide,  # NOTE: shap_Mean_wide and shap_Mean_long variables are not defined in your provided code
-  shap_Mean_long = shap_Mean_long,  # NOTE: Make sure these variables are defined or adjust the code accordingly
+  shap_Mean_wide = shap_Mean_wide,
+  shap_Mean_long = shap_Mean_long,
   num_of_clusters = 4,
   seed = seed,
   subset = 0.8

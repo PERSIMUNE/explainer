@@ -170,6 +170,8 @@
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="va">seed</span>,</span></span>
 <span class="r-in"><span>  subset <span class="op">=</span> <span class="fl">0.8</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">shap_Mean_wide</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">shap_Mean_long</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">SHAP_plot_clusters</span> <span class="op">&lt;-</span> <span class="fu">SHAPclust</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  task <span class="op">=</span> <span class="va">maintask</span>,</span></span>
 <span class="r-in"><span>  trained_model <span class="op">=</span> <span class="va">mylrn</span>,</span></span>
@@ -180,7 +182,10 @@
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="va">seed</span>,</span></span>
 <span class="r-in"><span>  subset <span class="op">=</span> <span class="fl">0.8</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.matrix(x):</span> object 'shap_Mean_wide' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 200 x 169 mm image</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 200 x 169 mm image</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 6.67 x 6.67 in image</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 6.67 x 6.67 in image</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
