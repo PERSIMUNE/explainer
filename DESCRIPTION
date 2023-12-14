@@ -39,7 +39,8 @@ Suggests:
   reshape2,
   remotes,
   mlbench,
-  ranger
+  ranger,
+  precrec
 
 
 

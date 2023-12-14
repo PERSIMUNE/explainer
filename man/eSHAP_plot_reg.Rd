@@ -37,23 +37,14 @@ A list of two objects:
 The SHAP plot for regression models is a visualization tool that uses the Shapley value, an approach from cooperative game theory, to compute feature contributions for single predictions. The Shapley value fairly distributes the difference of the instance’s prediction and the datasets average prediction among the features. This method is available from the iml package.
 }
 \examples{
-\donttest{
+\dontrun{
 library("explainer")
 seed <- 246
 set.seed(seed)
-# Install and load necessary packages
-if (!requireNamespace("mlbench", quietly = TRUE)) {
-  install.packages("mlbench")
-  library(mlbench)
-}
-if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-  install.packages("mlr3learners")
-  library(mlr3learners)
-}
-if (!requireNamespace("ranger", quietly = TRUE)) {
-  install.packages("ranger")
-  library(ranger)
-}
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 # Load BreastCancer dataset
 utils::data("BreastCancer", package = "mlbench")
 mydata <- BreastCancer[, -1]
@@ -77,9 +68,9 @@ SHAP_output <- eSHAP_plot_reg(
   task = maintask,
   trained_model = mylrn,
   splits = splits,
-  sample.size = 30,
+  sample.size = 2, # also 30 or more
   seed = seed,
-  subset = 0.8
+  subset = 0.02 # up to 1
 )
 myplot <- SHAP_output[[1]]
 }

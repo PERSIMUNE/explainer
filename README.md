@@ -37,19 +37,10 @@ library("explainer")
 seed <- 246
 set.seed(seed)
 
-# Install and load necessary packages if not already installed
-if (!requireNamespace("mlbench", quietly = TRUE)) {
-  install.packages("mlbench")
-  library(mlbench)
-}
-if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-  install.packages("mlr3learners")
-  library(mlr3learners)
-}
-if (!requireNamespace("ranger", quietly = TRUE)) {
-  install.packages("ranger")
-  library(ranger)
-}
+# load necessary packages
+library(mlbench)
+library(mlr3learners)
+library(ranger)
 
 # Load BreastCancer dataset
 utils::data("BreastCancer", package = "mlbench")
@@ -139,4 +130,26 @@ citation("explainer")
 ```
 ## References
 
-Zargari Marandi R, Leung P, Sigera C, Murray DD, Weeratunga P, Fernando D, et al. (2023) Development of a machine learning model for early prediction of plasma leakage in suspected dengue patients. PLoS Negl Trop Dis 17(3): e0010758. https://doi.org/10.1371/journal.pntd.0010758
+Zargari Marandi R, Leung P, Sigera C, Murray DD, Weeratunga P, Fernando D, Rodrigo C, Rajapakse S, MacPherson CR, (2023). Development of a machine learning model for early prediction of plasma leakage in suspected dengue patients. PLoS Negl Trop Dis 17(3): e0010758. [doi:10.1371/journal.pntd.0010758](https://doi.org/10.1371/journal.pntd.0010758)
+
+Lang M, Binder M, Richter J, Schratz P, Pfisterer F, Coors S, Au Q, Casalicchio G, Kotthoff L, Bischl B, (2019). mlr3: A modern
+object-oriented machine learning framework in R. Journal of Open Source Software. [doi:10.21105/joss.01903](https://joss.theoj.org/papers/10.21105/joss.01903)
+
+Molnar C, Bischl B, Casalicchio G, (2018). iml: An R package for Interpretable Machine Learning.JOSS, 3(26), 786. [doi:10.21105/joss.00786](https://doi.org/10.21105/joss.00786)
+
+Lundberg SM and Lee SI, (2017). A unified approach to interpreting model predictions. Advances in neural information processing systems.[arXiv:1705.07874](https://arxiv.org/abs/1705.07874)
+
+Ludvig Renbo Olsen and Hugh Benjamin Zachariae, (2022). cvms: Cross-Validation for Model Selection. R package version 1.3.4.
+  https://CRAN.R-project.org/package=cvms
+  
+R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
+  URL https://www.R-project.org/.
+  
+## Acknowledgements
+
+Many thanks to my colleagues at CHIP/PERSIMUNE to support this work by their feedback. In addition, thanks to the authors and maintainers of all the utilized packages for their dedication to advancing the R ecosystem.
+
+## Funding
+
+This work was supported by the Danish National Research Foundation (DNRF126).
+

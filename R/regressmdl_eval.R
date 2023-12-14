@@ -12,23 +12,13 @@
 #' @return Data frame containing regression evaluation measures
 #'
 #' @examples
-#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)
-#' # Install and load necessary packages
-#' if (!requireNamespace("mlbench", quietly = TRUE)) {
-#'   install.packages("mlbench")
-#'   library(mlbench)
-#' }
-#' if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-#'   install.packages("mlr3learners")
-#'   library(mlr3learners)
-#' }
-#' if (!requireNamespace("ranger", quietly = TRUE)) {
-#'   install.packages("ranger")
-#'   library(ranger)
-#' }
+#' # Load necessary packages
+#' if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+#' if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+#' if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 #' # Load BreastCancer dataset
 #' utils::data("BreastCancer", package = "mlbench")
 #' mydata <- BreastCancer[, -1]
@@ -67,7 +57,6 @@
 #'   trained_model = mylrn,
 #'   splits = splits
 #' )
-#' }
 #'
 #' @references
 #' Lang M, Binder M, Richter J, Schratz P, Pfisterer F, Coors S, Au Q, Casalicchio G, Kotthoff L, Bischl B. mlr3: A modern object-oriented machine learning framework in R. Journal of Open Source Software. 2019 Dec 11;4(44):1903.

@@ -10,29 +10,20 @@ shapPartialPlot(shap_Mean_long)
 \item{shap_Mean_long}{data frame containing SHAP values in long format}
 }
 \value{
-Interactive partial dependence plot
+an interactive partial dependence plot
 }
 \description{
 Generates an interactive partial dependence plot based on SHAP values, visualizing the marginal effect of one or two features on the predicted outcome of a machine learning model.
 }
 \examples{
-\donttest{
+\dontrun{
 library("explainer")
 seed <- 246
 set.seed(seed)
-# Install and load necessary packages
-if (!requireNamespace("mlbench", quietly = TRUE)) {
-  install.packages("mlbench")
-  library(mlbench)
-}
-if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-  install.packages("mlr3learners")
-  library(mlr3learners)
-}
-if (!requireNamespace("ranger", quietly = TRUE)) {
-  install.packages("ranger")
-  library(ranger)
-}
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 # Load BreastCancer dataset
 utils::data("BreastCancer", package = "mlbench")
 target_col <- "Class"
@@ -65,13 +56,14 @@ mylrn <- mlr3::lrn(
   "classif.ranger",
   predict_type = "prob"
 )
+mylrn$train(maintask, splits$train)
 SHAP_output <- eSHAP_plot(
   task = maintask,
   trained_model = mylrn,
   splits = splits,
-  sample.size = 30,
+  sample.size = 2, # also 30 or more
   seed = seed,
-  subset = 0.8
+  subset = 0.02 # up to 1
 )
 shap_Mean_long <- SHAP_output[[3]]
 myplot <- shapPartialPlot(shap_Mean_long)

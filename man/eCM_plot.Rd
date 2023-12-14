@@ -24,24 +24,14 @@ A confusion matrix plot visualizing sensitivity, specificity, PPV, and NPV
 This function generates an enhanced confusion matrix plot using the CVMS package. The plot includes visualizations of sensitivity, specificity, positive predictive value (PPV), and negative predictive value (NPV).
 }
 \examples{
-\donttest{
 library("explainer")
 seed <- 246
 set.seed(seed)
 
-# Load required libraries
-if (!requireNamespace("mlbench", quietly = TRUE)) {
-  install.packages("mlbench")
-  library(mlbench)
-}
-if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-  install.packages("mlr3learners")
-  library(mlr3learners)
-}
-if (!requireNamespace("ranger", quietly = TRUE)) {
-  install.packages("ranger")
-  library(ranger)
-}
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 # Load BreastCancer dataset
 utils::data("BreastCancer", package = "mlbench")
 target_col <- "Class"
@@ -80,5 +70,4 @@ myplot <- eCM_plot(
   trained_model = mylrn,
   splits = splits
 )
-}
 }

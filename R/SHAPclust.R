@@ -1,5 +1,5 @@
 #' @title Clustered SHAP Summary Plot
-#' @description SHAP values are used to cluster data samples using the Kmeans method to identify subgroups of individuals with specific patterns of feature contributions.
+#' @description SHAP values are used to cluster data samples using the k-means method to identify subgroups of individuals with specific patterns of feature contributions.
 #'
 #' @param task an mlr3 task for binary classification
 #' @param trained_model an mlr3 trained learner object
@@ -9,6 +9,8 @@
 #' @param num_of_clusters number of clusters to make based on SHAP values, default: 4
 #' @param seed an integer for reproducibility, Default to 246
 #' @param subset what percentage of the instances to use from 0 to 1 where 1 means all
+#' @param algorithm k-means algorithm character: "Hartigan-Wong", "Lloyd", "Forgy", "MacQueen".
+#' @param iter.max maximum number of iterations allowed
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -23,24 +25,22 @@
 #' @importFrom utils capture.output
 #' @export
 #'
+#' @return A list containing four elements:
+#' \item{shap_plot_onerow}{A plotly interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
+#' \item{combined_plot}{A ggplot2 figure combining confusion matrices for each cluster, providing insights into the model's performance within each identified subgroup.}
+#' \item{kmeans_fvals_desc}{A summary table containing statistical descriptions of the clusters based on feature values.}
+#' \item{shap_Mean_wide_kmeans}{A data frame containing clustered SHAP values along with predictions and ground truth information.}
+#' \item{kmeans_info}{Information about the k-means clustering process, including cluster centers and assignment details.}
+#'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)
-#' # Install and load necessary packages
-#' if (!requireNamespace("mlbench", quietly = TRUE)) {
-#'   install.packages("mlbench")
-#'   library(mlbench)
-#' }
-#' if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-#'   install.packages("mlr3learners")
-#'   library(mlr3learners)
-#' }
-#' if (!requireNamespace("ranger", quietly = TRUE)) {
-#'   install.packages("ranger")
-#'   library(ranger)
-#' }
+#' # Load necessary packages
+#' if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+#' if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+#' if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 #' # Load BreastCancer dataset
 #' utils::data("BreastCancer", package = "mlbench")
 #' target_col <- "Class"
@@ -78,9 +78,9 @@
 #'   task = maintask,
 #'   trained_model = mylrn,
 #'   splits = splits,
-#'   sample.size = 30,
+#'   sample.size = 2, # also 30 or more
 #'   seed = seed,
-#'   subset = 0.8
+#'   subset = 0.02 # up to 1
 #' )
 #' shap_Mean_wide <- SHAP_output[[2]]
 #' shap_Mean_long <- SHAP_output[[3]]
@@ -90,11 +90,20 @@
 #'   splits = splits,
 #'   shap_Mean_wide = shap_Mean_wide,
 #'   shap_Mean_long = shap_Mean_long,
-#'   num_of_clusters = 4,
+#'   num_of_clusters = 3, # your choice
 #'   seed = seed,
-#'   subset = 0.8
+#'   subset = 0.02, # match with eSHAP_plot
+#'   algorithm="Hartigan-Wong",
+#'   iter.max = 10
 #' )
 #' }
+#'
+#' @references
+#' For more details on SHAP analysis, refer to Lundberg, S. M., & Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. In Advances in Neural Information Processing Systems (NIPS) (pp. 4765-4774).
+#'
+#' @seealso Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}, \code{\link{plot_confusion_matrix}}, \code{\link{confusion_matrix}}.
+#'
+#' @keywords clustering SHAP k-means machine-learning interpretability
 SHAPclust <- function(task,
                       trained_model,
                       splits,
@@ -102,7 +111,10 @@ SHAPclust <- function(task,
                       shap_Mean_long,
                       num_of_clusters = 4,
                       seed = 246,
-                      subset = 1){
+                      subset = 1,
+                      algorithm="Hartigan-Wong",
+                      iter.max = 1000
+                      ){
 
   # utils::globalVariables(c("prediction_correctness", "truth", "response", "fval", "variable", "mean_absolute_shap", "feature", "value", "sample_num"))
   prediction_correctness <- NULL
@@ -137,9 +149,9 @@ SHAPclust <- function(task,
   # the test set based on the data split is used to calculate SHAP values
   test_set <- as.data.frame(mydata)
 
-  km.res <- kmeans(shap_Mean_wide[,!c("sample_num")], centers =  num_of_clusters, nstart = 20, algorithm="Hartigan-Wong", iter.max = 10000)
-
-  capture.output(km.res, file =  paste0('kmeans_info',seed,'.txt'))
+  km.res <- kmeans(shap_Mean_wide[,!c("sample_num")], centers =  num_of_clusters, nstart = 20, algorithm=algorithm, iter.max = iter.max)
+  kmeans_info <- km.res
+  # capture.output(km.res, file =  paste0('kmeans_info',seed,'.txt'))
 
   shap_Mean_wide_kmeans <-
     shap_Mean_wide %>%
@@ -150,16 +162,19 @@ SHAPclust <- function(task,
   colnames(kmeans_fvals)[1] <- "cluster"
 
   # save the statistical descriptions of the clusters by feature values
-  writexl::write_xlsx(psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster),
-                      path=paste0("shap_PL_kmeans_clusters",seed,".xlsx"))
+  kmeans_fvals_desc <- psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster)
+  # writexl::write_xlsx(psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster),
+  #                     path=paste0("shap_PL_kmeans_clusters",seed,".xlsx"))
 
   shap_Mean_wide_kmeans$row_ids <- shap_Mean_wide_kmeans$row_ids - shap_Mean_wide_kmeans$row_ids[1] + 1
   #set(shap_Mean_wide_kmeans, j = "prediction_correctness", value = (truth == response))
 
   shap_Mean_wide_kmeans[, prediction_correctness := (truth == response)]
 
-  # save the clustered data along with the predictions and shap values
-  writexl::write_xlsx(shap_Mean_wide_kmeans, path=paste0("shap_PL_kmeans_clusters_detailed",seed,".xlsx"))
+  # # save the clustered data along with the predictions and shap values
+  # writexl::write_xlsx(shap_Mean_wide_kmeans, path=paste0("shap_PL_kmeans_clusters_detailed",seed,".xlsx"))
+
+
   shap_Mean_wide_kmeans_forCM <- shap_Mean_wide_kmeans
   shap_Mean_wide_kmeans[,c(1,2,3,4,5)] <- NULL
   variables_for_long_format <- colnames(shap_Mean_wide_kmeans)
@@ -171,12 +186,6 @@ SHAPclust <- function(task,
                               measure.vars = variables_for_long_format,
                               variable.name = "variable",
                               value.name = "value")
-
-  # dt_long <- data.table::melt(shap_Mean_wide_kmeans, id.vars = c("sample_num","prediction_correctness","cluster"),
-  #                             measure.vars = variables_for_long_format,
-  #                             variable.name = "variable",
-  #                             value.name = "value") %>%
-  #   tidyr::gather(key = "variable", value = "value", -sample_num, -prediction_correctness, -cluster)
 
   dt_long$fval <- NA
   dt_long_vars <- as.character(dt_long$variable)
@@ -221,10 +230,10 @@ SHAPclust <- function(task,
   # shap_plot_tworows <- shap_plot1 + facet_wrap(~ cluster, ncol = 2) # , scales = "free"
   shap_plot_onerow <- shap_plot1 + facet_wrap(~ cluster, ncol = num_of_clusters)
 
-  ggsave(filename = paste0("SHAP_clusters_kmeans",seed,".pdf"),
-         plot = shap_plot_onerow,
-         width = 200,
-         units = "mm")
+  # ggsave(filename = paste0("SHAP_clusters_kmeans",seed,".pdf"),
+  #        plot = shap_plot_onerow,
+  #        width = 200,
+  #        units = "mm")
   shap_plot_onerow <- ggplotly(shap_plot_onerow)
 
   # # Create confusion matrix
@@ -267,14 +276,14 @@ SHAPclust <- function(task,
   # Combine the plots into one figure
   combined_plot <- ggpubr::ggarrange(plotlist = CM_plt, ncol = num_of_clusters)
 
-  ggsave("confusion_matrices.pdf", combined_plot,
-         width = 200,
-         units = "mm")
+  # ggsave("confusion_matrices.pdf", combined_plot,
+  #        width = 200,
+  #        units = "mm")
+  #
+  # # Adjust the size of each plot and the spacing between the plots
+  # ggsave("confusion_matrices.pdf", combined_plot)
+  # ggsave("confusion_matrices.png", combined_plot, dpi = 300)
 
-  # Adjust the size of each plot and the spacing between the plots
-  ggsave("confusion_matrices.pdf", combined_plot)
-  ggsave("confusion_matrices.png", combined_plot, dpi = 300)
-
-  return(list(shap_plot_onerow,combined_plot))
+  return(list(shap_plot_onerow, combined_plot, kmeans_fvals_desc, shap_Mean_wide_kmeans, kmeans_info))
 
 }

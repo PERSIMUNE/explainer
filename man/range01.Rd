@@ -16,9 +16,7 @@ Normalized vector
 Scale the data to the range of 0 to 1. It uses the Hampel filter to adjust outliers, followed by min-max normalization.
 }
 \examples{
-\donttest{
 normalized_vector <- range01(seq(-10:1000))
-}
 
 }
 \references{

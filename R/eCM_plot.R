@@ -11,24 +11,14 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)
 #'
-#' # Load required libraries
-#' if (!requireNamespace("mlbench", quietly = TRUE)) {
-#'   install.packages("mlbench")
-#'   library(mlbench)
-#' }
-#' if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-#'   install.packages("mlr3learners")
-#'   library(mlr3learners)
-#' }
-#' if (!requireNamespace("ranger", quietly = TRUE)) {
-#'   install.packages("ranger")
-#'   library(ranger)
-#' }
+#' # Load necessary packages
+#' if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+#' if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+#' if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 #' # Load BreastCancer dataset
 #' utils::data("BreastCancer", package = "mlbench")
 #' target_col <- "Class"
@@ -67,7 +57,6 @@
 #'   trained_model = mylrn,
 #'   splits = splits
 #' )
-#' }
 eCM_plot <- function(task,
                      trained_model,
                      splits,
@@ -85,7 +74,7 @@ eCM_plot <- function(task,
   d_binomial <- tibble("Truth" = featset_total_test[, task$target_names],
                        "Prediction" = pred_results$response)
   basic_table <- table(d_binomial)
-  cfm <- broom::tidy(basic_table)
+  cfm <- tibble::as_tibble(basic_table)
   CM_plt_test <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
                                              prediction_col = "Prediction",
                                              counts_col = "n", palette = palette,
@@ -106,11 +95,11 @@ eCM_plot <- function(task,
   featset_total_train <- mydata[splits$train,]
   featset_total_train <- as.data.frame(featset_total_train)
   pred_results <- trained_model$predict(task, splits$train)
-  # plot confusion matrix
   d_binomial <- tibble("Truth" = featset_total_train[, task$target_names],
                        "Prediction" = pred_results$response)
   basic_table <- table(d_binomial)
-  cfm <- broom::tidy(basic_table)
+  # cfm <- broom::tidy(basic_table)
+  cfm <- tibble::as_tibble(basic_table)
   CM_plt_train <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
                                               prediction_col = "Prediction",
                                               counts_col = "n", palette = palette,

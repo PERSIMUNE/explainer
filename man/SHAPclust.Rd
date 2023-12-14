@@ -12,7 +12,9 @@ SHAPclust(
   shap_Mean_long,
   num_of_clusters = 4,
   seed = 246,
-  subset = 1
+  subset = 1,
+  algorithm = "Hartigan-Wong",
+  iter.max = 1000
 )
 }
 \arguments{
@@ -31,28 +33,31 @@ SHAPclust(
 \item{seed}{an integer for reproducibility, Default to 246}
 
 \item{subset}{what percentage of the instances to use from 0 to 1 where 1 means all}
+
+\item{algorithm}{k-means algorithm character: "Hartigan-Wong", "Lloyd", "Forgy", "MacQueen".}
+
+\item{iter.max}{maximum number of iterations allowed}
+}
+\value{
+A list containing four elements:
+\item{shap_plot_onerow}{A plotly interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
+\item{combined_plot}{A ggplot2 figure combining confusion matrices for each cluster, providing insights into the model's performance within each identified subgroup.}
+\item{kmeans_fvals_desc}{A summary table containing statistical descriptions of the clusters based on feature values.}
+\item{shap_Mean_wide_kmeans}{A data frame containing clustered SHAP values along with predictions and ground truth information.}
+\item{kmeans_info}{Information about the k-means clustering process, including cluster centers and assignment details.}
 }
 \description{
-SHAP values are used to cluster data samples using the Kmeans method to identify subgroups of individuals with specific patterns of feature contributions.
+SHAP values are used to cluster data samples using the k-means method to identify subgroups of individuals with specific patterns of feature contributions.
 }
 \examples{
-\donttest{
+\dontrun{
 library("explainer")
 seed <- 246
 set.seed(seed)
-# Install and load necessary packages
-if (!requireNamespace("mlbench", quietly = TRUE)) {
-  install.packages("mlbench")
-  library(mlbench)
-}
-if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-  install.packages("mlr3learners")
-  library(mlr3learners)
-}
-if (!requireNamespace("ranger", quietly = TRUE)) {
-  install.packages("ranger")
-  library(ranger)
-}
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 # Load BreastCancer dataset
 utils::data("BreastCancer", package = "mlbench")
 target_col <- "Class"
@@ -90,9 +95,9 @@ SHAP_output <- eSHAP_plot(
   task = maintask,
   trained_model = mylrn,
   splits = splits,
-  sample.size = 30,
+  sample.size = 2, # also 30 or more
   seed = seed,
-  subset = 0.8
+  subset = 0.02 # up to 1
 )
 shap_Mean_wide <- SHAP_output[[2]]
 shap_Mean_long <- SHAP_output[[3]]
@@ -102,9 +107,23 @@ SHAP_plot_clusters <- SHAPclust(
   splits = splits,
   shap_Mean_wide = shap_Mean_wide,
   shap_Mean_long = shap_Mean_long,
-  num_of_clusters = 4,
+  num_of_clusters = 3, # your choice
   seed = seed,
-  subset = 0.8
+  subset = 0.02, # match with eSHAP_plot
+  algorithm="Hartigan-Wong",
+  iter.max = 10
 )
 }
+
 }
+\references{
+For more details on SHAP analysis, refer to Lundberg, S. M., & Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. In Advances in Neural Information Processing Systems (NIPS) (pp. 4765-4774).
+}
+\seealso{
+Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}, \code{\link{plot_confusion_matrix}}, \code{\link{confusion_matrix}}.
+}
+\keyword{SHAP}
+\keyword{clustering}
+\keyword{interpretability}
+\keyword{k-means}
+\keyword{machine-learning}

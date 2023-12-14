@@ -17,7 +17,6 @@
 #' @return ROC and Precision-Recall curves with threshold information
 #'
 #' @examples
-#' \donttest{
 #' # Set environment variables for reproducibility
 #' Sys.setenv(LANG = "en") # Change R language to English!
 #' RNGkind("L'Ecuyer-CMRG") # Change to L'Ecuyer-CMRG instead of the default "Mersenne-Twister"
@@ -29,19 +28,10 @@
 #' seed <- 246
 #' set.seed(seed)
 #'
-#' # Install and load necessary packages
-#' if (!requireNamespace("mlbench", quietly = TRUE)) {
-#'   install.packages("mlbench")
-#'   library(mlbench)
-#' }
-#' if (!requireNamespace("mlr3learners", quietly = TRUE)) {
-#'   install.packages("mlr3learners")
-#'   library(mlr3learners)
-#' }
-#' if (!requireNamespace("ranger", quietly = TRUE)) {
-#'   install.packages("ranger")
-#'   library(ranger)
-#' }
+#' # Load necessary packages
+#' if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+#' if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+#' if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
 #' # Load BreastCancer dataset
 #' utils::data("BreastCancer", package = "mlbench")
 #'
@@ -88,7 +78,6 @@
 #' # Make predictions on new data
 #' mylrn$predict(maintask, splits$test)
 #' eperformance(task = maintask, trained_model = mylrn, splits = splits)
-#' }
 eperformance <- function(task,
                          trained_model,
                          splits) {

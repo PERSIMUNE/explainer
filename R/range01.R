@@ -10,9 +10,7 @@
 #' @return Normalized vector
 #'
 #' @examples
-#' \donttest{
 #' normalized_vector <- range01(seq(-10:1000))
-#' }
 #'
 #' @references
 #' Pearson, R. K. (1999). “Data cleaning for dynamic modeling and control”. European Control Conference, ETH Zurich, Switzerland.
