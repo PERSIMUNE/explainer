@@ -147,7 +147,7 @@ R Core Team (2021). R: A language and environment for statistical computing. R F
   
 ## Acknowledgements
 
-Many thanks to my colleagues at CHIP/PERSIMUNE to support this work by their feedback. In addition, thanks to the authors and maintainers of all the utilized packages for their dedication to advancing the R ecosystem.
+Many thanks to my colleagues at CHIP/PERSIMUNE to support this work by their feedback. In addition, thanks to the CRAN team as well as the authors and maintainers of all the utilized packages for their dedication to advancing the R ecosystem.
 
 ## Funding
 

@@ -33,7 +33,7 @@
 #' \item{kmeans_info}{Information about the k-means clustering process, including cluster centers and assignment details.}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)

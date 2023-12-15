@@ -16,7 +16,7 @@ an interactive plot of SHAP values in association with feature values
 SHAP values in association with feature values
 }
 \examples{
-\dontrun{
+\donttest{
 library("explainer")
 seed <- 246
 set.seed(seed)

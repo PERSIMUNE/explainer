@@ -37,7 +37,7 @@ A list containing:
 The SHAP plot for classification models is a visualization tool that uses the Shapley value, an approach from cooperative game theory, to compute feature contributions for single predictions. The Shapley value fairly distributes the difference of the instance’s prediction and the datasets average prediction among the features. This method is available from the iml package.
 }
 \examples{
-\dontrun{
+\donttest{
 library("explainer")
 seed <- 246
 set.seed(seed)

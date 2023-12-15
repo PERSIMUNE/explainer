@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)

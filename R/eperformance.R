@@ -77,8 +77,8 @@
 #'
 #' # Make predictions on new data
 #' mylrn$predict(maintask, splits$test)
-#' eperformance(task = maintask, trained_model = mylrn, splits = splits)
-eperformance <- function(task,
+#' ePerformance(task = maintask, trained_model = mylrn, splits = splits)
+ePerformance <- function(task,
                          trained_model,
                          splits) {
   fpr <- NULL

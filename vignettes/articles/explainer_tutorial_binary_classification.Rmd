@@ -168,7 +168,7 @@ eROC_plot(task = maintask,
 By running the next code chunk, you will get ROC and Precision Recall curves for the development and test sets this time with probability threshold information.
 
 ```{r}
-eperformance(task = maintask,
+ePerformance(task = maintask,
          trained_model = mylrn,
          splits = splits)
 ```
@@ -200,7 +200,7 @@ Partial dependence plots (PDPs): PDPs can be used to visualize the marginal effe
 
 ```{r}
 
-shapPartialPlot(shap_Mean_long = shap_Mean_long)
+ShapPartialPlot(shap_Mean_long = shap_Mean_long)
 
 ```
 

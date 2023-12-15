@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)
@@ -61,9 +61,9 @@
 #'   subset = 0.02 # up to 1
 #' )
 #' shap_Mean_long <- SHAP_output[[3]]
-#' myplot <- shapPartialPlot(shap_Mean_long)
+#' myplot <- ShapPartialPlot(shap_Mean_long)
 #' }
-shapPartialPlot <- function(shap_Mean_long) {
+ShapPartialPlot <- function(shap_Mean_long) {
   # utils::globalVariables(c("f_val", "pred_prob", "correct_prediction"))
   f_val <- NULL
   pred_prob <- NULL

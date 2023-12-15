@@ -50,7 +50,7 @@ A list containing four elements:
 SHAP values are used to cluster data samples using the k-means method to identify subgroups of individuals with specific patterns of feature contributions.
 }
 \examples{
-\dontrun{
+\donttest{
 library("explainer")
 seed <- 246
 set.seed(seed)

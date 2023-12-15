@@ -22,7 +22,7 @@
 #' \item{shap}{Raw SHAP values.}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library("explainer")
 #' seed <- 246
 #' set.seed(seed)
