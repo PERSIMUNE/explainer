@@ -4,9 +4,6 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/articles/explainer_tutorial.html</loc>
-  </url>
-  <url>
     <loc>/articles/explainer_tutorial_binary_classification.html</loc>
   </url>
   <url>
@@ -55,16 +52,7 @@
     <loc>/reference/explainer-package.html</loc>
   </url>
   <url>
-    <loc>/reference/feature.html</loc>
-  </url>
-  <url>
-    <loc>/reference/f_val.html</loc>
-  </url>
-  <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PP_vs_FVAL_plt.html</loc>
   </url>
   <url>
     <loc>/reference/range01.html</loc>
@@ -80,8 +68,5 @@
   </url>
   <url>
     <loc>/reference/ShapPartialPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SHAP_vs_FVAL_plt.html</loc>
   </url>
 </urlset>
