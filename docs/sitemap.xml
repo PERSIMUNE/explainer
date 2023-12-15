@@ -40,7 +40,7 @@
     <loc>/reference/eFairness.html</loc>
   </url>
   <url>
-    <loc>/reference/eperformance.html</loc>
+    <loc>/reference/ePerformance.html</loc>
   </url>
   <url>
     <loc>/reference/eROC_plot.html</loc>
@@ -79,7 +79,7 @@
     <loc>/reference/ShapFeaturePlot.html</loc>
   </url>
   <url>
-    <loc>/reference/shapPartialPlot.html</loc>
+    <loc>/reference/ShapPartialPlot.html</loc>
   </url>
   <url>
     <loc>/reference/SHAP_vs_FVAL_plt.html</loc>
