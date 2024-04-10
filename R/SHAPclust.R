@@ -116,7 +116,6 @@ SHAPclust <- function(task,
                       iter.max = 1000
                       ){
 
-  # utils::globalVariables(c("prediction_correctness", "truth", "response", "fval", "variable", "mean_absolute_shap", "feature", "value", "sample_num"))
   prediction_correctness <- NULL
   truth <- NULL
   response <- NULL
@@ -163,18 +162,8 @@ SHAPclust <- function(task,
 
   # save the statistical descriptions of the clusters by feature values
   kmeans_fvals_desc <- psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster)
-  # writexl::write_xlsx(psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster),
-  #                     path=paste0("shap_PL_kmeans_clusters",seed,".xlsx"))
-
   shap_Mean_wide_kmeans$row_ids <- shap_Mean_wide_kmeans$row_ids - shap_Mean_wide_kmeans$row_ids[1] + 1
-  #set(shap_Mean_wide_kmeans, j = "prediction_correctness", value = (truth == response))
-
   shap_Mean_wide_kmeans[, prediction_correctness := (truth == response)]
-
-  # # save the clustered data along with the predictions and shap values
-  # writexl::write_xlsx(shap_Mean_wide_kmeans, path=paste0("shap_PL_kmeans_clusters_detailed",seed,".xlsx"))
-
-
   shap_Mean_wide_kmeans_forCM <- shap_Mean_wide_kmeans
   shap_Mean_wide_kmeans[,c(1,2,3,4,5)] <- NULL
   variables_for_long_format <- colnames(shap_Mean_wide_kmeans)
@@ -201,42 +190,31 @@ SHAPclust <- function(task,
   ############## SHAP plots for clusters
   shap_plot1 <- dt_long %>%
     mutate(feature = forcats::fct_reorder(variable, mean_absolute_shap)) %>%
-    ggplot(aes(x = feature, y = value, color = fval))+
+    ggplot(aes(x = feature, y = value, color = fval)) +
     geom_violin(colour = "grey") +
-    geom_line(aes(group = sample_num), alpha = 0.1,size=0.2) +
+    geom_line(aes(group = sample_num), alpha = 0.1, size = 0.2) +
     coord_flip() +
-    geom_jitter(alpha = 0.6,size=0.6, position=position_jitter(width=0.2, height=0),aes(shape=prediction_correctness)) +
-    scale_shape_manual(values=c(13, 21))+
-    labs(shape = "correct prediction") +
-    scale_colour_gradient2(low="blue" ,mid="green", high="red", midpoint=0.5,breaks=c(0,1), labels=c("Low","High")) +
-    geom_text(aes(x = feature, y=-Inf, label = ""),hjust = -0.2, alpha = 0.7, color = "black") + # sprintf("%.3f", mean_phi)
-    theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(),
-          legend.position="right") +
-    geom_hline(yintercept = 0, color = "grey", alpha = 0.5) + # the vertical line
+    geom_jitter(aes(shape = factor(prediction_correctness, levels = c(FALSE, TRUE), labels = c("Incorrect","Correct"))), alpha = 0.6, size = 1.5, position = position_jitter(width = 0.2, height = 0)) +
+    # geom_jitter(aes(shape = factor(prediction_correctness)), alpha = 0.6, size = 1, position = position_jitter(width = 0.2, height = 0)) +
+    scale_shape_manual(values = c(4, 19)) +  # 19 for correct predictions (circle), 4 for incorrect predictions (cross)
+    # labs(shape = "Prediction Correctness") +
+    labs(shape = "model prediction") +
+    scale_colour_gradient2(low = "blue", mid = "green", high = "red", midpoint = 0.5, breaks = c(0, 1), labels = c("Low", "High")) +
+    geom_text(aes(x = feature, y = -Inf, label = ""), hjust = -0.2, alpha = 0.7, color = "black") +
+    theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(), legend.position = "right") +
+    geom_hline(yintercept = 0, color = "grey", alpha = 0.5) +
     labs(y = "SHAP decision plot - test set", x = "features", color = "feature values scaled\n to [low=0 high=1]") +
-    theme(text = element_text(size = 8, family="Helvetica"),
-          # Remove panel border
-          panel.border = element_blank(),
-          # Remove panel grid lines
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          # Remove panel background
-          panel.background = element_blank(),
-          # Add axis line
-          axis.line = element_line(colour = "grey"),
-          legend.key.width = grid::unit(2,"mm")) +
-    ylim(min(dt_long$value)-0.05, max(dt_long$value)+0.05)
+    theme(text = element_text(size = 8, family = "Helvetica"), panel.border = element_blank(),
+          panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
+          axis.line = element_line(colour = "grey"), legend.key.width = grid::unit(2, "mm")) +
+    ylim(min(dt_long$value) - 0.05, max(dt_long$value) + 0.05) +
+    guides(
+      shape = ggplot2::guide_legend(color = "black")
+    )
 
-  # shap_plot_tworows <- shap_plot1 + facet_wrap(~ cluster, ncol = 2) # , scales = "free"
   shap_plot_onerow <- shap_plot1 + facet_wrap(~ cluster, ncol = num_of_clusters)
 
-  # ggsave(filename = paste0("SHAP_clusters_kmeans",seed,".pdf"),
-  #        plot = shap_plot_onerow,
-  #        width = 200,
-  #        units = "mm")
   shap_plot_onerow <- ggplotly(shap_plot_onerow)
-
-  # # Create confusion matrix
 
   CM_plt <- list()
   # Create a tibble for each cluster and calculate the confusion matrix for each cluster
@@ -275,14 +253,6 @@ SHAPclust <- function(task,
 
   # Combine the plots into one figure
   combined_plot <- ggpubr::ggarrange(plotlist = CM_plt, ncol = num_of_clusters)
-
-  # ggsave("confusion_matrices.pdf", combined_plot,
-  #        width = 200,
-  #        units = "mm")
-  #
-  # # Adjust the size of each plot and the spacing between the plots
-  # ggsave("confusion_matrices.pdf", combined_plot)
-  # ggsave("confusion_matrices.png", combined_plot, dpi = 300)
 
   return(list(shap_plot_onerow, combined_plot, kmeans_fvals_desc, shap_Mean_wide_kmeans, kmeans_info))
 

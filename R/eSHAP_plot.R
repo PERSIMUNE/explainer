@@ -185,11 +185,12 @@ eSHAP_plot <- function(task,
     geom_violin(colour = "grey") +
     geom_line(aes(group = sample_num), alpha = 0.1,size=0.2) +
     coord_flip() +
-    geom_jitter(alpha = 0.6,size=1, position=position_jitter(width=0.2, height=0),aes(shape=correct_prediction)) +
-    scale_shape_manual(values=c(4, 19))+
+    geom_jitter(alpha = 0.6,size=1.5, position=position_jitter(width=0.2, height=0),aes(shape=correct_prediction)) +
+    scale_shape_manual(values=c(4, 19), guide = FALSE)+
     # scale_color_manual(values=c("black","grey")) +
     labs(shape = "model prediction") +
     scale_colour_gradient2(low="blue" ,mid="green", high="red", midpoint=0.5, breaks=c(0,1), labels=c("Low","High")) +
+    guides(shape = ggplot2::guide_legend(override.aes = list(fill = "black", color = "black"))) +
     geom_text(aes(x = feature, y=-Inf, label = sprintf("%.3f", mean_phi)), hjust = -0.2, alpha = 0.7, color = "black") +
     theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(),
           legend.position="right") +
@@ -207,6 +208,7 @@ eSHAP_plot <- function(task,
           axis.line = element_line(colour = "grey"),
           legend.key.width = grid::unit(2,"mm")) +
     ylim(min(shap_Mean$Phi)-0.05, max(shap_Mean$Phi)+0.05)
+
 
   shap_plot <- ggplotly(shap_plot)
 

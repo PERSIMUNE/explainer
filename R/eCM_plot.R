@@ -89,7 +89,7 @@ eCM_plot <- function(task,
   CM_plt_test[["labels"]][["y"]] <- 'Prediction (model output)'
   CM_plt_test[["theme"]][["text"]][["size"]] <- 9
   CM_plt_test[["theme"]][["axis.text"]][["size"]] <- 9
-  CM_plt_test[["theme"]][["text"]][["family"]] <- 'Helvetica'
+  # CM_plt_test[["theme"]][["text"]][["family"]] <- 'Helvetica'
 
   # plot the confusion matrix for the train set
   featset_total_train <- mydata[splits$train,]
@@ -114,7 +114,7 @@ eCM_plot <- function(task,
   CM_plt_train[["labels"]][["y"]] <- 'Prediction (model output)'
   CM_plt_train[["theme"]][["text"]][["size"]] <- 9
   CM_plt_train[["theme"]][["axis.text"]][["size"]] <- 9
-  CM_plt_train[["theme"]][["text"]][["family"]] <- 'Helvetica'
+  # CM_plt_train[["theme"]][["text"]][["family"]] <- 'Helvetica'
 
   CM_plt_both <- egg::ggarrange(CM_plt_train,
                                 CM_plt_test,
