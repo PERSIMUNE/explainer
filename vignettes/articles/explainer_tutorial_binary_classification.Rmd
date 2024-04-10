@@ -81,15 +81,6 @@ mylrn$train(maintask, splits$train)
 mylrn$predict(maintask, splits$test)
 
 ```
-```{r}
-
-# Check for missing values in the dataset
-missing_values <- colSums(is.na(mydata))
-
-# Print the number of missing values in each column
-print(missing_values)
-
-```
 
 ## SHAP analysis to extract feature (variable) impacts on predictions
 
