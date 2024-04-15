@@ -87,6 +87,8 @@ mylrn$predict(maintask, splits$test)
 The following code chunk uses eSHAP_plot function to estimate SHAP values for the test set and create an interactive SHAP plot. This is an enhanced SHAP plot that means it provides additional information such as whether the predictions were correct (TP or TN). The color mapping provides enhanced visual inspection of the SHAP plot.
 
 ```{r}
+library("magrittr")
+library("plotly")
 # enhanced SHAP plot
 SHAP_output <- eSHAP_plot(task = maintask,
            trained_model = mylrn,
@@ -98,19 +100,26 @@ SHAP_output <- eSHAP_plot(task = maintask,
 # display the SHAP plot
 myplot <- SHAP_output[[1]]
 myplot
-# plotly::orca(myplot, file = "shap_summary_plot.svg")
+
+```
+
+The following plot displays SHAP values associate with the predicted probabilities.
+
+```{r}
+SHAP_output[[5]]
 ```
 
 
 ## Visualize model performance by confusion matrix
 
-The following code chunk uses eCM_plot function to visualize the confusion matrix for the test set in the model. More information can be found here: <https://en.wikipedia.org/wiki/Confusion_matrix> <https://cran.r-project.org/web/packages/cvms/vignettes/Creating_a_confusion_matrix.html>
+The following code chunk uses eCM_plot function to visualize the confusion matrix to evaluate model performance for the train and test sets. More information can be found here: <https://en.wikipedia.org/wiki/Confusion_matrix> <https://cran.r-project.org/web/packages/cvms/vignettes/Creating_a_confusion_matrix.html>
 
 ```{r}
 # enhanced confusion matrix
-eCM_plot(task = maintask,
+confusionmatrix_plot <- eCM_plot(task = maintask,
          trained_model = mylrn,
          splits = splits)
+print(confusionmatrix_plot)
 ```
 
 ## Decision curve analysis
@@ -269,6 +278,10 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 ```
+```{r}
+str(shap_Mean_long)
+```
+
 
 ```{r}
 # This is the data table that includes SHAP values in wide format. Each row contains sample_num as sample ID and the SHAP values for each feature.

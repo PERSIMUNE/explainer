@@ -71,7 +71,7 @@ eCM_plot <- function(task,
   featset_total_test <- as.data.frame(featset_total_test)
   pred_results <- trained_model$predict(task, splits$test)
   # plot confusion matrix
-  d_binomial <- tibble("Truth" = featset_total_test[, task$target_names],
+  d_binomial <- tibble::tibble("Truth" = featset_total_test[, task$target_names],
                        "Prediction" = pred_results$response)
   basic_table <- table(d_binomial)
   cfm <- tibble::as_tibble(basic_table)
@@ -84,7 +84,7 @@ eCM_plot <- function(task,
                                                palette = "Oranges",
                                                label = "Total",
                                                tc_tile_border_color = "black"
-                                             ))
+                                             )) + ggtitle("Confusion matrix for the train set")
   CM_plt_test[["labels"]][["x"]] <- 'Truth (observation)'
   CM_plt_test[["labels"]][["y"]] <- 'Prediction (model output)'
   CM_plt_test[["theme"]][["text"]][["size"]] <- 9
@@ -95,7 +95,7 @@ eCM_plot <- function(task,
   featset_total_train <- mydata[splits$train,]
   featset_total_train <- as.data.frame(featset_total_train)
   pred_results <- trained_model$predict(task, splits$train)
-  d_binomial <- tibble("Truth" = featset_total_train[, task$target_names],
+  d_binomial <- tibble::tibble("Truth" = featset_total_train[, task$target_names],
                        "Prediction" = pred_results$response)
   basic_table <- table(d_binomial)
   # cfm <- broom::tidy(basic_table)
@@ -109,17 +109,12 @@ eCM_plot <- function(task,
                                                 palette = "Oranges",
                                                 label = "Total",
                                                 tc_tile_border_color = "black"
-                                              ))
+                                              )) + ggtitle("Confusion matrix for the test set")
   CM_plt_train[["labels"]][["x"]] <- 'Truth (observation)'
   CM_plt_train[["labels"]][["y"]] <- 'Prediction (model output)'
   CM_plt_train[["theme"]][["text"]][["size"]] <- 9
   CM_plt_train[["theme"]][["axis.text"]][["size"]] <- 9
   # CM_plt_train[["theme"]][["text"]][["family"]] <- 'Helvetica'
-
-  CM_plt_both <- egg::ggarrange(CM_plt_train,
-                                CM_plt_test,
-                                labels = c("train set", "test set"),
-                                nrow = 1,
-                                ncol = 2)
-  return(CM_plt_both)
+  # Return a list containing both plots
+  return(list(train_set = CM_plt_train, test_set = CM_plt_test))
 }

@@ -200,8 +200,12 @@
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="va">seed</span>,</span></span>
 <span class="r-in"><span>  subset <span class="op">=</span> <span class="fl">0.02</span> <span class="co"># up to 1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Ignoring unknown aesthetics: text</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in theme_minimal():</span> could not find function "theme_minimal"</span>
 <span class="r-in"><span><span class="va">shap_Mean_wide</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'SHAP_output' not found</span>
 <span class="r-in"><span><span class="va">shap_Mean_long</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'SHAP_output' not found</span>
 <span class="r-in"><span><span class="va">SHAP_plot_clusters</span> <span class="op">&lt;-</span> <span class="fu">SHAPclust</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  task <span class="op">=</span> <span class="va">maintask</span>,</span></span>
 <span class="r-in"><span>  trained_model <span class="op">=</span> <span class="va">mylrn</span>,</span></span>
@@ -214,20 +218,7 @@
 <span class="r-in"><span>  algorithm<span class="op">=</span><span class="st">"Hartigan-Wong"</span>,</span></span>
 <span class="r-in"><span>  iter.max <span class="op">=</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two data points have been dropped.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Computation failed in `stat_ydensity()`:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> replacement has 1 row, data has 0</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.matrix(x):</span> object 'shap_Mean_wide' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

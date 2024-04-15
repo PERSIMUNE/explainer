@@ -130,8 +130,12 @@
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="va">seed</span>,</span></span>
 <span class="r-in"><span>  subset <span class="op">=</span> <span class="fl">0.02</span> <span class="co"># up to 1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Ignoring unknown aesthetics: text</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in theme_minimal():</span> could not find function "theme_minimal"</span>
 <span class="r-in"><span><span class="va">shap_Mean_long</span> <span class="op">&lt;-</span> <span class="va">SHAP_output</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'SHAP_output' not found</span>
 <span class="r-in"><span><span class="va">myplot</span> <span class="op">&lt;-</span> <span class="fu">ShapPartialPlot</span><span class="op">(</span><span class="va">shap_Mean_long</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ggplot(shap_Mean_long, aes(x = f_val, y = pred_prob)):</span> object 'shap_Mean_long' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
