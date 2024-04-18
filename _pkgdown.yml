@@ -1,4 +1,5 @@
-url: ~
-template:
-  bootstrap: 5
-
+---
+editor_options:
+  markdown:
+    wrap: 72
+---
