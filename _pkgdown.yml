@@ -1,5 +1,4 @@
----
-editor_options:
-  markdown:
-    wrap: 72
----
+url: https://persimune.github.io/explainer/
+template:
+  bootstrap: 5
+
