@@ -1,17 +1,19 @@
-citHeader("To cite explaineR in publications use:")
-
-citEntry(
-  entry    = "Article",
-  title    = "ExplaineR: an R package to explain machine learning models",
-  author   = "Zargari Marandi, Ramtin",
-  journal  = "Bioinformatics Advances",
-  year     = 2024,
-  volume   = 4,
-  number   = 1,
-  pages    = "vbae049",
-  url      = "https://doi.org/10.1093/bioadv/vbae049",
+citation <- bibentry(
+  bibtype = "Article",
+  title = "ExplaineR: an R package to explain machine learning models",
+  author = person("R. Zargari Marandi"),
+  person(given = "R.", family = "Zargari Marandi"),
+  journal = "Bioinformatics advances",
+  year = "2024",
+  volume = "4",
+  number = "1",
+  pages = "vbae049",
+  doi = "10.1093/bioadv/vbae049",
+  howpublished = "https://doi.org/10.1093/bioadv/vbae049",
+  header = "To cite ExplaineR in publications use:",
   textVersion = paste(
-    "Zargari Marandi, Ramtin. “ExplaineR: an R package to explain machine learning models.”",
-    "Bioinformatics Advances 4, no. 1 (2024): vbae049."
+    "Zargari Marandi, R. (2024). ExplaineR: an R package to explain machine learning models.",
+    "Bioinformatics advances, 4(1), p. vbae049.",
+    "doi:10.1093/bioadv/vbae049. https://doi.org/10.1093/bioadv/vbae049"
   )
 )
