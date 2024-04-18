@@ -20,6 +20,7 @@
 #' \item{shap_Mean_wide}{A matrix of SHAP values.}
 #' \item{shap_Mean}{A data.table with aggregated SHAP values.}
 #' \item{shap}{Raw SHAP values.}
+#' \item{shap_pred_plot}{A plot depicting SHAP values versus predicted probabilities.}
 #'
 #' @examples
 #' \donttest{
@@ -59,6 +60,7 @@
 #' }
 #'
 #' @references
+#' Zargari Marandi, R., 2024. ExplaineR: an R package to explain machine learning models. Bioinformatics advances, 4(1), p.vbae049.
 #' Molnar C, Casalicchio G, Bischl B. iml: An R package for interpretable machine learning. Journal of Open Source Software. 2018 Jun 27;3(26):786.
 #'
 #' @seealso
@@ -107,15 +109,12 @@ eSHAP_plot <- function(task,
   feature_names <- colnames(X)
   nfeats <- length(feature_names)
 
-  # print(pred_results)
-  # print(pred_results$prob)
   # save the predicted probability for the positive class
   pred_prob <- pred_results$prob[,1]
 
   # mark which samples were correctly predicted and which samples were not
   predicted_correct <- mydata$Class==pred_results$response
 
-  # test_set.nolab <- mydata
   # initialize the results list.
   shap_values <- vector("list", nrow(test_set))
   for (i in seq_along(shap_values)) {
@@ -236,8 +235,7 @@ eSHAP_plot <- function(task,
     ggplot(aes(x = Phi, y = pred_prob, shape=pred_class)) +
     geom_point() +
     geom_smooth(method = "loess", se = FALSE) +
-    labs(x = "SHAP value", y = "Predicted probability") +
-    theme_minimal()
+    labs(x = "SHAP value", y = "Predicted probability")
 
   return(list(shap_plot, shap_Mean_wide, shap_Mean, shap, shap_pred_plot))
 }

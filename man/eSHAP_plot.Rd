@@ -32,6 +32,7 @@ A list containing:
 \item{shap_Mean_wide}{A matrix of SHAP values.}
 \item{shap_Mean}{A data.table with aggregated SHAP values.}
 \item{shap}{Raw SHAP values.}
+\item{shap_pred_plot}{A plot depicting SHAP values versus predicted probabilities.}
 }
 \description{
 The SHAP plot for classification models is a visualization tool that uses the Shapley value, an approach from cooperative game theory, to compute feature contributions for single predictions. The Shapley value fairly distributes the difference of the instance’s prediction and the datasets average prediction among the features. This method is available from the iml package.
@@ -75,6 +76,7 @@ SHAP_output <- eSHAP_plot(
 
 }
 \references{
+Zargari Marandi, R., 2024. ExplaineR: an R package to explain machine learning models. Bioinformatics advances, 4(1), p.vbae049.
 Molnar C, Casalicchio G, Bischl B. iml: An R package for interpretable machine learning. Journal of Open Source Software. 2018 Jun 27;3(26):786.
 }
 \seealso{

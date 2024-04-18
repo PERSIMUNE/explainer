@@ -1,4 +1,4 @@
-#' @title Clustered SHAP Summary Plot
+#' @title SHAP clustering
 #' @description SHAP values are used to cluster data samples using the k-means method to identify subgroups of individuals with specific patterns of feature contributions.
 #'
 #' @param task an mlr3 task for binary classification
@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @return A list containing four elements:
-#' \item{shap_plot_onerow}{A plotly interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
+#' \item{shap_plot_onerow}{An interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
 #' \item{combined_plot}{A ggplot2 figure combining confusion matrices for each cluster, providing insights into the model's performance within each identified subgroup.}
 #' \item{kmeans_fvals_desc}{A summary table containing statistical descriptions of the clusters based on feature values.}
 #' \item{shap_Mean_wide_kmeans}{A data frame containing clustered SHAP values along with predictions and ground truth information.}
@@ -99,9 +99,9 @@
 #' }
 #'
 #' @references
-#' For more details on SHAP analysis, refer to Lundberg, S. M., & Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. In Advances in Neural Information Processing Systems (NIPS) (pp. 4765-4774).
+#' Zargari Marandi, R., 2024. ExplaineR: an R package to explain machine learning models. Bioinformatics advances, 4(1), p.vbae049, https://doi.org/10.1093/bioadv/vbae049.
 #'
-#' @seealso Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}, \code{\link{plot_confusion_matrix}}, \code{\link{confusion_matrix}}.
+#' @seealso Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}.
 #'
 #' @keywords clustering SHAP k-means machine-learning interpretability
 SHAPclust <- function(task,
@@ -251,8 +251,7 @@ SHAPclust <- function(task,
     CM_plt[[i]][["theme"]][["text"]][["family"]] <- 'Helvetica'
 
     # Add the cluster number to the title of each plot
-    title <- paste("Cluster", i)
-    CM_plt[[i]] <- CM_plt[[i]] + ggtitle(title) + theme(plot.title = element_text(hjust = 0.5))
+    CM_plt[[i]] <- CM_plt[[i]] + ggtitle(paste("Cluster", i)) + theme(plot.title = element_text(hjust = 0.5))
   }
 
   # Combine the plots into one figure

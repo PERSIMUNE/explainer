@@ -2,7 +2,7 @@
 % Please edit documentation in R/range01.R
 \name{range01}
 \alias{range01}
-\title{Data Scale to 0 and 1}
+\title{Data scale to 0 and 1}
 \usage{
 range01(x)
 }

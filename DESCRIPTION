@@ -1,6 +1,6 @@
 Package: explainer
 Title: Machine Learning Model Explainer
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person("Ramtin", "Zargari Marandi", , "ramtin.zargari.marandi@regionh.dk", role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0000-0001-9233-1656"))

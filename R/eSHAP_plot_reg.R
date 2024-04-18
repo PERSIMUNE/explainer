@@ -65,28 +65,20 @@ eSHAP_plot_reg <- function(task,
   # utils::globalVariables(c("feature", "sample_num"))
   feature <- NULL
   sample_num <- NULL
+  pred_value <- NULL
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
   X <- mydata[which(names(mydata[splits$train,]) != task$target_names)]
   model <- iml::Predictor$new(trained_model, data = X, y = mydata[, task$target_names])
 
   # randomly subset the target variable and the corresponding rows
-  if (subset < 1) {
-    set.seed(seed) # set seed for reproducibility
-    n <- round(subset * length(splits$test))
-    target_index <- sample(splits$test, size = n, replace = FALSE)
-    mydata <- mydata[target_index, ]
+  set.seed(seed) # set seed for reproducibility
+  n <- round(subset * length(splits$test))
+  target_index <- sample(splits$test, size = n, replace = FALSE)
+  mydata <- mydata[target_index, ]
 
-    # do the prediction for the test set
-    pred_results <- trained_model$predict(task, target_index)
-
-  } else {
-    mydata <- mydata[splits$test, ]
-
-    # do the prediction for the test set
-    pred_results <- trained_model$predict(task, splits$test)
-
-  }
+  # do the prediction for the test set
+  pred_results <- trained_model$predict(task, target_index)
 
   # the test set based on the data split is used to calculate SHAP values
   test_set <- as.data.frame(mydata)
@@ -130,11 +122,16 @@ eSHAP_plot_reg <- function(task,
     test_set.nolab[[col]] <- as.numeric(test_set.nolab[[col]])
   }
 
+  # store feature values
+  unscaled_f_val_lst <- f_val_lst
+
   # Apply transformation for visualization
   for (i in 1:length(f_val_lst)) {
+    unscaled_f_val_lst[[i]] <- mydata[,i] # not scaled
     f_val_lst[[i]] <- range01(test_set.nolab[, i])
   }
 
+  (unscaled_f_val = as.numeric(unlist(unscaled_f_val_lst)))
   (f_val = as.numeric(unlist(f_val_lst)))
   (Phi = unlist(indiv_phi))
 
@@ -142,6 +139,7 @@ eSHAP_plot_reg <- function(task,
                                       mean_phi = rep(mean_phi, each = total_reps),
                                       Phi = Phi,
                                       f_val = f_val,
+                                      unscaled_f_val = unscaled_f_val,
                                       sample_num = rep(1:nrow(test_set), length(feature_names)),
                                       pred_value = unlist(pred_values_rep))
 
@@ -173,7 +171,11 @@ eSHAP_plot_reg <- function(task,
     geom_violin(colour = "grey") +
     geom_line(aes(group = sample_num), alpha = 0.1, size = 0.2) +
     coord_flip() +
-    geom_jitter(alpha = 0.6, size = 1, position = position_jitter(width = 0.2, height = 0)) +
+    geom_jitter(aes(text = paste("Feature: ", feature,
+                                 "<br>Unscaled feature value: ", unscaled_f_val,
+                                 "<br>SHAP value: ", Phi,
+                                 "<br>Predicted outcome value: ", pred_value)),
+                alpha = 0.6, size=1.5, position=position_jitter(width=0.2, height=0)) +
     scale_colour_gradient2(low = "blue", mid = "green", high = "red", midpoint = 0.5, breaks = c(0, 1), labels = c("Low", "High")) +
     geom_text(aes(x = feature, y = -Inf, label = sprintf("%.3f", mean_phi)), hjust = -0.2, alpha = 0.7, color = "black") +
     theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(),
@@ -193,7 +195,8 @@ eSHAP_plot_reg <- function(task,
           legend.key.width = grid::unit(2, "mm")) +
     ylim(min(shap_Mean$Phi) - 0.05, max(shap_Mean$Phi) + 0.05)
 
-  shap_plot <- ggplotly(shap_plot)
+  # Convert ggplot to Plotly
+  shap_plot <- ggplotly(shap_plot, tooltip="text")
 
   return(list(shap_plot, shap_Mean_wide, shap_Mean, shap))
 }

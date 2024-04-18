@@ -1,4 +1,4 @@
-#' @title Data Scale to 0 and 1
+#' @title Data scale to 0 and 1
 #' @description
 #' Scale the data to the range of 0 to 1. It uses the Hampel filter to adjust outliers, followed by min-max normalization.
 #'

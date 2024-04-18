@@ -2,7 +2,7 @@
 % Please edit documentation in R/SHAPclust.R
 \name{SHAPclust}
 \alias{SHAPclust}
-\title{Clustered SHAP Summary Plot}
+\title{SHAP clustering}
 \usage{
 SHAPclust(
   task,
@@ -40,7 +40,7 @@ SHAPclust(
 }
 \value{
 A list containing four elements:
-\item{shap_plot_onerow}{A plotly interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
+\item{shap_plot_onerow}{An interactive plot displaying the SHAP values for each feature, clustered by the specified number of clusters. Each cluster is shown in a facet.}
 \item{combined_plot}{A ggplot2 figure combining confusion matrices for each cluster, providing insights into the model's performance within each identified subgroup.}
 \item{kmeans_fvals_desc}{A summary table containing statistical descriptions of the clusters based on feature values.}
 \item{shap_Mean_wide_kmeans}{A data frame containing clustered SHAP values along with predictions and ground truth information.}
@@ -117,10 +117,10 @@ SHAP_plot_clusters <- SHAPclust(
 
 }
 \references{
-For more details on SHAP analysis, refer to Lundberg, S. M., & Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. In Advances in Neural Information Processing Systems (NIPS) (pp. 4765-4774).
+Zargari Marandi, R., 2024. ExplaineR: an R package to explain machine learning models. Bioinformatics advances, 4(1), p.vbae049, https://doi.org/10.1093/bioadv/vbae049.
 }
 \seealso{
-Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}, \code{\link{plot_confusion_matrix}}, \code{\link{confusion_matrix}}.
+Other functions to visualize and interpret machine learning models: \code{\link{eSHAP_plot}}.
 }
 \keyword{SHAP}
 \keyword{clustering}
