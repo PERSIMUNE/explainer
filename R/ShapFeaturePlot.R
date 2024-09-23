@@ -31,7 +31,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -63,7 +63,7 @@
 #' shap_Mean_long <- SHAP_output[[3]]
 #' myplot <- ShapFeaturePlot(shap_Mean_long)
 #' }
-ShapFeaturePlot <- function(shap_Mean_long){
+ShapFeaturePlot <- function(shap_Mean_long) {
   # utils::globalVariables(c("f_val", "Phi", "correct_prediction"))
   f_val <- NULL
   Phi <- NULL
@@ -73,7 +73,7 @@ ShapFeaturePlot <- function(shap_Mean_long){
     stat_smooth(method = "lm", formula = y ~ x) +
     ggplot2::xlab("normalized feature values [0 1]") +
     ggplot2::ylab("SHAP values") +
-    facet_wrap(~ feature, scales = "free_y") +
+    facet_wrap(~feature, scales = "free_y") +
     egg::theme_article() # base_size = 8
 
   SHAP_vs_FVAL_plt <- ggplotly(SHAP_vs_FVAL_plt)

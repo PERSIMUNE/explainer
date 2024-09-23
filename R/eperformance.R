@@ -91,7 +91,7 @@ ePerformance <- function(task,
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
 
-  featset_total <- mydata[splits$train,]
+  featset_total <- mydata[splits$train, ]
   featset_total <- as.data.frame(featset_total)
 
   pred_results <- trained_model$predict(task, splits$train)
@@ -125,19 +125,23 @@ ePerformance <- function(task,
     th_step <- th_step + 1
   }
 
-  dev_roc_res <- data.frame(tpr = TPR_dev,
-                            fpr = FPR_dev,
-                            threshold = seq(0, 1.01, .01))
-  dev_roc_res <- dev_roc_res[complete.cases(dev_roc_res),]
+  dev_roc_res <- data.frame(
+    tpr = TPR_dev,
+    fpr = FPR_dev,
+    threshold = seq(0, 1.01, .01)
+  )
+  dev_roc_res <- dev_roc_res[complete.cases(dev_roc_res), ]
 
   dev_roc_plt <- ggplot(data = dev_roc_res, mapping = aes(fpr, tpr)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
-    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = "blue") +
+    scale_colour_gradient2(low = "blue", high = "red", mid = "green", midpoint = 0.5) +
     geom_line(data = random_guess, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title = paste0("development set, N=", nrow(featset_total)),
-         x = "False Positive Rate (FPR)",
-         y = "True Positive Rate (TPR)") +
+    labs(
+      title = paste0("development set, N=", nrow(featset_total)),
+      x = "False Positive Rate (FPR)",
+      y = "True Positive Rate (TPR)"
+    ) +
     scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
@@ -148,25 +152,29 @@ ePerformance <- function(task,
   Tnum <- nrow(featset_total)
   PRcurve.baseline <- data.frame(x = c(0, 1), y = c(Pnum / Tnum, Pnum / Tnum))
 
-  dev_PRroc_res <- data.frame(tpr = TPR_dev,
-                              ppv = PPV_dev,
-                              threshold = seq(0, 1.01, .01))
-  dev_PRroc_res <- dev_PRroc_res[complete.cases(dev_PRroc_res),]
+  dev_PRroc_res <- data.frame(
+    tpr = TPR_dev,
+    ppv = PPV_dev,
+    threshold = seq(0, 1.01, .01)
+  )
+  dev_PRroc_res <- dev_PRroc_res[complete.cases(dev_PRroc_res), ]
   dev_PRroc_plt <- ggplot(data = dev_PRroc_res, mapping = aes(tpr, ppv)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
-    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
+    scale_colour_gradient2(low = "blue", high = "red", mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = "blue") +
     geom_line(data = PRcurve.baseline, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title = paste0("development set, N=", nrow(featset_total)),
-         x = "Recall",
-         y = "Precision") +
+    labs(
+      title = paste0("development set, N=", nrow(featset_total)),
+      x = "Recall",
+      y = "Precision"
+    ) +
     scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   dev_PRroc_plt <- dev_PRroc_plt + theme(legend.position = c(0.2, 0.25))
   dev_PRroc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-  test_set <- mydata[splits$test,]
+  test_set <- mydata[splits$test, ]
   test_set <- as.data.frame(test_set)
 
   pred_results <- trained_model$predict(task, splits$test)
@@ -192,27 +200,31 @@ ePerformance <- function(task,
         calprd[i] <- NegClass
       }
     }
-    TPR_test[th_step] = sum((calprd == PosClass & truth == PosClass) == T) / sum(truth == PosClass)
-    FPR_test[th_step] = sum((calprd == PosClass & truth == NegClass) == T) / sum(truth == NegClass)
+    TPR_test[th_step] <- sum((calprd == PosClass & truth == PosClass) == T) / sum(truth == PosClass)
+    FPR_test[th_step] <- sum((calprd == PosClass & truth == NegClass) == T) / sum(truth == NegClass)
     TP <- sum(calprd == PosClass & truth == PosClass)
     FP <- sum(calprd == PosClass & truth == NegClass)
     PPV_test[th_step] <- TP / (TP + FP)
     th_step <- th_step + 1
   }
 
-  test_roc_res <- data.frame(tpr = TPR_test,
-                             fpr = FPR_test,
-                             threshold = seq(0, 1.01, .01))
-  test_roc_res <- test_roc_res[complete.cases(test_roc_res),]
+  test_roc_res <- data.frame(
+    tpr = TPR_test,
+    fpr = FPR_test,
+    threshold = seq(0, 1.01, .01)
+  )
+  test_roc_res <- test_roc_res[complete.cases(test_roc_res), ]
 
   test_roc_plt <- ggplot(data = test_roc_res, mapping = aes(fpr, tpr)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
-    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = "blue") +
+    scale_colour_gradient2(low = "blue", high = "red", mid = "green", midpoint = 0.5) +
     geom_line(data = random_guess, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title = paste0("test set, N=", nrow(test_set)),
-         x = "False Positive Rate (FPR)",
-         y = "True Positive Rate (TPR)") +
+    labs(
+      title = paste0("test set, N=", nrow(test_set)),
+      x = "False Positive Rate (FPR)",
+      y = "True Positive Rate (TPR)"
+    ) +
     scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
@@ -223,28 +235,34 @@ ePerformance <- function(task,
   Tnum <- nrow(test_set)
   PRcurve.baseline <- data.frame(x = c(0, 1), y = c(Pnum / Tnum, Pnum / Tnum))
 
-  test_PRroc_res <- data.frame(tpr = TPR_test,
-                               ppv = PPV_test,
-                               threshold = seq(0, 1.01, .01))
-  test_PRroc_res <- test_PRroc_res[complete.cases(test_PRroc_res),]
+  test_PRroc_res <- data.frame(
+    tpr = TPR_test,
+    ppv = PPV_test,
+    threshold = seq(0, 1.01, .01)
+  )
+  test_PRroc_res <- test_PRroc_res[complete.cases(test_PRroc_res), ]
   test_PRroc_plt <- ggplot(data = test_PRroc_res, mapping = aes(tpr, ppv)) +
     geom_point(size = 0.5, aes(colour = threshold)) +
-    scale_colour_gradient2(low = 'blue', high = 'red', mid = "green", midpoint = 0.5) +
-    geom_line(size = 0.2, linetype = "dashed", colour = 'blue') +
+    scale_colour_gradient2(low = "blue", high = "red", mid = "green", midpoint = 0.5) +
+    geom_line(size = 0.2, linetype = "dashed", colour = "blue") +
     geom_line(data = PRcurve.baseline, aes(x = x, y = y), color = "grey", linetype = "dashed") +
-    labs(title = paste0("test set, N=", nrow(test_set)),
-         x = "Recall",
-         y = "Precision") +
+    labs(
+      title = paste0("test set, N=", nrow(test_set)),
+      x = "Recall",
+      y = "Precision"
+    ) +
     scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5), labels = seq(0, 1, 0.5)) +
     egg::theme_article()
   test_PRroc_plt <- test_PRroc_plt + theme(legend.position = c(0.2, 0.25))
   test_PRroc_plt[["theme"]][["plot.title"]][["size"]] <- 10
 
-  all_plts <- ggpubr::ggarrange(plotlist = list(dev_PRroc_plt, dev_roc_plt, test_PRroc_plt, test_roc_plt),
-                                ncol = 2, nrow = 2,
-                                common.legend = TRUE,
-                                legend = "right")
+  all_plts <- ggpubr::ggarrange(
+    plotlist = list(dev_PRroc_plt, dev_roc_plt, test_PRroc_plt, test_roc_plt),
+    ncol = 2, nrow = 2,
+    common.legend = TRUE,
+    legend = "right"
+  )
 
   dev_PRroc_plt <- dev_PRroc_plt + theme(legend.position = "none")
   dev_PRroc_plt <- ggplotly(dev_PRroc_plt)
@@ -252,12 +270,12 @@ ePerformance <- function(task,
   fig_dev <- subplot(test_PRroc_plt, test_roc_plt) %>%
     layout(
       annotations = list(
-        text = 'ROC plots on the development set',
+        text = "ROC plots on the development set",
         x = 0.5,
         y = 1,
         showarrow = FALSE,
-        xref = 'paper',
-        yref = 'paper',
+        xref = "paper",
+        yref = "paper",
         font = list(size = 10)
       )
     )
@@ -268,12 +286,12 @@ ePerformance <- function(task,
   fig_test <- subplot(test_PRroc_plt, test_roc_plt) %>%
     layout(
       annotations = list(
-        text = 'ROC plots on the test set',
+        text = "ROC plots on the test set",
         x = 0.5,
         y = 1,
         showarrow = FALSE,
-        xref = 'paper',
-        yref = 'paper',
+        xref = "paper",
+        yref = "paper",
         font = list(size = 10)
       )
     )

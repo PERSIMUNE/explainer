@@ -31,7 +31,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -73,7 +73,7 @@ ShapPartialPlot <- function(shap_Mean_long) {
     geom_smooth(method = "lm", formula = y ~ x) +
     ggplot2::xlab("Normalized Feature Values [0 1]") +
     ggplot2::ylab("Predicted Probability for the Positive Class") +
-    facet_wrap(~ feature, scales = "free_y") +
+    facet_wrap(~feature, scales = "free_y") +
     egg::theme_article()
 
   shapPartialPlot <- ggplotly(shapPartialPlot)

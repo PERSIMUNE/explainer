@@ -35,7 +35,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -73,7 +73,7 @@ eDecisionCurve <- function(task,
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
 
-  featset_total_test <- mydata[splits$test,]
+  featset_total_test <- mydata[splits$test, ]
   featset_total_test <- as.data.frame(featset_total_test)
 
   pred_results <- data.table::as.data.table(trained_model$predict(task, splits$test))
@@ -126,11 +126,13 @@ eDecisionCurve <- function(task,
     x <- x + 1
   }
 
-  netbenefit_df <- data.frame(netbenefit = netbenefit,
-                              total_all = total_all,
-                              total_none = total_none,
-                              total_rand = total_rand,
-                              threshold = seq(0.01, 0.99, 0.01))
+  netbenefit_df <- data.frame(
+    netbenefit = netbenefit,
+    total_all = total_all,
+    total_none = total_none,
+    total_rand = total_rand,
+    threshold = seq(0.01, 0.99, 0.01)
+  )
   netbenefit_df_long <- reshape2::melt(netbenefit_df, id.vars = c("threshold"))
 
   decision_curve_plt <- ggplot(data = netbenefit_df_long, aes(x = threshold, y = value, colour = variable)) +

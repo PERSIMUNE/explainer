@@ -122,6 +122,10 @@ If you want to contribute to the development of this package, please read [CONTR
 
 If you encounter any issues or have suggestions, please [open an issue](https://github.com/PERSIMUNE/explainer/issues).
 
+## Major updates
+
+23-09-2024: a new function for multi-class classification is added, check out the tutorial for multi-class classification on how to use the function (eSHAP_plot_multiclass.R).
+
 ## License
 
 This package is released under the [MIT License](https://github.com/PERSIMUNE/explainer/blob/main/LICENSE.md).

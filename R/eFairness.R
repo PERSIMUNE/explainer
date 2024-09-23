@@ -35,7 +35,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -69,26 +69,27 @@ eFairness <- function(task,
                       splits,
                       target_variable,
                       var_levels) {
-
   truth <- NULL
   pos_class_prob <- NULL
   subgroups <- NULL
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
 
-  featset_total <- mydata[splits$train,]
+  featset_total <- mydata[splits$train, ]
   featset_total <- as.data.frame(featset_total)
 
   var_levels_codes <- levels(featset_total[, target_variable])
-  meas <- c("classif.auc",
-            "classif.bacc",
-            "classif.mcc",
-            "classif.bbrier",
-            "classif.ppv",
-            "classif.npv",
-            "classif.specificity",
-            "classif.sensitivity",
-            "classif.prauc") #mlr3
+  meas <- c(
+    "classif.auc",
+    "classif.bacc",
+    "classif.mcc",
+    "classif.bbrier",
+    "classif.ppv",
+    "classif.npv",
+    "classif.specificity",
+    "classif.sensitivity",
+    "classif.prauc"
+  ) # mlr3
 
   pred_results <- trained_model$predict(task, splits$train)
   pred_results <- as.data.table(pred_results)
@@ -101,7 +102,7 @@ eFairness <- function(task,
     plotROC::geom_roc() +
     plotROC::style_roc()
 
-  featset_total_test <- mydata[splits$test,]
+  featset_total_test <- mydata[splits$test, ]
   featset_total_test <- as.data.frame(featset_total_test)
 
   pred_results <- trained_model$predict(task, splits$test)
@@ -118,10 +119,12 @@ eFairness <- function(task,
 
   ROC_plt_dev <- ROC_plt_dev + labs(title = "ROC plot for development Set")
   ROC_plt_test <- ROC_plt_test + labs(title = "ROC plot for test Set")
-  all_plts <- ggpubr::ggarrange(plotlist = list(ROC_plt_dev, ROC_plt_test),
-                                ncol = 2, nrow = 1,
-                                common.legend = TRUE,
-                                legend = "right")
+  all_plts <- ggpubr::ggarrange(
+    plotlist = list(ROC_plt_dev, ROC_plt_test),
+    ncol = 2, nrow = 1,
+    common.legend = TRUE,
+    legend = "right"
+  )
 
   prf_dev_list <- list()
   for (i in 1:length(var_levels_codes)) {

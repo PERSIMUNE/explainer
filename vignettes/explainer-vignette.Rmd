@@ -1,0 +1,77 @@
+---
+title: "explainer-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{explainer-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(explainer)
+```
+
+## Introduction to Explainer Package
+
+This vignette serves as a basic introduction to the functionalities of the Explainer package. Explainer provides a comprehensive toolkit for explaining and interpreting machine learning models.
+
+### Functions Overview
+
+#### SHAPclust
+
+This function is used for SHAP clustering for binary classification models. SHAP values calculated by eSHAP_plot function are used to cluster data samples (instances) using the k-means method to identify subgroups of individuals with specific patterns of feature contributions.
+
+#### ShapFeaturePlot
+
+This function can be sued to plot SHAP values in association with feature values.
+
+#### ShapPartialPlot
+
+This function generates an interactive partial dependence plot based on SHAP values, visualizing the marginal effect of one or two features on the predicted outcome of a machine learning model.
+
+#### eCM_plot
+
+This function generates an enhanced confusion matrix plot using the CVMS package. The plot includes visualizations of sensitivity, specificity, positive predictive value (PPV), and negative predictive value (NPV).
+
+#### eDecisionCurve
+
+Decision curve analysis is a statistical method used in medical research to evaluate and compare the clinical utility of different diagnostic or predictive models. It assesses the net benefit of a model across a range of decision thresholds, aiding in the selection of the most informative and practical approach for guiding clinical decisions.
+
+#### eFairness
+
+This function generates Precision-Recall and ROC curves for sample subgroups, facilitating fairness analysis of a binary classification model.
+
+#### eperformance
+
+This function generates Precision-Recall and ROC curves, including threshold information for binary classification models.
+
+#### eROC_plot
+
+This function generates Precision-Recall and ROC curves for binary classification models.
+
+#### eSHAP_plot
+
+This function generates SHAP summary plot for classification models. It is a visualization tool that uses the Shapley value, an approach from cooperative game theory, to compute feature contributions for single predictions. The Shapley value fairly distributes the difference of the instance’s prediction and the datasets average prediction among the features. This method is available from the iml package. See the package tutorial for a working example of a binary classification model analysis.
+
+#### eSHAP_plot_multiclass
+
+This function is an extension to eSHAP_plot function for multiclass classification. See the package tutorial for a working example of multi-class classification model analysis.
+
+#### eSHAP_plot_reg
+
+This function creates a SHAP summary plot for a regression model. See the package tutorial for a working example of regression model analysis.
+
+#### range01
+
+This function is used to scale the data to the range of 0 to 1. It uses the Hampel filter to adjust outliers, followed by min-max normalization.
+
+#### regressmdl_eval
+
+This function provides calculations of measures to evaluate regression models.

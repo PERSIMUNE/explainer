@@ -34,3 +34,5 @@ inst/doc
 *.utf8.md
 
 docs
+/doc/
+/Meta/

@@ -68,7 +68,7 @@ eSHAP_plot_reg <- function(task,
   pred_value <- NULL
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
-  X <- mydata[which(names(mydata[splits$train,]) != task$target_names)]
+  X <- mydata[which(names(mydata[splits$train, ]) != task$target_names)]
   model <- iml::Predictor$new(trained_model, data = X, y = mydata[, task$target_names])
 
   # randomly subset the target variable and the corresponding rows
@@ -93,12 +93,14 @@ eSHAP_plot_reg <- function(task,
   shap_values <- vector("list", nrow(test_set))
   for (i in seq_along(shap_values)) {
     set.seed(seed)
-    shap_values[[i]] <- iml::Shapley$new(model, x.interest = test_set[i, feature_names],
-                                         sample.size = sample.size)$results
-    shap_values[[i]]$sample_num <- i  # identifier to track our instances.
+    shap_values[[i]] <- iml::Shapley$new(model,
+      x.interest = test_set[i, feature_names],
+      sample.size = sample.size
+    )$results
+    shap_values[[i]]$sample_num <- i # identifier to track our instances.
     shap_values[[i]]$pred_value <- pred_values[i]
   }
-  data_shap_values <- dplyr::bind_rows(shap_values)  # collapse the list.
+  data_shap_values <- dplyr::bind_rows(shap_values) # collapse the list.
 
   shap <- data_shap_values
 
@@ -108,13 +110,13 @@ eSHAP_plot_reg <- function(task,
   f_val_lst <- rep(0, nfeats)
   pred_values_rep <- rep(0, nfeats)
 
-  feature_values <- gsub(".*=", '', shap$feature.value)
+  feature_values <- gsub(".*=", "", shap$feature.value)
   shap$feature.value <- as.numeric(feature_values)
   for (i in 1:nfeats) {
-    mean_phi[i] = mean(abs(shap$phi[seq(i, nrow(shap), nfeats)]))
-    indiv_phi[i] = list(shap$phi[seq(i, nrow(shap), nfeats)])
-    f_val_lst[i] = list(feature_values[seq(i, nrow(shap), nfeats)])
-    pred_values_rep[i] = list(shap$pred_value[seq(i, nrow(shap), nfeats)])
+    mean_phi[i] <- mean(abs(shap$phi[seq(i, nrow(shap), nfeats)]))
+    indiv_phi[i] <- list(shap$phi[seq(i, nrow(shap), nfeats)])
+    f_val_lst[i] <- list(feature_values[seq(i, nrow(shap), nfeats)])
+    pred_values_rep[i] <- list(shap$pred_value[seq(i, nrow(shap), nfeats)])
   }
 
   # Convert non-numeric columns in test_set.nolab to numeric
@@ -127,21 +129,23 @@ eSHAP_plot_reg <- function(task,
 
   # Apply transformation for visualization
   for (i in 1:length(f_val_lst)) {
-    unscaled_f_val_lst[[i]] <- mydata[,i] # not scaled
+    unscaled_f_val_lst[[i]] <- mydata[, i] # not scaled
     f_val_lst[[i]] <- range01(test_set.nolab[, i])
   }
 
-  (unscaled_f_val = as.numeric(unlist(unscaled_f_val_lst)))
-  (f_val = as.numeric(unlist(f_val_lst)))
-  (Phi = unlist(indiv_phi))
+  (unscaled_f_val <- as.numeric(unlist(unscaled_f_val_lst)))
+  (f_val <- as.numeric(unlist(f_val_lst)))
+  (Phi <- unlist(indiv_phi))
 
-  shap_Mean <- data.table::data.table(feature = rep(feature_names, each = total_reps),
-                                      mean_phi = rep(mean_phi, each = total_reps),
-                                      Phi = Phi,
-                                      f_val = f_val,
-                                      unscaled_f_val = unscaled_f_val,
-                                      sample_num = rep(1:nrow(test_set), length(feature_names)),
-                                      pred_value = unlist(pred_values_rep))
+  shap_Mean <- data.table::data.table(
+    feature = rep(feature_names, each = total_reps),
+    mean_phi = rep(mean_phi, each = total_reps),
+    Phi = Phi,
+    f_val = f_val,
+    unscaled_f_val = unscaled_f_val,
+    sample_num = rep(1:nrow(test_set), length(feature_names)),
+    pred_value = unlist(pred_values_rep)
+  )
 
   shap_Mean_wide <- data.table::dcast(shap_Mean, sample_num ~ feature, value.var = "Phi")
 
@@ -171,32 +175,39 @@ eSHAP_plot_reg <- function(task,
     geom_violin(colour = "grey") +
     geom_line(aes(group = sample_num), alpha = 0.1, size = 0.2) +
     coord_flip() +
-    geom_jitter(aes(text = paste("Feature: ", feature,
-                                 "<br>Unscaled feature value: ", unscaled_f_val,
-                                 "<br>SHAP value: ", Phi,
-                                 "<br>Predicted outcome value: ", pred_value)),
-                alpha = 0.6, size=1.5, position=position_jitter(width=0.2, height=0)) +
+    geom_jitter(aes(text = paste(
+      "Feature: ", feature,
+      "<br>Unscaled feature value: ", unscaled_f_val,
+      "<br>SHAP value: ", Phi,
+      "<br>Predicted outcome value: ", pred_value
+    )),
+    alpha = 0.6, size = 1.5, position = position_jitter(width = 0.2, height = 0)
+    ) +
     scale_colour_gradient2(low = "blue", mid = "green", high = "red", midpoint = 0.5, breaks = c(0, 1), labels = c("Low", "High")) +
     geom_text(aes(x = feature, y = -Inf, label = sprintf("%.3f", mean_phi)), hjust = -0.2, alpha = 0.7, color = "black") +
-    theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(),
-          legend.position = "right") +
+    theme(
+      axis.line.y = element_blank(), axis.ticks.y = element_blank(),
+      legend.position = "right"
+    ) +
     geom_hline(yintercept = 0, color = "grey") + # the vertical line
     labs(y = "SHAP decision plot - test set", x = "features", color = "feature values scaled\n to [low=0 high=1]") +
-    theme(text = element_text(size = 10, family = "Helvetica"),
-          # Remove panel border
-          panel.border = element_blank(),
-          # Remove panel grid lines
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          # Remove panel background
-          panel.background = element_blank(),
-          # Add axis line
-          axis.line = element_line(colour = "grey"),
-          legend.key.width = grid::unit(2, "mm")) +
+    theme(
+      text = element_text(size = 10, family = "Helvetica"),
+      # Remove panel border
+      panel.border = element_blank(),
+      # Remove panel grid lines
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # Remove panel background
+      panel.background = element_blank(),
+      # Add axis line
+      axis.line = element_line(colour = "grey"),
+      legend.key.width = grid::unit(2, "mm")
+    ) +
     ylim(min(shap_Mean$Phi) - 0.05, max(shap_Mean$Phi) + 0.05)
 
   # Convert ggplot to Plotly
-  shap_plot <- ggplotly(shap_plot, tooltip="text")
+  shap_plot <- ggplotly(shap_plot, tooltip = "text")
 
   return(list(shap_plot, shap_Mean_wide, shap_Mean, shap))
 }

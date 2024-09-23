@@ -53,7 +53,7 @@ positive_class <- "malignant"
 mydata <- BreastCancer[, -1]
 mydata <- na.omit(mydata)
 sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+mydata$age <- as.numeric(sample(seq(18, 60), size = nrow(mydata), replace = TRUE))
 mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 maintask <- mlr3::TaskClassif$new(
   id = "my_classification_task",
@@ -81,6 +81,12 @@ Molnar C, Casalicchio G, Bischl B. iml: An R package for interpretable machine l
 }
 \seealso{
 \code{\link[=eSHAP_plot_reg]{eSHAP_plot_reg()}}
+
+Other classification: 
+\code{\link{eSHAP_plot_multiclass}()}
+
+Other SHAP: 
+\code{\link{eSHAP_plot_multiclass}()}
 }
 \concept{SHAP}
 \concept{classification}

@@ -31,7 +31,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -67,51 +67,59 @@ eCM_plot <- function(task,
   mydata <- as.data.frame(mydata)
 
   # plot the confusion matrix for the test set
-  featset_total_test <- mydata[splits$test,]
+  featset_total_test <- mydata[splits$test, ]
   featset_total_test <- as.data.frame(featset_total_test)
   pred_results <- trained_model$predict(task, splits$test)
   # plot confusion matrix
-  d_binomial <- tibble::tibble("Truth" = featset_total_test[, task$target_names],
-                       "Prediction" = pred_results$response)
+  d_binomial <- tibble::tibble(
+    "Truth" = featset_total_test[, task$target_names],
+    "Prediction" = pred_results$response
+  )
   basic_table <- table(d_binomial)
   cfm <- tibble::as_tibble(basic_table)
-  CM_plt_test <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
-                                             prediction_col = "Prediction",
-                                             counts_col = "n", palette = palette,
-                                             theme_fn = ggplot2::theme_minimal,
-                                             add_sums = add_sums,
-                                             sums_settings = cvms::sum_tile_settings(
-                                               palette = "Oranges",
-                                               label = "Total",
-                                               tc_tile_border_color = "black"
-                                             )) + ggtitle("Confusion matrix for the train set")
-  CM_plt_test[["labels"]][["x"]] <- 'Truth (observation)'
-  CM_plt_test[["labels"]][["y"]] <- 'Prediction (model output)'
+  CM_plt_test <- cvms::plot_confusion_matrix(cfm,
+    target_col = "Truth",
+    prediction_col = "Prediction",
+    counts_col = "n", palette = palette,
+    theme_fn = ggplot2::theme_minimal,
+    add_sums = add_sums,
+    sums_settings = cvms::sum_tile_settings(
+      palette = "Oranges",
+      label = "Total",
+      tc_tile_border_color = "black"
+    )
+  ) + ggtitle("Confusion matrix for the train set")
+  CM_plt_test[["labels"]][["x"]] <- "Truth (observation)"
+  CM_plt_test[["labels"]][["y"]] <- "Prediction (model output)"
   CM_plt_test[["theme"]][["text"]][["size"]] <- 9
   CM_plt_test[["theme"]][["axis.text"]][["size"]] <- 9
   # CM_plt_test[["theme"]][["text"]][["family"]] <- 'Helvetica'
 
   # plot the confusion matrix for the train set
-  featset_total_train <- mydata[splits$train,]
+  featset_total_train <- mydata[splits$train, ]
   featset_total_train <- as.data.frame(featset_total_train)
   pred_results <- trained_model$predict(task, splits$train)
-  d_binomial <- tibble::tibble("Truth" = featset_total_train[, task$target_names],
-                       "Prediction" = pred_results$response)
+  d_binomial <- tibble::tibble(
+    "Truth" = featset_total_train[, task$target_names],
+    "Prediction" = pred_results$response
+  )
   basic_table <- table(d_binomial)
   # cfm <- broom::tidy(basic_table)
   cfm <- tibble::as_tibble(basic_table)
-  CM_plt_train <- cvms::plot_confusion_matrix(cfm, target_col = "Truth",
-                                              prediction_col = "Prediction",
-                                              counts_col = "n", palette = palette,
-                                              theme_fn = ggplot2::theme_minimal,
-                                              add_sums = add_sums,
-                                              sums_settings = cvms::sum_tile_settings(
-                                                palette = "Oranges",
-                                                label = "Total",
-                                                tc_tile_border_color = "black"
-                                              )) + ggtitle("Confusion matrix for the test set")
-  CM_plt_train[["labels"]][["x"]] <- 'Truth (observation)'
-  CM_plt_train[["labels"]][["y"]] <- 'Prediction (model output)'
+  CM_plt_train <- cvms::plot_confusion_matrix(cfm,
+    target_col = "Truth",
+    prediction_col = "Prediction",
+    counts_col = "n", palette = palette,
+    theme_fn = ggplot2::theme_minimal,
+    add_sums = add_sums,
+    sums_settings = cvms::sum_tile_settings(
+      palette = "Oranges",
+      label = "Total",
+      tc_tile_border_color = "black"
+    )
+  ) + ggtitle("Confusion matrix for the test set")
+  CM_plt_train[["labels"]][["x"]] <- "Truth (observation)"
+  CM_plt_train[["labels"]][["y"]] <- "Prediction (model output)"
   CM_plt_train[["theme"]][["text"]][["size"]] <- 9
   CM_plt_train[["theme"]][["axis.text"]][["size"]] <- 9
   # CM_plt_train[["theme"]][["text"]][["family"]] <- 'Helvetica'

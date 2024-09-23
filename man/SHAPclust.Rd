@@ -70,7 +70,7 @@ sex <- sample(
   replace = TRUE
 )
 mydata$age <- as.numeric(sample(
-  seq(18,60),
+  seq(18, 60),
   size = nrow(mydata),
   replace = TRUE
 ))
@@ -110,7 +110,7 @@ SHAP_plot_clusters <- SHAPclust(
   num_of_clusters = 3, # your choice
   seed = seed,
   subset = 0.02, # match with eSHAP_plot
-  algorithm="Hartigan-Wong",
+  algorithm = "Hartigan-Wong",
   iter.max = 10
 )
 }

@@ -39,7 +39,7 @@ sex <- sample(
   replace = TRUE
 )
 mydata$age <- as.numeric(sample(
-  seq(18,60),
+  seq(18, 60),
   size = nrow(mydata),
   replace = TRUE
 ))

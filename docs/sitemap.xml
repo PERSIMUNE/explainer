@@ -4,7 +4,22 @@
     <loc>https://persimune.github.io/explainer/404.html</loc>
   </url>
   <url>
+    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_binary_classification.html</loc>
+  </url>
+  <url>
+    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_multiclass.html</loc>
+  </url>
+  <url>
+    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_regression.html</loc>
+  </url>
+  <url>
+    <loc>https://persimune.github.io/explainer/articles/explainer-vignette.html</loc>
+  </url>
+  <url>
     <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_binary_classification.html</loc>
+  </url>
+  <url>
+    <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_multiclass.html</loc>
   </url>
   <url>
     <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_regression.html</loc>
@@ -44,6 +59,9 @@
   </url>
   <url>
     <loc>https://persimune.github.io/explainer/reference/eSHAP_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://persimune.github.io/explainer/reference/eSHAP_plot_multiclass.html</loc>
   </url>
   <url>
     <loc>https://persimune.github.io/explainer/reference/eSHAP_plot_reg.html</loc>

@@ -1,6 +1,6 @@
 Package: explainer
 Title: Machine Learning Model Explainer
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: 
     person("Ramtin", "Zargari Marandi", , "ramtin.zargari.marandi@regionh.dk", role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0000-0001-9233-1656"))
@@ -24,20 +24,24 @@ Imports:
   plotly,
   tibble,
   tidyr,
-  writexl
+  writexl,
+  gridExtra,
+  scales
 Suggests:
-  cowplot,
-  mlr3,
-  mlr3learners,
-  knitr,
-  broom,
-  iml,
-  forcats,
-  mlr3viz,
-  plotROC,
-  psych,
-  reshape2,
-  remotes,
-  mlbench,
-  ranger,
-  precrec
+    cowplot,
+    mlr3,
+    mlr3learners,
+    knitr,
+    broom,
+    iml,
+    forcats,
+    mlr3viz,
+    plotROC,
+    psych,
+    reshape2,
+    remotes,
+    mlbench,
+    ranger,
+    precrec,
+    rmarkdown
+VignetteBuilder: knitr

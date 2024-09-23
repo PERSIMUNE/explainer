@@ -53,7 +53,7 @@
 #'   replace = TRUE
 #' )
 #' mydata$age <- as.numeric(sample(
-#'   seq(18,60),
+#'   seq(18, 60),
 #'   size = nrow(mydata),
 #'   replace = TRUE
 #' ))
@@ -93,7 +93,7 @@
 #'   num_of_clusters = 3, # your choice
 #'   seed = seed,
 #'   subset = 0.02, # match with eSHAP_plot
-#'   algorithm="Hartigan-Wong",
+#'   algorithm = "Hartigan-Wong",
 #'   iter.max = 10
 #' )
 #' }
@@ -112,9 +112,8 @@ SHAPclust <- function(task,
                       num_of_clusters = 4,
                       seed = 246,
                       subset = 1,
-                      algorithm="Hartigan-Wong",
-                      iter.max = 1000
-                      ){
+                      algorithm = "Hartigan-Wong",
+                      iter.max = 1000) {
   cluster <- NULL
   correct_prediction <- NULL
   feature <- NULL
@@ -142,12 +141,12 @@ SHAPclust <- function(task,
   mydata <- mydata[target_index, ]
 
   # do the prediction for the test set
-  pred_results <- trained_model$predict(task,target_index)
+  pred_results <- trained_model$predict(task, target_index)
 
   # the test set based on the data split is used to calculate SHAP values
   test_set <- as.data.frame(mydata)
 
-  km.res <- kmeans(shap_Mean_wide[,!c("sample_num")], centers =  num_of_clusters, nstart = 20, algorithm=algorithm, iter.max = iter.max)
+  km.res <- kmeans(shap_Mean_wide[, !c("sample_num")], centers = num_of_clusters, nstart = 20, algorithm = algorithm, iter.max = iter.max)
   kmeans_info <- km.res
   # capture.output(km.res, file =  paste0('kmeans_info',seed,'.txt'))
 
@@ -155,28 +154,29 @@ SHAPclust <- function(task,
     shap_Mean_wide %>%
     mutate(cluster = km.res$cluster)
 
-  shap_Mean_wide_kmeans <- cbind(data.table::as.data.table(pred_results),shap_Mean_wide_kmeans)
-  kmeans_fvals <- cbind(shap_Mean_wide_kmeans$cluster,test_set)
+  shap_Mean_wide_kmeans <- cbind(data.table::as.data.table(pred_results), shap_Mean_wide_kmeans)
+  kmeans_fvals <- cbind(shap_Mean_wide_kmeans$cluster, test_set)
   colnames(kmeans_fvals)[1] <- "cluster"
 
   # save the statistical descriptions of the clusters by feature values
-  kmeans_fvals_desc <- psych::describeBy(kmeans_fvals,group=kmeans_fvals$cluster)
+  kmeans_fvals_desc <- psych::describeBy(kmeans_fvals, group = kmeans_fvals$cluster)
   shap_Mean_wide_kmeans$row_ids <- shap_Mean_wide_kmeans$row_ids - shap_Mean_wide_kmeans$row_ids[1] + 1
   shap_Mean_wide_kmeans[, prediction_correctness := (truth == response)]
   shap_Mean_wide_kmeans_forCM <- shap_Mean_wide_kmeans
 
-  shap_Mean_wide_kmeans[,c(1,2,5)] <- NULL # ,3,4
+  shap_Mean_wide_kmeans[, c(1, 2, 5)] <- NULL # ,3,4
   colnames(shap_Mean_wide_kmeans)[2] <- "prob_positive_class"
   variables_for_long_format <- colnames(shap_Mean_wide_kmeans)
 
-  variables_for_long_format <- variables_for_long_format[!variables_for_long_format %in% c("sample_num", "prediction_correctness", "cluster","response","prob_positive_class")]
+  variables_for_long_format <- variables_for_long_format[!variables_for_long_format %in% c("sample_num", "prediction_correctness", "cluster", "response", "prob_positive_class")]
 
   # Melt the data.table from wide to long format
   dt_long <- data.table::melt(shap_Mean_wide_kmeans,
-                              id.vars = c("sample_num", "prediction_correctness", "cluster","response","prob_positive_class"),
-                              measure.vars = variables_for_long_format,
-                              variable.name = "variable",
-                              value.name = "value")
+    id.vars = c("sample_num", "prediction_correctness", "cluster", "response", "prob_positive_class"),
+    measure.vars = variables_for_long_format,
+    variable.name = "variable",
+    value.name = "value"
+  )
 
   # Remove specified columns
   dt_long[, c("response", "prob_positive_class", "prediction_correctness") := NULL]
@@ -190,41 +190,48 @@ SHAPclust <- function(task,
   ############## SHAP plots for clusters
   shap_plot1 <- dt_long %>%
     mutate(feature = forcats::fct_reorder(feature, mean_phi)) %>%
-    ggplot(aes(x = feature, y = Phi, color = f_val))+
+    ggplot(aes(x = feature, y = Phi, color = f_val)) +
     geom_violin(colour = "grey") +
-    geom_line(aes(group = sample_num), alpha = 0.1,size=0.2) +
+    geom_line(aes(group = sample_num), alpha = 0.1, size = 0.2) +
     coord_flip() +
-    geom_jitter(aes(shape=correct_prediction, text = paste("Feature: ", feature,
-                                                           "<br>Unscaled feature value: ", unscaled_f_val,
-                                                           "<br>SHAP value: ", Phi,
-                                                           "<br>Prediction correctness: ", correct_prediction,
-                                                           "<br>Predicted probability: ", pred_prob,
-                                                           "<br>Predicted class: ", pred_class)),
-                alpha = 0.6, size=1.5, position=position_jitter(width=0.2, height=0)) +
-    scale_shape_manual(values = c(4, 19)) +  # 19 for correct predictions (circle), 4 for incorrect predictions (cross)
+    geom_jitter(aes(shape = correct_prediction, text = paste(
+      "Feature: ", feature,
+      "<br>Unscaled feature value: ", unscaled_f_val,
+      "<br>SHAP value: ", Phi,
+      "<br>Prediction correctness: ", correct_prediction,
+      "<br>Predicted probability: ", pred_prob,
+      "<br>Predicted class: ", pred_class
+    )),
+    alpha = 0.6, size = 1.5, position = position_jitter(width = 0.2, height = 0)
+    ) +
+    scale_shape_manual(values = c(4, 19)) + # 19 for correct predictions (circle), 4 for incorrect predictions (cross)
     labs(shape = "model prediction") +
     scale_colour_gradient2(low = "blue", mid = "green", high = "red", midpoint = 0.5, breaks = c(0, 1), labels = c("Low", "High")) +
     geom_text(aes(x = feature, y = -Inf, label = ""), hjust = -0.2, alpha = 0.7, color = "black") +
     theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(), legend.position = "right") +
     geom_hline(yintercept = 0, color = "grey", alpha = 0.5) +
     labs(y = "SHAP decision plot - test set", x = "features", color = "feature values scaled\n to [low=0 high=1]") +
-    theme(text = element_text(size = 8, family = "Helvetica"), panel.border = element_blank(),
-          panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
-          axis.line = element_line(colour = "grey"), legend.key.width = grid::unit(2, "mm")) +
+    theme(
+      text = element_text(size = 8, family = "Helvetica"), panel.border = element_blank(),
+      panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
+      axis.line = element_line(colour = "grey"), legend.key.width = grid::unit(2, "mm")
+    ) +
     ylim(min(dt_long$Phi) - 0.05, max(dt_long$Phi) + 0.05) +
     guides(
       shape = ggplot2::guide_legend(color = "black")
     )
 
-  shap_plot_onerow <- shap_plot1 + facet_wrap(~ cluster, ncol = num_of_clusters)
+  shap_plot_onerow <- shap_plot1 + facet_wrap(~cluster, ncol = num_of_clusters)
 
-  shap_plot_onerow <- ggplotly(shap_plot_onerow, tooltip="text")
+  shap_plot_onerow <- ggplotly(shap_plot_onerow, tooltip = "text")
 
   CM_plt <- list()
   # Create a tibble for each cluster and calculate the confusion matrix for each cluster
   for (i in 1:num_of_clusters) {
-    d_binomial <- tibble::tibble("Truth" = shap_Mean_wide_kmeans_forCM$truth[which(shap_Mean_wide_kmeans_forCM$cluster==i)],
-                         "Prediction" = shap_Mean_wide_kmeans_forCM$response[which(shap_Mean_wide_kmeans_forCM$cluster==i)])
+    d_binomial <- tibble::tibble(
+      "Truth" = shap_Mean_wide_kmeans_forCM$truth[which(shap_Mean_wide_kmeans_forCM$cluster == i)],
+      "Prediction" = shap_Mean_wide_kmeans_forCM$response[which(shap_Mean_wide_kmeans_forCM$cluster == i)]
+    )
     cvms::confusion_matrix(targets = d_binomial$Truth, predictions = d_binomial$Prediction)
     # basic_table <- table(d_binomial)
     # cfm <- cvms::tidy(basic_table)
@@ -233,22 +240,22 @@ SHAPclust <- function(task,
     cm_tbl <- data.frame(matrix(nrow = 4, ncol = 3))
     colnames(cm_tbl) <- c("Target", "Prediction", "N")
     cm_tbl <- tibble::as_tibble(cm_tbl)
-    cm_tbl[1:2,1] <- levels(d_binomial$Truth)[1]
-    cm_tbl[3:4,1] <- levels(d_binomial$Truth)[2]
-    cm_tbl[1,2] <- levels(d_binomial$Truth)[1]
-    cm_tbl[1,3] <- sum(d_binomial$Truth %in% cm_tbl[1,1] & d_binomial$Prediction %in% cm_tbl[1,2])
-    cm_tbl[2,2] <- levels(d_binomial$Truth)[2]
-    cm_tbl[2,3] <- sum(d_binomial$Truth %in% cm_tbl[2,1] & d_binomial$Prediction %in% cm_tbl[2,2])
-    cm_tbl[3,2] <- levels(d_binomial$Truth)[1]
-    cm_tbl[3,3] <- sum(d_binomial$Truth %in% cm_tbl[3,1] & d_binomial$Prediction %in% cm_tbl[3,2])
-    cm_tbl[4,2] <- levels(d_binomial$Truth)[2]
-    cm_tbl[4,3] <- sum(d_binomial$Truth %in% cm_tbl[4,1] & d_binomial$Prediction %in% cm_tbl[4,2])
+    cm_tbl[1:2, 1] <- levels(d_binomial$Truth)[1]
+    cm_tbl[3:4, 1] <- levels(d_binomial$Truth)[2]
+    cm_tbl[1, 2] <- levels(d_binomial$Truth)[1]
+    cm_tbl[1, 3] <- sum(d_binomial$Truth %in% cm_tbl[1, 1] & d_binomial$Prediction %in% cm_tbl[1, 2])
+    cm_tbl[2, 2] <- levels(d_binomial$Truth)[2]
+    cm_tbl[2, 3] <- sum(d_binomial$Truth %in% cm_tbl[2, 1] & d_binomial$Prediction %in% cm_tbl[2, 2])
+    cm_tbl[3, 2] <- levels(d_binomial$Truth)[1]
+    cm_tbl[3, 3] <- sum(d_binomial$Truth %in% cm_tbl[3, 1] & d_binomial$Prediction %in% cm_tbl[3, 2])
+    cm_tbl[4, 2] <- levels(d_binomial$Truth)[2]
+    cm_tbl[4, 3] <- sum(d_binomial$Truth %in% cm_tbl[4, 1] & d_binomial$Prediction %in% cm_tbl[4, 2])
 
     # Plot the confusion matrix for each cluster
     CM_plt[[i]] <- cvms::plot_confusion_matrix(conf_matrix = cm_tbl) # cfm$`Confusion Matrix`[[1]] doesn't work when only one level is the truth
     CM_plt[[i]][["theme"]][["text"]][["size"]] <- 6
     CM_plt[[i]][["theme"]][["axis.text"]][["size"]] <- 6
-    CM_plt[[i]][["theme"]][["text"]][["family"]] <- 'Helvetica'
+    CM_plt[[i]][["theme"]][["text"]][["family"]] <- "Helvetica"
 
     # Add the cluster number to the title of each plot
     CM_plt[[i]] <- CM_plt[[i]] + ggtitle(paste("Cluster", i)) + theme(plot.title = element_text(hjust = 0.5))
@@ -258,5 +265,4 @@ SHAPclust <- function(task,
   combined_plot <- ggpubr::ggarrange(plotlist = CM_plt, ncol = num_of_clusters)
 
   return(list(shap_plot_onerow, combined_plot, kmeans_fvals_desc, shap_Mean_wide_kmeans, kmeans_info))
-
 }
