@@ -357,21 +357,3 @@ model_params <- mylrn$param_set
 print(data.table::as.data.table(model_params))
 ```
 
-
-
-## Report packages that have been used
-
-The current R package has been developed with the following dependencies, ensuring its functionality and compatibility:
-For a detailed reference on each package, please consult the respective documentation and citation information available on CRAN (Comprehensive R Archive Network) or the official package repositories.
-
-```{r}
-
-library("report") # to report packages have been used
-oursessionreport <- report(sessionInfo())
-summary(oursessionreport)
-oursessionreport_df <- as.data.frame(oursessionreport)
-data.table::fwrite(oursessionreport_df, file = paste0("sessioninfo",seed,".xlsx"))
-summary(as.data.frame(oursessionreport))
-
-
-```

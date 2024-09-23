@@ -1,5 +1,5 @@
 ---
-title: "SHAP Analysis in multi-class classification tasks"
+title: "SHAP analysis in multi-class classification tasks"
 author: "Ramtin Zargari Marandi"
 output: html_document
 ---
