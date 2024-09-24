@@ -1,90 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://persimune.github.io/explainer/404.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_binary_classification.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_multiclass.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/articles/explainer_tutorial_regression.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/explainer-vignette.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_binary_classification.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_multiclass.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/explainer_tutorial_regression.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/index.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eCM_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eDecisionCurve.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eFairness.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/ePerformance.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eROC_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eSHAP_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eSHAP_plot_multiclass.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/eSHAP_plot_reg.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/explainer-package.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/range01.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/regressmdl_eval.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/SHAPclust.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/ShapFeaturePlot.html</loc>
-  </url>
-  <url>
-    <loc>https://persimune.github.io/explainer/reference/ShapPartialPlot.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://persimune.github.io/explainer/404.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/articles/explainer-vignette.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/articles/explainer_tutorial_binary_classification.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/articles/explainer_tutorial_multiclass.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/articles/explainer_tutorial_regression.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/articles/index.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/authors.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/CONTRIBUTING.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/index.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/LICENSE-text.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/LICENSE.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eCM_plot.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eDecisionCurve.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eFairness.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/ePerformance.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eROC_plot.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eSHAP_plot.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eSHAP_plot_multiclass.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/eSHAP_plot_reg.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/explainer-package.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/index.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/range01.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/regressmdl_eval.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/SHAPclust.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/ShapFeaturePlot.html</loc></url>
+<url><loc>https://persimune.github.io/explainer/reference/ShapPartialPlot.html</loc></url>
 </urlset>
+
