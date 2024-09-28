@@ -34,7 +34,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Enhanced Performance Evaluation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/PERSIMUNE/explainer/blob/main/R/eperformance.R" class="external-link"><code>R/eperformance.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PERSIMUNE/explainer/blob/v1.0.2/R/eperformance.R" class="external-link"><code>R/eperformance.R</code></a></small>
       <div class="d-none name"><code>eperformance.Rd</code></div>
     </div>
 
@@ -130,15 +130,15 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Make predictions on new data</span></span></span>
 <span class="r-in"><span><span class="va">mylrn</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">maintask</span>, <span class="va">splits</span><span class="op">$</span><span class="va">test</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 226 observations:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids     truth  response prob.malignant  prob.benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        2    benign malignant      0.8358405 0.1641595238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        3    benign    benign      0.0010000 0.9990000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        4    benign malignant      0.8758770 0.1241230159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      ---       ---       ---            ---          ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      655 malignant malignant      0.9152730 0.0847269841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      665 malignant malignant      0.9993333 0.0006666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      683 malignant malignant      0.9147024 0.0852976190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 225 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids     truth  response prob.malignant prob.benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2    benign malignant     0.86798175  0.13201825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        5    benign    benign     0.00922619  0.99077381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        7    benign    benign     0.35852381  0.64147619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---       ---       ---            ---         ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      671    benign    benign     0.00000000  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      675    benign    benign     0.00230000  0.99770000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      681 malignant malignant     0.91511905  0.08488095</span>
 <span class="r-in"><span><span class="fu">ePerformance</span><span class="op">(</span>task <span class="op">=</span> <span class="va">maintask</span>, trained_model <span class="op">=</span> <span class="va">mylrn</span>, splits <span class="op">=</span> <span class="va">splits</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-plt img"><img src="eperformance-1.png" alt="" width="700" height="433"></span>

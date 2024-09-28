@@ -34,7 +34,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>SHAP clustering</h1>
-      <small class="dont-index">Source: <a href="https://github.com/PERSIMUNE/explainer/blob/main/R/SHAPclust.R" class="external-link"><code>R/SHAPclust.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PERSIMUNE/explainer/blob/v1.0.2/R/SHAPclust.R" class="external-link"><code>R/SHAPclust.R</code></a></small>
       <div class="d-none name"><code>SHAPclust.Rd</code></div>
     </div>
 
@@ -197,123 +197,127 @@
 <span class="r-in"><span>  iter.max <span class="op">=</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;sample_num, feature, Phi&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample_num         feature           Phi cluster    mean_phi     f_val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;          &lt;char&gt;         &lt;num&gt;   &lt;int&gt;       &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:          1     Bare.nuclei -0.0502892857       1 0.131418095 0.2500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:          1     Bl.cromatin  0.0067321429       1 0.099304206 0.4285714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:          1      Cell.shape  0.1119261905       1 0.103042937 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:          1       Cell.size  0.3119706349       1 0.194636190 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:          1    Cl.thickness  0.0715214286       1 0.061621905 0.8750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:          1    Epith.c.size  0.0469928571       1 0.042565079 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:          1   Marg.adhesion  0.1016091270       1 0.084125397 0.5714286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:          1         Mitoses  0.0398400794       1 0.007968016 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:          1 Normal.nucleoli  0.0343305556       1 0.039085476 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:          1             age  0.0000000000       1 0.008259048 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:          1             sex  0.0036666667       1 0.002500317 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:          2     Bare.nuclei -0.1375361111       3 0.131418095 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:          2     Bl.cromatin -0.1114793651       3 0.099304206 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:          2      Cell.shape -0.0514559524       3 0.103042937 0.1428571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:          2       Cell.size -0.0857575397       3 0.194636190 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:          2    Cl.thickness  0.0169722222       3 0.061621905 0.3750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:          2    Epith.c.size -0.0024634921       3 0.042565079 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:          2   Marg.adhesion -0.0533325397       3 0.084125397 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:          2         Mitoses  0.0000000000       3 0.007968016 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:          2 Normal.nucleoli -0.0223630952       3 0.039085476 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:          2             age -0.0156880952       3 0.008259048 0.8205128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:          2             sex  0.0000000000       3 0.002500317 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:          3     Bare.nuclei  0.1458841270       2 0.131418095 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:          3     Bl.cromatin  0.1523980159       2 0.099304206 0.8571429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:          3      Cell.shape  0.1557253968       2 0.103042937 0.8571429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26:          3       Cell.size  0.2166472222       2 0.194636190 0.5714286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27:          3    Cl.thickness  0.0117880952       2 0.061621905 0.3750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28:          3    Epith.c.size  0.1036420635       2 0.042565079 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29:          3   Marg.adhesion  0.1224638889       2 0.084125397 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30:          3         Mitoses  0.0000000000       2 0.007968016 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31:          3 Normal.nucleoli  0.0616575397       2 0.039085476 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32:          3             age  0.0057753968       2 0.008259048 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33:          3             sex  0.0000000000       2 0.002500317 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34:          4     Bare.nuclei  0.0890119048       2 0.131418095 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35:          4     Bl.cromatin  0.0967761905       2 0.099304206 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36:          4      Cell.shape  0.0786674603       2 0.103042937 0.5714286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37:          4       Cell.size  0.1656662698       2 0.194636190 0.7142857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38:          4    Cl.thickness  0.1231694444       2 0.061621905 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39:          4    Epith.c.size  0.0395043651       2 0.042565079 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40:          4   Marg.adhesion  0.0526595238       2 0.084125397 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41:          4         Mitoses  0.0000000000       2 0.007968016 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42:          4 Normal.nucleoli  0.0107317460       2 0.039085476 0.5555556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43:          4             age  0.0001428571       2 0.008259048 0.1794872</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44:          4             sex  0.0000000000       2 0.002500317 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45:          5     Bare.nuclei -0.2343690476       3 0.131418095 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46:          5     Bl.cromatin -0.1291353175       3 0.099304206 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47:          5      Cell.shape -0.1174396825       3 0.103042937 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48:          5       Cell.size -0.1931392857       3 0.194636190 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49:          5    Cl.thickness -0.0846583333       3 0.061621905 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50:          5    Epith.c.size -0.0202226190       3 0.042565079 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51:          5   Marg.adhesion -0.0905619048       3 0.084125397 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52:          5         Mitoses  0.0000000000       3 0.007968016 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53:          5 Normal.nucleoli -0.0663444444       3 0.039085476 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54:          5             age -0.0196888889       3 0.008259048 0.7179487</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55:          5             sex  0.0088349206       3 0.002500317 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample_num         feature           Phi cluster    mean_phi     f_val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     unscaled_f_val correct_prediction pred_prob pred_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;num&gt;             &lt;fctr&gt;     &lt;num&gt;     &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:              2            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:              4            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:              8            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:              8            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:              9            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:              6            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:              5            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:              4            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:             10            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:             19            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:              1            Correct 0.9646984  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:              2            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:              5            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:              2            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:              1            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:             51            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:              2            Correct 0.0000000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:             10            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:              7            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:              7            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26:              5            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27:              5            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28:              6            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29:              8            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30:              1            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31:              4            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32:             58            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33:              2            Correct 0.9759817  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34:             10            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35:              8            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36:              5            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37:              6            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38:             10            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39:              5            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40:              8            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41:              1            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42:              6            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43:             26            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44:              2            Correct 1.0000000  malignant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49:              2            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50:              2            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54:             47            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55:              1            Correct 0.0010000     benign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     unscaled_f_val correct_prediction pred_prob pred_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample_num         feature           Phi cluster     mean_phi     f_val</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;          &lt;char&gt;         &lt;num&gt;   &lt;int&gt;        &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:          1     Bare.nuclei -0.1399936508       2 0.0493383117 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:          1     Bl.cromatin -0.0828492063       2 0.0489450397 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:          1      Cell.shape -0.0367019841       2 0.0745567280 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:          1       Cell.size  0.0000000000       2 0.0319849206 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:          1    Cl.thickness -0.0178948413       2 0.0262465278 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:          1    Epith.c.size -0.0055142857       2 0.0059076389 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:          1   Marg.adhesion  0.0000000000       2 0.0238763889 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:          1         Mitoses  0.0000000000       2 0.0043198413 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:          1 Normal.nucleoli -0.0798761905       2 0.0537973214 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:          1             age -0.0151575397       2 0.0140473214 0.9444444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:          1             sex -0.0010932540       2 0.0005277778       NaN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:          2     Bare.nuclei -0.0050662698       3 0.0493383117 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:          2     Bl.cromatin  0.0610115079       3 0.0489450397 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:          2      Cell.shape  0.1521496032       3 0.0745567280 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:          2       Cell.size  0.1072460317       3 0.0319849206 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:          2    Cl.thickness  0.0501396825       3 0.0262465278 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:          2    Epith.c.size  0.0181162698       3 0.0059076389 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:          2   Marg.adhesion  0.0858515873       3 0.0238763889 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:          2         Mitoses  0.0172793651       3 0.0043198413 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:          2 Normal.nucleoli  0.0572436508       3 0.0537973214 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:          2             age -0.0293571429       3 0.0140473214 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:          2             sex  0.0010178571       3 0.0005277778       NaN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:          3     Bare.nuclei  0.0000000000       1 0.0493383117 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:          3     Bl.cromatin  0.0000000000       1 0.0489450397 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:          3      Cell.shape  0.0000000000       1 0.0745567280 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:          3       Cell.size  0.0000000000       1 0.0319849206 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:          3    Cl.thickness  0.0002857143       1 0.0262465278 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:          3    Epith.c.size  0.0000000000       1 0.0059076389 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:          3   Marg.adhesion  0.0000000000       1 0.0238763889 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:          3         Mitoses  0.0000000000       1 0.0043198413 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:          3 Normal.nucleoli  0.0000000000       1 0.0537973214 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:          3             age  0.0002857143       1 0.0140473214 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:          3             sex  0.0000000000       1 0.0005277778       NaN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:          4     Bare.nuclei -0.0522933261       2 0.0493383117 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:          4     Bl.cromatin -0.0519194444       2 0.0489450397 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:          4      Cell.shape -0.1093753247       2 0.0745567280 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:          4       Cell.size -0.0206936508       2 0.0319849206 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:          4    Cl.thickness -0.0366658730       2 0.0262465278 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:          4    Epith.c.size  0.0000000000       2 0.0059076389 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:          4   Marg.adhesion -0.0096539683       2 0.0238763889 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:          4         Mitoses  0.0000000000       2 0.0043198413 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:          4 Normal.nucleoli -0.0780694444       2 0.0537973214 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:          4             age -0.0113888889       2 0.0140473214 0.4722222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:          4             sex  0.0000000000       2 0.0005277778       NaN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample_num         feature           Phi cluster     mean_phi     f_val</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     unscaled_f_val correct_prediction    pred_prob pred_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;num&gt;             &lt;fctr&gt;        &lt;num&gt;     &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:              4            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:              3            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:              1            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:             54            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:              2            Correct 0.0043809524     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:              3            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:              8            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:              7            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:              8            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:              7            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:              4            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:              6            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:              4            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:              8            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:             56            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:              2            Correct 0.9575134921  malignant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:              3            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:              5            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:              2            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:              1            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:             20            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:              2            Correct 0.0005714286     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:              2            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:              1            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:             37            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:              2            Correct 0.0000000000     benign</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     unscaled_f_val correct_prediction    pred_prob pred_class</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Ignoring unknown aesthetics: <span style="color: #00BB00;">text</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Computation failed in `stat_ydensity()`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by error in `$&lt;-.data.frame`:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> replacement has 1 row, data has 0</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Groups with fewer than two datapoints have been dropped.</span>
