@@ -61,7 +61,7 @@ eCM_plot <- function(task,
                      trained_model,
                      splits,
                      add_sums = TRUE,
-                     palette = "Green") {
+                     palette = "Greens") {
   # library(ggplot2)
   mydata <- task$data()
   mydata <- as.data.frame(mydata)
@@ -88,7 +88,7 @@ eCM_plot <- function(task,
       label = "Total",
       tc_tile_border_color = "black"
     )
-  ) + ggtitle("Confusion matrix for the train set")
+  ) + ggtitle("Confusion matrix for the test set")
   CM_plt_test[["labels"]][["x"]] <- "Truth (observation)"
   CM_plt_test[["labels"]][["y"]] <- "Prediction (model output)"
   CM_plt_test[["theme"]][["text"]][["size"]] <- 9
@@ -117,7 +117,7 @@ eCM_plot <- function(task,
       label = "Total",
       tc_tile_border_color = "black"
     )
-  ) + ggtitle("Confusion matrix for the test set")
+  ) + ggtitle("Confusion matrix for the train set")
   CM_plt_train[["labels"]][["x"]] <- "Truth (observation)"
   CM_plt_train[["labels"]][["y"]] <- "Prediction (model output)"
   CM_plt_train[["theme"]][["text"]][["size"]] <- 9
