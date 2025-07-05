@@ -6,7 +6,7 @@ articles:
   articles/explainer_tutorial_multiclass: explainer_tutorial_multiclass.html
   articles/explainer_tutorial_regression: explainer_tutorial_regression.html
   explainer-vignette: explainer-vignette.html
-last_built: 2025-07-05T11:25Z
+last_built: 2025-07-05T11:44Z
 urls:
   reference: https://persimune.github.io/explainer/reference
   article: https://persimune.github.io/explainer/articles
