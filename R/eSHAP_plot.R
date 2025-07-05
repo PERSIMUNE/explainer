@@ -211,12 +211,13 @@ eSHAP_plot <- function(task,
     filter(!is.na(f_val), is.finite(f_val)) %>%
     mutate(
       feature = as.character(feature),
-      feature = factor(feature),
       Phi = as.numeric(Phi),
       f_val = as.numeric(f_val),
       mean_phi = as.numeric(mean_phi),
       sample_num = as.integer(sample_num)
-    )
+    ) %>%
+    # Order features by absolute mean SHAP importance, most important at top
+    mutate(feature = forcats::fct_reorder(feature, mean_phi, .fun = function(x) mean(abs(x), na.rm = TRUE), .desc = TRUE))
   
   # Check if we have data to plot
   if (nrow(plot_data) == 0) {
