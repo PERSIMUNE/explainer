@@ -216,8 +216,9 @@ eSHAP_plot <- function(task,
       mean_phi = as.numeric(mean_phi),
       sample_num = as.integer(sample_num)
     ) %>%
-    # Order features by absolute mean SHAP importance, most important at top
-    mutate(feature = forcats::fct_reorder(feature, mean_phi, .fun = function(x) mean(abs(x), na.rm = TRUE), .desc = TRUE))
+    # Order features by absolute mean SHAP importance, accounting for coord_flip()
+    # Since coord_flip() reverses the order, we use .desc = FALSE to get most important at top
+    mutate(feature = forcats::fct_reorder(feature, mean_phi, .fun = function(x) mean(abs(x), na.rm = TRUE), .desc = FALSE))
   
   # Check if we have data to plot
   if (nrow(plot_data) == 0) {
