@@ -13,7 +13,8 @@
 #' @param iter.max maximum number of iterations allowed
 #'
 #' @importFrom magrittr %>%
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate filter
+#' @importFrom forcats fct_reorder
 #' @importFrom ggplot2 ggtitle ggplot aes geom_violin geom_line coord_flip geom_jitter position_jitter scale_shape_manual labs scale_colour_gradient2 geom_text theme geom_hline element_blank element_text element_line ylim facet_wrap ggsave
 #' @importFrom plotly ggplotly
 #' @importFrom tibble tibble as_tibble
@@ -159,7 +160,24 @@ SHAPclust <- function(task,
   colnames(kmeans_fvals)[1] <- "cluster"
 
   # save the statistical descriptions of the clusters by feature values
-  kmeans_fvals_desc <- psych::describeBy(kmeans_fvals, group = kmeans_fvals$cluster)
+  # Use psych package if available, otherwise create basic summary
+  kmeans_fvals_desc <- tryCatch({
+    if (requireNamespace("psych", quietly = TRUE)) {
+      psych::describeBy(kmeans_fvals, group = kmeans_fvals$cluster)
+    } else {
+      # Fallback: create basic summary using base R
+      warning("Package 'psych' not available. Using basic summary instead of detailed description.")
+      aggregate(. ~ cluster, data = kmeans_fvals, FUN = function(x) {
+        c(mean = mean(x, na.rm = TRUE), 
+          sd = sd(x, na.rm = TRUE),
+          min = min(x, na.rm = TRUE),
+          max = max(x, na.rm = TRUE))
+      })
+    }
+  }, error = function(e) {
+    warning("Could not create cluster descriptions: ", conditionMessage(e))
+    NULL
+  })
   shap_Mean_wide_kmeans$row_ids <- shap_Mean_wide_kmeans$row_ids - shap_Mean_wide_kmeans$row_ids[1] + 1
   shap_Mean_wide_kmeans[, prediction_correctness := (truth == response)]
   shap_Mean_wide_kmeans_forCM <- shap_Mean_wide_kmeans
@@ -189,7 +207,10 @@ SHAPclust <- function(task,
   print(dt_long)
   ############## SHAP plots for clusters
   shap_plot1 <- dt_long %>%
-    mutate(feature = forcats::fct_reorder(feature, mean_phi)) %>%
+    # Clean data to ensure forcats::fct_reorder works properly
+    filter(!is.na(feature), !is.na(mean_phi), is.finite(mean_phi)) %>%
+    mutate(feature = as.character(feature)) %>%
+    mutate(feature = forcats::fct_reorder(feature, mean_phi, .fun = function(x) mean(x, na.rm = TRUE))) %>%
     ggplot(aes(x = feature, y = Phi, color = f_val)) +
     geom_violin(colour = "grey") +
     geom_line(aes(group = sample_num), alpha = 0.1, size = 0.2) +
