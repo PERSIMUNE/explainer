@@ -16,7 +16,7 @@ You can install the released version of the package from CRAN:
 install.packages("explainer")
 ```
 
-And the development version from GitHub (recommended for latest updates):
+And the development version from GitHub (**recommended for latest updates**):
 
 ``` r
 # install.packages("devtools")
