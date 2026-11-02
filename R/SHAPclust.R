@@ -169,7 +169,7 @@ SHAPclust <- function(task,
       warning("Package 'psych' not available. Using basic summary instead of detailed description.")
       aggregate(. ~ cluster, data = kmeans_fvals, FUN = function(x) {
         c(mean = mean(x, na.rm = TRUE), 
-          sd = sd(x, na.rm = TRUE),
+          sd = stats::sd(x, na.rm = TRUE),
           min = min(x, na.rm = TRUE),
           max = max(x, na.rm = TRUE))
       })
@@ -208,7 +208,7 @@ SHAPclust <- function(task,
   ############## SHAP plots for clusters
   shap_plot1 <- dt_long %>%
     # Clean data to ensure forcats::fct_reorder works properly
-    filter(!is.na(feature), !is.na(mean_phi), is.finite(mean_phi)) %>%
+    dplyr::filter(!is.na(feature), !is.na(mean_phi), is.finite(mean_phi)) %>%
     mutate(feature = as.character(feature)) %>%
     mutate(feature = forcats::fct_reorder(feature, mean_phi, .fun = function(x) mean(x, na.rm = TRUE))) %>%
     ggplot(aes(x = feature, y = Phi, color = f_val)) +

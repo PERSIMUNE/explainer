@@ -5,7 +5,7 @@
 #' @param trained_model mlr3 trained learner (model) object obtained after training
 #' @param splits mlr3 object defining data splits for train and test sets
 #' @param add_sums logical, indicating whether total numbers should be displayed in the plot (default: TRUE)
-#' @param palette character, the color palette for the confusion matrix (default: "Green")
+#' @param palette character, the color palette for the confusion matrix (default: "Greens")
 #'
 #' @return A confusion matrix plot visualizing sensitivity, specificity, PPV, and NPV
 #' @export
