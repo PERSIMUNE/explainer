@@ -13,11 +13,13 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
-This is an example on how to use the package "explainer" developed by Ramtin Zargari Marandi (email:[ramtin.zargari.marandi\@regionh.dk](mailto:ramtin.zargari.marandi@regionh.dk){.email})
+This is an example on how to use the package "explainer" developed by Ramtin Zargari Marandi (email:[ramtin.zargari\@gmail.com](mailto:ramtin.zargari@gmail.com){.email})
 
 # Loading a dataset and training a machine learning model
 
-This first code chunk loads a dataset and creates a binary classification task and train a "random forest" model using mlr3 package.
+This example uses `mlbench::BreastCancer` to classify breast cytology samples as benign or malignant from their recorded cell characteristics. It does not predict a person's future breast-cancer risk. We use only the original predictors, exclude the ID column, and omit rows with missing values. Age and sex are not recorded in this dataset, so we do not invent demographic values.
+
+The first code chunk creates a binary classification task and trains a random forest using mlr3. The original predictors are stored as factors, so this example already demonstrates categorical feature handling without adding synthetic patient attributes.
 
 ```{r}
 
@@ -43,16 +45,6 @@ mydata <- BreastCancer[, -1] # 1 is ID
 
 # remove rows with missing values
 mydata <- na.omit(mydata)
-
-# create a vector of sex categories
-sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-
-# create a vector of sex categories
-mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
-
-# add a sex column to the mydata data frame (for fairness analysis)
-mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
-
 
 # create a classification task
 maintask <- mlr3::TaskClassif$new(id = "my_classification_task",
@@ -321,32 +313,11 @@ SHAP_plot_clusters[[2]]
 ```
 
 
-# Model fairness (sensitivity analysis)
+# Subgroup performance and model fairness
 
-Sometimes we would like to investigate whether our model performs fairly well for different subgroups based on categories of variables such as sex.
+`eFairness()` compares model performance across levels of a recorded categorical variable. This dataset does not include demographic attributes such as age or sex, so it cannot support a demographic fairness analysis. Randomly assigning those attributes would create arbitrary groups and would not provide evidence about fairness for real patients.
 
-```{r}
-
-# you should decide what variables to use to be tested
-# here we chose sex from the variables existing in the dataset
-
-Fairness_results <- eFairness(task = maintask,
-         trained_model = mylrn,
-         splits = splits,
-         target_variable = "sex",
-         var_levels = c("Male", "Female"))
-
-# ROC curves for the subgroups for the development (left) and test (right) sets
-Fairness_results[[1]]
-
-# performance in the subgroups for the development set
-Fairness_results[[2]]
-
-# performance in the subgroups for the test set
-Fairness_results[[3]]
-
-
-```
+For a fairness analysis on your own data, use a genuinely recorded subgroup variable, pass its actual factor levels to `var_levels`, and check that each subgroup contains enough observations from both outcome classes. Differences across cell-characteristic categories can describe subgroup performance, but should not be interpreted as demographic fairness.
 
 ## Model parameters
 
