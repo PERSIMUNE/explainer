@@ -199,16 +199,16 @@ eSHAP_plot <- function(task,
   # Prepare data for plotting with robust error handling
   # Handle NaN values in mean_phi by recalculating from Phi
   shap_Mean <- shap_Mean %>%
-    group_by(feature) %>%
+    dplyr::group_by(feature) %>%
     mutate(mean_phi = ifelse(is.nan(mean_phi) | is.na(mean_phi), 
                             mean(Phi, na.rm = TRUE), 
                             mean_phi)) %>%
-    ungroup()
+    dplyr::ungroup()
   
   plot_data <- shap_Mean %>%
-    filter(!is.na(feature)) %>%
-    filter(!is.na(Phi), is.finite(Phi)) %>%
-    filter(!is.na(f_val), is.finite(f_val)) %>%
+    dplyr::filter(!is.na(feature)) %>%
+    dplyr::filter(!is.na(Phi), is.finite(Phi)) %>%
+    dplyr::filter(!is.na(f_val), is.finite(f_val)) %>%
     mutate(
       feature = as.character(feature),
       Phi = as.numeric(Phi),

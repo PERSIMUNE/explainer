@@ -4,7 +4,7 @@
 \alias{eCM_plot}
 \title{Enhanced Confusion Matrix Plot}
 \usage{
-eCM_plot(task, trained_model, splits, add_sums = TRUE, palette = "Green")
+eCM_plot(task, trained_model, splits, add_sums = TRUE, palette = "Greens")
 }
 \arguments{
 \item{task}{mlr3 task object specifying the task details}
@@ -15,7 +15,7 @@ eCM_plot(task, trained_model, splits, add_sums = TRUE, palette = "Green")
 
 \item{add_sums}{logical, indicating whether total numbers should be displayed in the plot (default: TRUE)}
 
-\item{palette}{character, the color palette for the confusion matrix (default: "Green")}
+\item{palette}{character, the color palette for the confusion matrix (default: "Greens")}
 }
 \value{
 A confusion matrix plot visualizing sensitivity, specificity, PPV, and NPV
