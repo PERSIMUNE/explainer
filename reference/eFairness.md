@@ -1,0 +1,95 @@
+# Enhanced Fairness Analysis
+
+This function generates Precision-Recall and ROC curves for sample
+subgroups, facilitating fairness analysis of a binary classification
+model.
+
+## Usage
+
+``` r
+eFairness(task, trained_model, splits, target_variable, var_levels)
+```
+
+## Arguments
+
+- task:
+
+  mlr3 binary classification task object specifying the task details
+
+- trained_model:
+
+  mlr3 trained learner (model) object obtained after training
+
+- splits:
+
+  mlr3 object defining data splits for train and test sets
+
+- target_variable:
+
+  character, the variable from the dataset used to test the model's
+  performance against
+
+- var_levels:
+
+  list, defining the levels for the specified variable
+
+## Value
+
+Model performance metrics for user-specified subgroups using
+Precision-Recall and ROC curves
+
+## Examples
+
+``` r
+library("explainer")
+seed <- 246
+set.seed(seed)
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
+# Load BreastCancer dataset
+utils::data("BreastCancer", package = "mlbench")
+target_col <- "Class"
+positive_class <- "malignant"
+mydata <- BreastCancer[, -1]
+mydata <- na.omit(mydata)
+sex <- sample(
+  c("Male", "Female"),
+  size = nrow(mydata),
+  replace = TRUE
+)
+mydata$age <- as.numeric(sample(
+  seq(18, 60),
+  size = nrow(mydata),
+  replace = TRUE
+))
+mydata$sex <- factor(
+  sex,
+  levels = c("Male", "Female"),
+  labels = c(1, 0)
+)
+maintask <- mlr3::TaskClassif$new(
+  id = "my_classification_task",
+  backend = mydata,
+  target = target_col,
+  positive = positive_class
+)
+splits <- mlr3::partition(maintask)
+mylrn <- mlr3::lrn(
+  "classif.ranger",
+  predict_type = "prob"
+)
+mylrn$train(maintask, splits$train)
+# sex is chosen for fairness analysis
+Fairness_results <- eFairness(
+  task = maintask,
+  trained_model = mylrn,
+  splits = splits,
+  target_variable = "sex",
+  var_levels = c("Male", "Female")
+)
+#> Warning: D not labeled 0/1, assuming benign = 0 and malignant = 1!
+#> Warning: D not labeled 0/1, assuming benign = 0 and malignant = 1!
+#> Warning: D not labeled 0/1, assuming benign = 0 and malignant = 1!
+```

@@ -1,0 +1,88 @@
+# Regression Model Evaluation
+
+Provides calculations of measures to evaluate regression models.
+
+## Usage
+
+``` r
+regressmdl_eval(task, trained_model, splits)
+```
+
+## Arguments
+
+- task:
+
+  mlr3 regression task object
+
+- trained_model:
+
+  mlr3 trained learner (model) object
+
+- splits:
+
+  mlr3 object defining data splits for train and test sets
+
+## Value
+
+Data frame containing regression evaluation measures
+
+## References
+
+Lang M, Binder M, Richter J, Schratz P, Pfisterer F, Coors S, Au Q,
+Casalicchio G, Kotthoff L, Bischl B. mlr3: A modern object-oriented
+machine learning framework in R. Journal of Open Source Software. 2019
+Dec 11;4(44):1903.
+
+## See also
+
+[`eCM_plot()`](https://persimune.github.io/explainer/reference/eCM_plot.md)
+
+## Examples
+
+``` r
+library("explainer")
+seed <- 246
+set.seed(seed)
+# Load necessary packages
+if (!requireNamespace("mlbench", quietly = TRUE)) stop("mlbench not installed.")
+if (!requireNamespace("mlr3learners", quietly = TRUE)) stop("mlr3learners not installed.")
+if (!requireNamespace("ranger", quietly = TRUE)) stop("ranger not installed.")
+# Load BreastCancer dataset
+utils::data("BreastCancer", package = "mlbench")
+mydata <- BreastCancer[, -1]
+mydata <- na.omit(mydata)
+sex <- sample(
+  c("Male", "Female"),
+  size = nrow(mydata),
+  replace = TRUE
+)
+mydata$age <- sample(
+  seq(18, 60),
+  size = nrow(mydata),
+  replace = TRUE
+)
+mydata$sex <- factor(
+  sex,
+  levels = c("Male", "Female"),
+  labels = c(1, 0)
+)
+mydata$Class <- NULL
+mydata$Cl.thickness <- as.numeric(mydata$Cl.thickness)
+target_col <- "Cl.thickness"
+maintask <- mlr3::TaskRegr$new(
+  id = "my_regression_task",
+  backend = mydata,
+  target = target_col
+)
+splits <- mlr3::partition(maintask)
+mylrn <- mlr3::lrn(
+  "regr.ranger",
+  predict_type = "response"
+)
+mylrn$train(maintask, splits$train)
+regressmdl_eval_results <- regressmdl_eval(
+  task = maintask,
+  trained_model = mylrn,
+  splits = splits
+)
+```
