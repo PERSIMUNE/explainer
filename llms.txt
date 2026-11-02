@@ -36,8 +36,12 @@ devtools::install_github("PERSIMUNE/explainer")
 
 ## Usage
 
-Here is a short example on how to use the package. See articles for more
-examples.
+This example classifies breast cytology samples as benign or malignant
+using the original predictors in
+[`mlbench::BreastCancer`](https://rdrr.io/pkg/mlbench/man/BreastCancer.html).
+It does not predict future breast-cancer risk. The ID column is excluded
+and rows with missing values are omitted. No synthetic demographic
+features are added. See articles for more examples.
 
 ``` r
 
@@ -63,11 +67,6 @@ positive_class <- "malignant"
 # Extract relevant columns from dataset
 mydata <- BreastCancer[, -1]
 mydata <- na.omit(mydata)
-
-# Generate random 'sex' and 'age' columns
-sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-mydata$age <- as.numeric(sample(seq(18, 60), size = nrow(mydata), replace = TRUE))
-mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 
 # Create a classification task
 maintask <- mlr3::TaskClassif$new(
