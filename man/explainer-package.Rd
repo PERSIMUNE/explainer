@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ramtin Zargari Marandi \email{ramtin.zargari.marandi@regionh.dk} (\href{https://orcid.org/0000-0001-9233-1656}{ORCID})
+\strong{Maintainer}: Ramtin Zargari Marandi \email{ramtin.zargari@gmail.com} (\href{https://orcid.org/0000-0001-9233-1656}{ORCID})
 
 }
 \keyword{internal}
