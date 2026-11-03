@@ -131,22 +131,17 @@ SHAP_plot_clusters <- SHAPclust(
 
 ## Research citing ExplaineR
 
-Selected papers citing the ExplaineR methods paper include:
+| Research area | Publication |
+|----|----|
+| Lung cancer outcomes after immunotherapy | [Frontiers in Immunology](https://doi.org/10.3389/fimmu.2025.1686260) |
+| Sausage spoilage prediction | [Food and Bioprocess Technology](https://doi.org/10.1007/s11947-025-03971-x) |
 
-| Research area | Publication | Citation context |
-|----|----|----|
-| Lung cancer outcomes after immunotherapy | [Frontiers in Immunology](https://doi.org/10.3389/fimmu.2025.1686260) | Cites ExplaineR alongside its SHAP feature importance and force-plot analysis. The text does not explicitly identify the package used. |
-| Sausage spoilage prediction | [Food and Bioprocess Technology](https://doi.org/10.1007/s11947-025-03971-x) | Cites ExplaineR in its discussion of SHAP interpretability. This is a citation, not confirmed package use. |
+[More papers citing
+ExplaineR](https://scholar.google.com/scholar?cites=14662030706240576679&hl=en)
 
-See [papers citing ExplaineR on Google
-Scholar](https://scholar.google.com/scholar?cites=14662030706240576679&hl=en)
-for further references. This curated selection distinguishes citations
-from confirmed software applications. Last checked: 3 November 2026.
-
-Used the ExplaineR package in your research? [Suggest an
-addition](https://github.com/PERSIMUNE/explainer/issues/new) with a
-publication or code link and the passage identifying package use, so it
-can be featured as a documented application.
+Used ExplaineR in your research? [Share your
+work](https://github.com/PERSIMUNE/explainer/issues/new) to be featured
+here.
 
 ## Citation
 
