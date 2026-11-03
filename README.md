@@ -109,12 +109,12 @@ SHAP_plot_clusters <- SHAPclust(
 
 ## Research citing ExplaineR
 
+**[Cited by 14 papers on Google Scholar](https://scholar.google.com/scholar?cites=14662030706240576679&hl=en)** · As of 3 November 2026.
+
 | Research area | Publication |
 | --- | --- |
 | Lung cancer outcomes after immunotherapy | [Frontiers in Immunology](https://doi.org/10.3389/fimmu.2025.1686260) |
 | Sausage spoilage prediction | [Food and Bioprocess Technology](https://doi.org/10.1007/s11947-025-03971-x) |
-
-[More papers citing ExplaineR](https://scholar.google.com/scholar?cites=14662030706240576679&hl=en)
 
 Used ExplaineR in your research? [Share your work](https://github.com/PERSIMUNE/explainer/issues/new) to be featured here.
 
