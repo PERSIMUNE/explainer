@@ -12,11 +12,3 @@ CRAN release: 2026-11-03
   is used without attaching dplyr.
 - Synchronize the documented confusion-matrix palette default with the
   function.
-
-## explainer 1.0.2
-
-CRAN release: 2024-09-30
-
-- Add multi-class classification support with
-  [`eSHAP_plot_multiclass()`](https://persimune.github.io/explainer/reference/eSHAP_plot_multiclass.md)
-  and a tutorial demonstrating SHAP analysis for multi-class models.

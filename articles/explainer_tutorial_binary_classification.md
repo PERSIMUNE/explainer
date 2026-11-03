@@ -7,22 +7,13 @@ Try executing this chunk by clicking the *Run* button within the chunk
 or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
 This is an example on how to use the package “explainer” developed by
-Ramtin Zargari Marandi (email:<ramtin.zargari@gmail.com>)
+Ramtin Zargari Marandi (email:<ramtin.zargari.marandi@regionh.dk>)
 
 ## Loading a dataset and training a machine learning model
 
-This example uses
-[`mlbench::BreastCancer`](https://rdrr.io/pkg/mlbench/man/BreastCancer.html)
-to classify breast cytology samples as benign or malignant from their
-recorded cell characteristics. It does not predict a person’s future
-breast-cancer risk. We use only the original predictors, exclude the ID
-column, and omit rows with missing values. Age and sex are not recorded
-in this dataset, so we do not invent demographic values.
-
-The first code chunk creates a binary classification task and trains a
-random forest using mlr3. The original predictors are stored as factors,
-so this example already demonstrates categorical feature handling
-without adding synthetic patient attributes.
+This first code chunk loads a dataset and creates a binary
+classification task and train a “random forest” model using mlr3
+package.
 
 ``` r
 
@@ -48,6 +39,16 @@ mydata <- BreastCancer[, -1] # 1 is ID
 
 # remove rows with missing values
 mydata <- na.omit(mydata)
+
+# create a vector of sex categories
+sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
+
+# create a vector of sex categories
+mydata$age <- as.numeric(sample(seq(18,60), size = nrow(mydata), replace = TRUE))
+
+# add a sex column to the mydata data frame (for fairness analysis)
+mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
+
 
 # create a classification task
 maintask <- mlr3::TaskClassif$new(id = "my_classification_task",
@@ -85,13 +86,13 @@ mylrn$predict(maintask, splits$test)
     ## 
     ## -- <PredictionClassif> for 225 observations: -----------------------------------
     ##  row_ids     truth  response prob.malignant prob.benign
-    ##        2    benign malignant    0.900477778  0.09952222
-    ##        5    benign    benign    0.010041270  0.98995873
-    ##        7    benign    benign    0.389238095  0.61076190
+    ##        2    benign malignant     0.86798175  0.13201825
+    ##        5    benign    benign     0.00922619  0.99077381
+    ##        7    benign    benign     0.35852381  0.64147619
     ##      ---       ---       ---            ---         ---
-    ##      671    benign    benign    0.000000000  1.00000000
-    ##      675    benign    benign    0.001371429  0.99862857
-    ##      681 malignant malignant    0.913784127  0.08621587
+    ##      671    benign    benign     0.00000000  1.00000000
+    ##      675    benign    benign     0.00230000  0.99770000
+    ##      681 malignant malignant     0.91511905  0.08488095
 
 ### SHAP analysis to extract feature (variable) impacts on predictions
 
@@ -311,7 +312,7 @@ eROC_plot(task = maintask,
     ## npv                                                         0.99
     ## specificity                                                 0.96
     ## sensitivity                                                 0.97
-    ## prauc                                                       0.96
+    ## prauc                                                       0.97
 
 ### ROC curves with annotated thresholds
 
@@ -441,15 +442,15 @@ shinyApp(ui = ui, server = server)
 str(shap_Mean_long)
 ```
 
-    ## tibble [1,620 x 9] (S3: tbl_df/tbl/data.frame)
-    ##  $ feature           : chr [1:1620] "Bare.nuclei" "Bare.nuclei" "Bare.nuclei" "Bare.nuclei" ...
-    ##  $ mean_phi          : num [1:1620] 0.0988 0.0988 0.0988 0.0988 0.0988 ...
-    ##  $ Phi               : num [1:1620] -0.0764 -0.0623 -0.0567 0.0884 0.0713 ...
-    ##  $ f_val             : num [1:1620] 0 0.111 0 0.444 0.556 ...
-    ##  $ unscaled_f_val    : num [1:1620] 1 2 1 5 6 1 1 3 1 1 ...
-    ##  $ sample_num        : int [1:1620] 1 2 3 4 5 6 7 8 9 10 ...
+    ## tibble [1,980 x 9] (S3: tbl_df/tbl/data.frame)
+    ##  $ feature           : chr [1:1980] "Bare.nuclei" "Bare.nuclei" "Bare.nuclei" "Bare.nuclei" ...
+    ##  $ mean_phi          : num [1:1980] 0.0934 0.0934 0.0934 0.0934 0.0934 ...
+    ##  $ Phi               : num [1:1980] -0.0859 -0.0821 -0.0317 0.0997 0.0817 ...
+    ##  $ f_val             : num [1:1980] 0 0.111 0 0.444 0.556 ...
+    ##  $ unscaled_f_val    : num [1:1980] 1 2 1 5 6 1 1 3 1 1 ...
+    ##  $ sample_num        : int [1:1980] 1 2 3 4 5 6 7 8 9 10 ...
     ##  $ correct_prediction: Factor w/ 2 levels "Incorrect","Correct": 2 2 2 1 2 2 2 2 2 2 ...
-    ##  $ pred_prob         : num [1:1620] 0.00351 0.00387 0 0.93658 0.98563 ...
+    ##  $ pred_prob         : num [1:1980] 0.00255 0.00182 0 0.92977 0.9283 ...
     ##  $ pred_class        : Factor w/ 2 levels "malignant","benign": 2 2 2 1 1 2 2 1 2 2 ...
 
 ``` r
@@ -459,32 +460,45 @@ shap_Mean_wide
 ```
 
     ## Key: <sample_num>
-    ##      sample_num Bare.nuclei Bl.cromatin  Cell.shape   Cell.size Cl.thickness
-    ##           <int>       <num>       <num>       <num>       <num>        <num>
-    ##   1:          1 -0.07639570 -0.05706958 -0.06619589 -0.05223212  0.002059577
-    ##   2:          2 -0.06231476 -0.03123529 -0.05198693 -0.05631366 -0.048326878
-    ##   3:          3 -0.05666370 -0.01267601 -0.03782910 -0.04817529 -0.034655370
-    ##   4:          4  0.08837070  0.06956929  0.08884785  0.08741011 -0.023663571
-    ##   5:          5  0.07133293  0.07332603  0.08644455  0.12104929 -0.008073228
-    ##  ---                                                                        
-    ## 176:        176 -0.05850143 -0.03343622 -0.09099357 -0.12194661 -0.070548148
-    ## 177:        177 -0.06186537 -0.04724013 -0.06136190 -0.07985424 -0.086679365
-    ## 178:        178 -0.07486704 -0.02945307 -0.07541830 -0.06231672 -0.051375582
-    ## 179:        179 -0.14022320  0.03093902 -0.05861410 -0.06368788 -0.042006323
-    ## 180:        180  0.25993000  0.01606952  0.14525574  0.12395902  0.139356878
-    ##      Epith.c.size Marg.adhesion       Mitoses Normal.nucleoli
-    ##             <num>         <num>         <num>           <num>
-    ##   1: -0.017461746 -0.0055123810 -7.301587e-05    -0.033975238
-    ##   2: -0.006284735 -0.0150961111 -9.077778e-04    -0.014735317
-    ##   3: -0.012663307 -0.0185450265 -1.155714e-03    -0.009536217
-    ##   4:  0.051964839  0.0427648677 -1.917725e-04     0.008738413
-    ##   5:  0.032355529  0.0455281217  1.385000e-03     0.006960291
-    ##  ---                                                         
-    ## 176: -0.017221720 -0.0299588095 -2.251720e-03    -0.026591984
-    ## 177: -0.020393516 -0.0156755026 -2.188175e-03    -0.016636376
-    ## 178: -0.009410342 -0.0168008466 -7.193386e-04    -0.017697407
-    ## 179: -0.059117963 -0.0003837037 -1.479894e-03    -0.009989524
-    ## 180: -0.005184074  0.0648683862  2.909524e-03     0.029994206
+    ##      sample_num Bare.nuclei  Bl.cromatin  Cell.shape   Cell.size Cl.thickness
+    ##           <int>       <num>        <num>       <num>       <num>        <num>
+    ##   1:          1 -0.08589487 -0.069985767 -0.04592299 -0.05557913 -0.016991720
+    ##   2:          2 -0.08207815 -0.043686534 -0.06930323 -0.07851767 -0.040950132
+    ##   3:          3 -0.03167399 -0.041501508 -0.05516873 -0.07578722 -0.026012011
+    ##   4:          4  0.09965638  0.100056508  0.16292108  0.13855823 -0.003343413
+    ##   5:          5  0.08170963  0.061670635  0.09991013  0.11153302 -0.024341667
+    ##  ---                                                                         
+    ## 176:        176 -0.10101344 -0.022493651 -0.09723053 -0.11001489 -0.036337381
+    ## 177:        177 -0.07544257 -0.050335159 -0.07331122 -0.07960852 -0.052942063
+    ## 178:        178 -0.07287780 -0.023547804 -0.08396833 -0.07580437 -0.065089868
+    ## 179:        179 -0.12122407  0.054544259 -0.06030249 -0.03421050 -0.088212037
+    ## 180:        180  0.17650148  0.008577434  0.08656048  0.09603124  0.118961111
+    ##      Epith.c.size Marg.adhesion       Mitoses Normal.nucleoli           age
+    ##             <num>         <num>         <num>           <num>         <num>
+    ##   1: -0.027082751   0.002213201 -0.0022784127    -0.028862540 -0.0037774339
+    ##   2: -0.010480000  -0.018519815 -0.0023586243    -0.016425476 -0.0006488360
+    ##   3: -0.024506111  -0.020070503 -0.0010957672    -0.015432884 -0.0008956349
+    ##   4:  0.076623836   0.041688201 -0.0006521693     0.017386984  0.0067640741
+    ##   5:  0.038122116   0.030285079  0.0018288624     0.029264021 -0.0230379101
+    ##  ---                                                                       
+    ## 176: -0.029844048  -0.031585979  0.0005687831    -0.027441481 -0.0015749206
+    ## 177: -0.024546667  -0.022700053 -0.0008221164    -0.020056270 -0.0021401058
+    ## 178: -0.020292487  -0.024337857 -0.0018688889    -0.019011217  0.0006503175
+    ## 179: -0.030457143  -0.004646905 -0.0040282540    -0.008570794  0.0014429101
+    ## 180: -0.006486825   0.047554444  0.0024593386     0.034816376 -0.0157181481
+    ##                sex
+    ##              <num>
+    ##   1:  0.0003026190
+    ##   2: -0.0004190476
+    ##   3:  0.0015755556
+    ##   4:  0.0008892857
+    ##   5:  0.0014779101
+    ##  ---              
+    ## 176:  0.0011694974
+    ## 177: -0.0014722487
+    ## 178:  0.0008101587
+    ## 179: -0.0010852910
+    ## 180: -0.0008616667
 
 ``` r
 
@@ -492,20 +506,20 @@ shap_Mean_wide
 shap_Mean_long
 ```
 
-    ## # A tibble: 1,620 x 9
-    ##    feature   mean_phi     Phi f_val unscaled_f_val sample_num correct_prediction
-    ##    <chr>        <dbl>   <dbl> <dbl>          <dbl>      <int> <fct>             
-    ##  1 Bare.nuc~   0.0988 -0.0764 0                  1          1 Correct           
-    ##  2 Bare.nuc~   0.0988 -0.0623 0.111              2          2 Correct           
-    ##  3 Bare.nuc~   0.0988 -0.0567 0                  1          3 Correct           
-    ##  4 Bare.nuc~   0.0988  0.0884 0.444              5          4 Incorrect         
-    ##  5 Bare.nuc~   0.0988  0.0713 0.556              6          5 Correct           
-    ##  6 Bare.nuc~   0.0988 -0.0536 0                  1          6 Correct           
-    ##  7 Bare.nuc~   0.0988 -0.0547 0                  1          7 Correct           
-    ##  8 Bare.nuc~   0.0988 -0.0369 0.222              3          8 Correct           
-    ##  9 Bare.nuc~   0.0988 -0.0848 0                  1          9 Correct           
-    ## 10 Bare.nuc~   0.0988 -0.102  0                  1         10 Correct           
-    ## # i 1,610 more rows
+    ## # A tibble: 1,980 x 9
+    ##    feature  mean_phi      Phi f_val unscaled_f_val sample_num correct_prediction
+    ##    <chr>       <dbl>    <dbl> <dbl>          <dbl>      <int> <fct>             
+    ##  1 Bare.nu~   0.0934 -0.0859  0                  1          1 Correct           
+    ##  2 Bare.nu~   0.0934 -0.0821  0.111              2          2 Correct           
+    ##  3 Bare.nu~   0.0934 -0.0317  0                  1          3 Correct           
+    ##  4 Bare.nu~   0.0934  0.0997  0.444              5          4 Incorrect         
+    ##  5 Bare.nu~   0.0934  0.0817  0.556              6          5 Correct           
+    ##  6 Bare.nu~   0.0934 -0.0518  0                  1          6 Correct           
+    ##  7 Bare.nu~   0.0934 -0.113   0                  1          7 Correct           
+    ##  8 Bare.nu~   0.0934 -0.00175 0.222              3          8 Correct           
+    ##  9 Bare.nu~   0.0934 -0.0468  0                  1          9 Correct           
+    ## 10 Bare.nu~   0.0934 -0.221   0                  1         10 Correct           
+    ## # i 1,970 more rows
     ## # i 2 more variables: pred_prob <dbl>, pred_class <fct>
 
 ## Patient subgroups determined by SHAP clusters
@@ -534,32 +548,32 @@ SHAP_plot_clusters <- SHAPclust(task = maintask,
 ```
 
     ## Key: <sample_num, feature, Phi>
-    ##       sample_num         feature          Phi cluster    mean_phi     f_val
-    ##            <int>          <char>        <num>   <int>       <num>     <num>
-    ##    1:          1     Bare.nuclei -0.076395697       1 0.098771160 0.0000000
-    ##    2:          1     Bl.cromatin -0.057069577       1 0.045911901 0.0000000
-    ##    3:          1      Cell.shape -0.066195892       1 0.080299347 0.0000000
-    ##    4:          1       Cell.size -0.052232121       1 0.091891452 0.0000000
-    ##    5:          1    Cl.thickness  0.002059577       1 0.070565158 0.5000000
-    ##   ---                                                                      
-    ## 1616:        180    Cl.thickness  0.139356878       2 0.070565158 0.7500000
-    ## 1617:        180    Epith.c.size -0.005184074       2 0.023117513 0.1111111
-    ## 1618:        180   Marg.adhesion  0.064868386       2 0.028259135 1.0000000
-    ## 1619:        180         Mitoses  0.002909524       2 0.001921332 0.1250000
-    ## 1620:        180 Normal.nucleoli  0.029994206       2 0.016990259 0.7777778
+    ##       sample_num         feature           Phi cluster    mean_phi     f_val
+    ##            <int>          <char>         <num>   <int>       <num>     <num>
+    ##    1:          1     Bare.nuclei -0.0858948677       3 0.093444244 0.0000000
+    ##    2:          1     Bl.cromatin -0.0699857672       3 0.044548987 0.0000000
+    ##    3:          1      Cell.shape -0.0459229894       3 0.076720237 0.0000000
+    ##    4:          1       Cell.size -0.0555791270       3 0.091198097 0.0000000
+    ##    5:          1    Cl.thickness -0.0169917196       3 0.069835393 0.5000000
+    ##   ---                                                                       
+    ## 1976:        180   Marg.adhesion  0.0475544444       2 0.026453762 1.0000000
+    ## 1977:        180         Mitoses  0.0024593386       2 0.002165296 0.1250000
+    ## 1978:        180 Normal.nucleoli  0.0348163757       2 0.021391343 0.7777778
+    ## 1979:        180             age -0.0157181481       2 0.003230698 0.0000000
+    ## 1980:        180             sex -0.0008616667       2 0.001183048 0.0000000
     ##       unscaled_f_val correct_prediction   pred_prob pred_class
     ##                <num>             <fctr>       <num>     <fctr>
-    ##    1:              1            Correct 0.003514286     benign
-    ##    2:              1            Correct 0.003514286     benign
-    ##    3:              1            Correct 0.003514286     benign
-    ##    4:              1            Correct 0.003514286     benign
-    ##    5:              5            Correct 0.003514286     benign
+    ##    1:              1            Correct 0.002554762     benign
+    ##    2:              1            Correct 0.002554762     benign
+    ##    3:              1            Correct 0.002554762     benign
+    ##    4:              1            Correct 0.002554762     benign
+    ##    5:              5            Correct 0.002554762     benign
     ##   ---                                                         
-    ## 1616:              7            Correct 0.962276984  malignant
-    ## 1617:              2            Correct 0.962276984  malignant
-    ## 1618:             10            Correct 0.962276984  malignant
-    ## 1619:              2            Correct 0.962276984  malignant
-    ## 1620:              8            Correct 0.962276984  malignant
+    ## 1976:             10            Correct 0.926616667  malignant
+    ## 1977:              2            Correct 0.926616667  malignant
+    ## 1978:              8            Correct 0.926616667  malignant
+    ## 1979:             18            Correct 0.926616667  malignant
+    ## 1980:              1            Correct 0.926616667  malignant
 
     ## Warning in geom_jitter(aes(shape = correct_prediction, text = paste("Feature:
     ## ", : Ignoring unknown aesthetics: text
@@ -603,21 +617,72 @@ SHAP_plot_clusters[[2]]
 
 ![](explainer_tutorial_binary_classification_files/figure-html/unnamed-chunk-17-1.png)
 
-## Subgroup performance and model fairness
+## Model fairness (sensitivity analysis)
 
-[`eFairness()`](https://persimune.github.io/explainer/reference/eFairness.md)
-compares model performance across levels of a recorded categorical
-variable. This dataset does not include demographic attributes such as
-age or sex, so it cannot support a demographic fairness analysis.
-Randomly assigning those attributes would create arbitrary groups and
-would not provide evidence about fairness for real patients.
+Sometimes we would like to investigate whether our model performs fairly
+well for different subgroups based on categories of variables such as
+sex.
 
-For a fairness analysis on your own data, use a genuinely recorded
-subgroup variable, pass its actual factor levels to `var_levels`, and
-check that each subgroup contains enough observations from both outcome
-classes. Differences across cell-characteristic categories can describe
-subgroup performance, but should not be interpreted as demographic
-fairness.
+``` r
+
+# you should decide what variables to use to be tested
+# here we chose sex from the variables existing in the dataset
+
+Fairness_results <- eFairness(task = maintask,
+         trained_model = mylrn,
+         splits = splits,
+         target_variable = "sex",
+         var_levels = c("Male", "Female"))
+```
+
+    ## Warning in verify_d(data$d): D not labeled 0/1, assuming benign = 0 and
+    ## malignant = 1!
+    ## Warning in verify_d(data$d): D not labeled 0/1, assuming benign = 0 and
+    ## malignant = 1!
+    ## Warning in verify_d(data$d): D not labeled 0/1, assuming benign = 0 and
+    ## malignant = 1!
+
+``` r
+
+# ROC curves for the subgroups for the development (left) and test (right) sets
+Fairness_results[[1]]
+```
+
+![](explainer_tutorial_binary_classification_files/figure-html/unnamed-chunk-18-1.png)
+
+``` r
+
+# performance in the subgroups for the development set
+Fairness_results[[2]]
+```
+
+    ##             Male Female
+    ## auc         1.00   1.00
+    ## bacc        0.99   0.99
+    ## mcc         0.97   0.98
+    ## bbrier      0.01   0.01
+    ## ppv         0.96   0.99
+    ## npv         1.00   0.99
+    ## specificity 0.98   0.99
+    ## sensitivity 1.00   0.99
+    ## prauc       1.00   1.00
+
+``` r
+
+# performance in the subgroups for the test set
+Fairness_results[[3]]
+```
+
+    ##             Male Female
+    ## auc         0.98   0.99
+    ## bacc        0.98   0.96
+    ## mcc         0.94   0.91
+    ## bbrier      0.04   0.03
+    ## ppv         0.92   0.93
+    ## npv         1.00   0.97
+    ## specificity 0.96   0.96
+    ## sensitivity 1.00   0.95
+    ## prauc       0.96   0.98
 
 ### Model parameters
 
