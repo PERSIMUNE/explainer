@@ -34,6 +34,18 @@ devtools::install_github("PERSIMUNE/explainer")
 
 ## Usage
 
+### Preparing your own data
+
+[DAIMS—Datasheets for AI and Medical
+Datasets](https://github.com/PERSIMUNE/DAIMS) provides a checklist,
+automated data checks, and templates for dataset documentation and data
+dictionaries. It can help identify preparation issues before model
+training and interpretation with ExplaineR. DAIMS is optional; passing
+its checks does not establish that a dataset, study design, or trained
+model is suitable for a particular analysis.
+
+### Example
+
 This example classifies breast cytology samples as benign or malignant
 using the original predictors in
 [`mlbench::BreastCancer`](https://rdrr.io/pkg/mlbench/man/BreastCancer.html).

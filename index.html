@@ -86,6 +86,14 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<div class="section level3">
+<h3 id="preparing-your-own-data">Preparing your own data<a class="anchor" aria-label="anchor" href="#preparing-your-own-data"></a>
+</h3>
+<p><a href="https://github.com/PERSIMUNE/DAIMS" class="external-link">DAIMS—Datasheets for AI and Medical Datasets</a> provides a checklist, automated data checks, and templates for dataset documentation and data dictionaries. It can help identify preparation issues before model training and interpretation with ExplaineR. DAIMS is optional; passing its checks does not establish that a dataset, study design, or trained model is suitable for a particular analysis.</p>
+</div>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
 <p>This example classifies breast cytology samples as benign or malignant using the original predictors in <code><a href="https://rdrr.io/pkg/mlbench/man/BreastCancer.html" class="external-link">mlbench::BreastCancer</a></code>. It does not predict future breast-cancer risk. The ID column is excluded and rows with missing values are omitted. No synthetic demographic features are added. See articles for more examples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load necessary packages</span></span>
@@ -156,6 +164,7 @@
 <span></span>
 <span><span class="co"># Please note that the colors on the legend on SHAP cluster plot is not the same as in the SHAP summary plot, but the markers are the same.</span></span>
 <span><span class="co"># The markers indicate prediction correctness not the colors (so the colors could be manually changed to black/white on the legend when reporting)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
