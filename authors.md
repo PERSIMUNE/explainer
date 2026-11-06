@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/PERSIMUNE/explainer/blob/v1.0.3/inst/CITATION)
+[`inst/CITATION`](https://github.com/PERSIMUNE/explainer/blob/main/inst/CITATION)
 
 Zargari Marandi, R. (2024). ExplaineR: an R package to explain machine
 learning models. Bioinformatics advances, 4(1), p. vbae049.

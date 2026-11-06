@@ -63,10 +63,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="explainer">ExplaineR<a class="anchor" aria-label="anchor" href="#explainer"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="explainer-">ExplaineR <a class="anchor" aria-label="anchor" href="#explainer-"></a>
 </h1>
 </div>
-<p><img src="reference/figures/logo.png" align="right"></p>
+<p><a href="https://huggingface.co/spaces/ramtinzm/ExplaineR" class="external-link"><img src="https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e" alt="Hugging Face Space"></a></p>
 <p><a href="https://doi.org/10.5281/zenodo.10201287" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10201287.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://www.r-pkg.org/badges/version/explainer" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/explainer" alt="Downloads"></a></p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
@@ -87,7 +87,15 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Here is a short example on how to use the package. See articles for more examples.</p>
+<div class="section level3">
+<h3 id="preparing-your-own-data">Preparing your own data<a class="anchor" aria-label="anchor" href="#preparing-your-own-data"></a>
+</h3>
+<p><a href="https://github.com/PERSIMUNE/DAIMS" class="external-link">DAIMS—Datasheets for AI and Medical Datasets</a> provides a checklist, automated data checks, and templates for dataset documentation and data dictionaries. It can help identify preparation issues before model training and interpretation with ExplaineR. DAIMS is optional; passing its checks does not establish that a dataset, study design, or trained model is suitable for a particular analysis.</p>
+</div>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
+<p>This example classifies breast cytology samples as benign or malignant using the original predictors in <code><a href="https://rdrr.io/pkg/mlbench/man/BreastCancer.html" class="external-link">mlbench::BreastCancer</a></code>. It does not predict future breast-cancer risk. The ID column is excluded and rows with missing values are omitted. No synthetic demographic features are added. See articles for more examples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load necessary packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://persimune.github.io/explainer/">"explainer"</a></span><span class="op">)</span></span>
@@ -111,11 +119,6 @@
 <span><span class="co"># Extract relevant columns from dataset</span></span>
 <span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="va">BreastCancer</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Generate random 'sex' and 'age' columns</span></span>
-<span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">mydata</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">60</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">mydata</span><span class="op">$</span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sex</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a classification task</span></span>
 <span><span class="va">maintask</span> <span class="op">&lt;-</span> <span class="fu">mlr3</span><span class="fu">::</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -163,12 +166,88 @@
 <span><span class="co"># Please note that the colors on the legend on SHAP cluster plot is not the same as in the SHAP summary plot, but the markers are the same.</span></span>
 <span><span class="co"># The markers indicate prediction correctness not the colors (so the colors could be manually changed to black/white on the legend when reporting)</span></span></code></pre></div>
 </div>
+</div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <ul>
 <li><a href="https://persimune.github.io/explainer/">Official Documentation</a></li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="research-citing-explainer">Research citing ExplaineR<a class="anchor" aria-label="anchor" href="#research-citing-explainer"></a>
+</h2>
+<p><strong><a href="https://scholar.google.com/scholar?cites=14662030706240576679&amp;hl=en" class="external-link">Cited by 14 papers on Google Scholar</a></strong> · As of 3 November 2026.</p>
+<p>ExplaineR is cited across medical research, food science, engineering, sustainability, and machine learning. All 14 citing works are listed below, grouped by research area.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Research area</th>
+<th>Citing publication</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Cancer research</td>
+<td><a href="https://doi.org/10.3389/fimmu.2025.1686260" class="external-link">Lung cancer outcomes after immunotherapy</a></td>
+</tr>
+<tr>
+<td>Cancer research</td>
+<td><a href="https://doi.org/10.1007/978-1-0716-4690-8_5" class="external-link">R-based protocols for predicting synthetic lethal interactions</a></td>
+</tr>
+<tr>
+<td>Cell biology</td>
+<td><a href="https://portlandpress.com/biochemsoctrans/article/54/1/BST20253023/237067" class="external-link">AI for cell biology discovery</a></td>
+</tr>
+<tr>
+<td>Food science and microbiology</td>
+<td><a href="https://doi.org/10.1007/s11947-025-03971-x" class="external-link">Sausage spoilage intensity prediction with explainable ML and data augmentation</a></td>
+</tr>
+<tr>
+<td>Food science and microbiology</td>
+<td><a href="https://doi.org/10.1007/s11947-026-04222-3" class="external-link">VOC profiles for sausage spoilage prediction</a></td>
+</tr>
+<tr>
+<td>Food science and microbiology</td>
+<td><a href="https://assets-eu.researchsquare.com/files/rs-6515642/v1_covered_0a676ae1-1e6a-4767-834a-e15d408d066c.pdf" class="external-link">Lactococcus abundance prediction in rump steak (preprint)</a></td>
+</tr>
+<tr>
+<td>Biomass and bioprocessing</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S0926669025011902" class="external-link">Predicting enzymatic hydrolysis yields of lignocellulosic biomass</a></td>
+</tr>
+<tr>
+<td>Environmental sustainability</td>
+<td><a href="https://doi.org/10.1002/bse.70011" class="external-link">Entrepreneurship and Sustainable Development Goal achievement</a></td>
+</tr>
+<tr>
+<td>Energy policy</td>
+<td><a href="https://www.mdpi.com/2079-9292/14/3/631" class="external-link">Forecasting fossil fuel trends in the EU-27</a></td>
+</tr>
+<tr>
+<td>Industrial manufacturing</td>
+<td><a href="https://doi.org/10.1007/s40831-026-01567-z" class="external-link">AI-driven smart manufacturing in the aluminum industry</a></td>
+</tr>
+<tr>
+<td>Construction materials</td>
+<td><a href="https://www.scielo.br/j/soiroc/a/LHdByjDMH4vMVscjbybv8jQ/?lang=en" class="external-link">Permeability prediction for recycled concrete aggregates</a></td>
+</tr>
+<tr>
+<td>Earthquake engineering</td>
+<td><a href="https://ieeexplore.ieee.org/abstract/document/11081977/" class="external-link">Multitask genetic programming and seismic building vulnerability</a></td>
+</tr>
+<tr>
+<td>Wellbeing and social research</td>
+<td><a href="https://ieeexplore.ieee.org/abstract/document/11685079/" class="external-link">SHAP-value clustering of life satisfaction determinants</a></td>
+</tr>
+<tr>
+<td>Interpretable machine learning</td>
+<td><a href="https://arxiv.org/abs/2406.01588" class="external-link">nn2poly: converting neural networks into interpretable polynomials</a></td>
+</tr>
+</tbody>
+</table>
+<p>Used ExplaineR in your research? <a href="https://github.com/PERSIMUNE/explainer/issues/new" class="external-link">Share your work</a> to be featured here.</p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>

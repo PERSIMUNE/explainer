@@ -1,6 +1,7 @@
 # ExplaineR
 
-![](reference/figures/logo.png)
+[![Hugging Face
+Space](https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e)](https://huggingface.co/spaces/ramtinzm/ExplaineR)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10201287.svg)](https://doi.org/10.5281/zenodo.10201287)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explainer)](https://cran.r-project.org/package=explainer)
@@ -36,8 +37,24 @@ devtools::install_github("PERSIMUNE/explainer")
 
 ## Usage
 
-Here is a short example on how to use the package. See articles for more
-examples.
+### Preparing your own data
+
+[DAIMS—Datasheets for AI and Medical
+Datasets](https://github.com/PERSIMUNE/DAIMS) provides a checklist,
+automated data checks, and templates for dataset documentation and data
+dictionaries. It can help identify preparation issues before model
+training and interpretation with ExplaineR. DAIMS is optional; passing
+its checks does not establish that a dataset, study design, or trained
+model is suitable for a particular analysis.
+
+### Example
+
+This example classifies breast cytology samples as benign or malignant
+using the original predictors in
+[`mlbench::BreastCancer`](https://rdrr.io/pkg/mlbench/man/BreastCancer.html).
+It does not predict future breast-cancer risk. The ID column is excluded
+and rows with missing values are omitted. No synthetic demographic
+features are added. See articles for more examples.
 
 ``` r
 
@@ -63,11 +80,6 @@ positive_class <- "malignant"
 # Extract relevant columns from dataset
 mydata <- BreastCancer[, -1]
 mydata <- na.omit(mydata)
-
-# Generate random 'sex' and 'age' columns
-sex <- sample(c("Male", "Female"), size = nrow(mydata), replace = TRUE)
-mydata$age <- as.numeric(sample(seq(18, 60), size = nrow(mydata), replace = TRUE))
-mydata$sex <- factor(sex, levels = c("Male", "Female"), labels = c(1, 0))
 
 # Create a classification task
 maintask <- mlr3::TaskClassif$new(
@@ -119,6 +131,37 @@ SHAP_plot_clusters <- SHAPclust(
 ## Documentation
 
 - [Official Documentation](https://persimune.github.io/explainer/)
+
+## Research citing ExplaineR
+
+**[Cited by 14 papers on Google
+Scholar](https://scholar.google.com/scholar?cites=14662030706240576679&hl=en)**
+· As of 3 November 2026.
+
+ExplaineR is cited across medical research, food science, engineering,
+sustainability, and machine learning. All 14 citing works are listed
+below, grouped by research area.
+
+| Research area | Citing publication |
+|----|----|
+| Cancer research | [Lung cancer outcomes after immunotherapy](https://doi.org/10.3389/fimmu.2025.1686260) |
+| Cancer research | [R-based protocols for predicting synthetic lethal interactions](https://doi.org/10.1007/978-1-0716-4690-8_5) |
+| Cell biology | [AI for cell biology discovery](https://portlandpress.com/biochemsoctrans/article/54/1/BST20253023/237067) |
+| Food science and microbiology | [Sausage spoilage intensity prediction with explainable ML and data augmentation](https://doi.org/10.1007/s11947-025-03971-x) |
+| Food science and microbiology | [VOC profiles for sausage spoilage prediction](https://doi.org/10.1007/s11947-026-04222-3) |
+| Food science and microbiology | [Lactococcus abundance prediction in rump steak (preprint)](https://assets-eu.researchsquare.com/files/rs-6515642/v1_covered_0a676ae1-1e6a-4767-834a-e15d408d066c.pdf) |
+| Biomass and bioprocessing | [Predicting enzymatic hydrolysis yields of lignocellulosic biomass](https://www.sciencedirect.com/science/article/pii/S0926669025011902) |
+| Environmental sustainability | [Entrepreneurship and Sustainable Development Goal achievement](https://doi.org/10.1002/bse.70011) |
+| Energy policy | [Forecasting fossil fuel trends in the EU-27](https://www.mdpi.com/2079-9292/14/3/631) |
+| Industrial manufacturing | [AI-driven smart manufacturing in the aluminum industry](https://doi.org/10.1007/s40831-026-01567-z) |
+| Construction materials | [Permeability prediction for recycled concrete aggregates](https://www.scielo.br/j/soiroc/a/LHdByjDMH4vMVscjbybv8jQ/?lang=en) |
+| Earthquake engineering | [Multitask genetic programming and seismic building vulnerability](https://ieeexplore.ieee.org/abstract/document/11081977/) |
+| Wellbeing and social research | [SHAP-value clustering of life satisfaction determinants](https://ieeexplore.ieee.org/abstract/document/11685079/) |
+| Interpretable machine learning | [nn2poly: converting neural networks into interpretable polynomials](https://arxiv.org/abs/2406.01588) |
+
+Used ExplaineR in your research? [Share your
+work](https://github.com/PERSIMUNE/explainer/issues/new) to be featured
+here.
 
 ## Citation
 
