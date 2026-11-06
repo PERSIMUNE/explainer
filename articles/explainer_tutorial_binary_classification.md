@@ -7,7 +7,7 @@ Try executing this chunk by clicking the *Run* button within the chunk
 or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
 This is an example on how to use the package “explainer” developed by
-Ramtin Zargari Marandi (email:<ramtin.zargari@gmail.com>)
+Ramtin Zargari Marandi, PhD (email:<ramtin.zargari@gmail.com>)
 
 ## Loading a dataset and training a machine learning model
 
@@ -20,9 +20,10 @@ column, and omit rows with missing values. Age and sex are not recorded
 in this dataset, so we do not invent demographic values.
 
 The first code chunk creates a binary classification task and trains a
-random forest using mlr3. The original predictors are stored as factors,
-so this example already demonstrates categorical feature handling
-without adding synthetic patient attributes.
+random forest using mlr3. The recorded cell-characteristic predictors,
+such as clump thickness (`Cl.thickness`) and uniformity of cell size
+(`Cell.size`), are stored as factors. They demonstrate categorical
+feature handling without adding synthetic patient attributes.
 
 ``` r
 
@@ -382,6 +383,8 @@ fval_predprob <- reshape2::dcast(shap, sample_num + pred_prob + predcorrectness 
 ```
 
 ## Run a Shiny app to visualize 2-way partial dependence plots
+
+Run this optional block interactively in R to launch the app.
 
 ``` r
 
