@@ -1,8 +1,7 @@
 # ExplaineR <img src="man/figures/logo.png" align="right" height="139" alt="ExplaineR logo" />
 
-[![Hugging Face Space](https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e)](https://huggingface.co/spaces/ramtinzm/ExplaineR)
-
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10201287.svg)](https://doi.org/10.5281/zenodo.10201287) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explainer)](https://cran.r-project.org/package=explainer) [![Downloads](http://cranlogs.r-pkg.org/badges/explainer)](https://cran.r-project.org/package=explainer)
+[![Hugging Face Space](https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e)](https://huggingface.co/spaces/ramtinzm/ExplaineR)
 
 ## Overview
 
