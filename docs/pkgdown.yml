@@ -1,12 +1,12 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: 3.9.0.2
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
-  explainer-vignette: explainer-vignette.html
   articles/explainer_tutorial_binary_classification: explainer_tutorial_binary_classification.html
   articles/explainer_tutorial_multiclass: explainer_tutorial_multiclass.html
   articles/explainer_tutorial_regression: explainer_tutorial_regression.html
-last_built: 2024-09-24T09:09Z
+  explainer-vignette: explainer-vignette.html
+last_built: 2026-11-06T15:12Z
 urls:
   reference: https://persimune.github.io/explainer/reference
   article: https://persimune.github.io/explainer/articles

@@ -12,7 +12,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
-This is an example on how to use the package "explainer" developed by Ramtin Zargari Marandi (email:[ramtin.zargari\@gmail.com](mailto:ramtin.zargari@gmail.com){.email})
+This is an example on how to use the package "explainer" developed by Ramtin Zargari Marandi, PhD (email:[ramtin.zargari\@gmail.com](mailto:ramtin.zargari@gmail.com){.email})
 
 # Loading a dataset and training a machine learning model
 

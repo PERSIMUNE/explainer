@@ -40,7 +40,8 @@ jobs:
 
       - name: Regenerate the classification tutorial
         run: |
-          pkgdown::build_article("explainer_tutorial_binary_classification", lazy = FALSE)
+          pkgdown::init_site()
+          pkgdown::build_article("articles/explainer_tutorial_binary_classification", lazy = FALSE)
         shell: Rscript {0}
 
       - name: Export verified SHAP showcase
