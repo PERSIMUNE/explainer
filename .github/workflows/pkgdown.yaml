@@ -3,6 +3,7 @@
 on:
   push:
     branches: [main, master]
+    paths-ignore: ["community/**"]
   pull_request:
     branches: [main, master]
   release:
@@ -36,6 +37,22 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+
+      - name: Regenerate the classification tutorial
+        run: |
+          pkgdown::build_article("explainer_tutorial_binary_classification", lazy = FALSE)
+        shell: Rscript {0}
+
+      - name: Export verified SHAP showcase
+        run: python3 .github/scripts/export-shap-showcase.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corrected-classification-example
+          path: |
+            community/huggingface/shap-plot.html
+            docs/articles/explainer_tutorial_binary_classification.html
+          if-no-files-found: error
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

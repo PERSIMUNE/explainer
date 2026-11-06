@@ -1,12 +1,11 @@
 ---
 title: "classification model interpretation using explainer package"
-author: "Ramtin Zargari Marandi"
+author: "Ramtin Zargari Marandi, PhD"
 output:
   word_document: default
   html_document:
     bibliography: references.bib
     citation_package: natbib
-runtime: shiny
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
@@ -19,7 +18,7 @@ This is an example on how to use the package "explainer" developed by Ramtin Zar
 
 This example uses `mlbench::BreastCancer` to classify breast cytology samples as benign or malignant from their recorded cell characteristics. It does not predict a person's future breast-cancer risk. We use only the original predictors, exclude the ID column, and omit rows with missing values. Age and sex are not recorded in this dataset, so we do not invent demographic values.
 
-The first code chunk creates a binary classification task and trains a random forest using mlr3. The original predictors are stored as factors, so this example already demonstrates categorical feature handling without adding synthetic patient attributes.
+The first code chunk creates a binary classification task and trains a random forest using mlr3. The recorded cell-characteristic predictors, such as clump thickness (`Cl.thickness`) and uniformity of cell size (`Cell.size`), are stored as factors. They demonstrate categorical feature handling without adding synthetic patient attributes.
 
 ```{r}
 
@@ -218,7 +217,9 @@ fval_predprob <- reshape2::dcast(shap, sample_num + pred_prob + predcorrectness 
 
 # Run a Shiny app to visualize 2-way partial dependence plots
 
-```{r}
+Run this optional block interactively in R to launch the app.
+
+```{r, eval=FALSE}
 library(shiny)
 library(ggplot2)
 # assuming your data.table is named `fval_predprob`
