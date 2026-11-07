@@ -8,10 +8,11 @@ ExplaineR is an open-source R package for explaining classification and regressi
 
 | What you want to do | Where to start |
 | --- | --- |
-| Try a runnable example in the browser | [Kaggle notebook with an interactive SHAP plot](https://www.kaggle.com/code/remyz5/explainer-shap-for-breast-cytology) |
 | Install ExplaineR for your own data and models | [Install from CRAN](#installation) |
 | Explain a classifier and evaluate it on held-out data | [Binary classification tutorial](https://persimune.github.io/explainer/articles/explainer_tutorial_binary_classification.html) |
+| Explain predictions for each class in a multiclass model | [Multiclass classification tutorial](https://persimune.github.io/explainer/articles/explainer_tutorial_multiclass.html) |
 | Explain predictions from a regression model | [Regression tutorial](https://persimune.github.io/explainer/articles/explainer_tutorial_regression.html) |
+| Try a runnable example in the browser | [Kaggle notebook with an interactive SHAP plot](https://www.kaggle.com/code/remyz5/explainer-shap-for-breast-cytology) |
 | Explore a SHAP figure without running code | [Interactive Hugging Face showcase](https://huggingface.co/spaces/ramtinzm/ExplaineR) |
 
 The Kaggle example trains a random forest on the original cell characteristics in the Wisconsin breast cytology dataset. It reports held-out performance and displays the widget returned by `explainer::eSHAP_plot()`. Hover over a point to inspect the feature contribution and whether the prediction was correct.
@@ -24,7 +25,7 @@ You can install the released version of the package from CRAN:
 install.packages("explainer")
 ```
 
-And the development version from GitHub (**recommended for latest updates**):
+To install the development version from GitHub:
 
 ``` r
 # install.packages("devtools")
@@ -143,6 +144,8 @@ ExplaineR is cited across medical research, food science, engineering, sustainab
 Used ExplaineR in your research? [Share your work](https://github.com/PERSIMUNE/explainer/issues/new) to be featured here.
 
 ## Citation
+
+ExplaineR is developed by [Ramtin Zargari Marandi, PhD](https://www.linkedin.com/in/rzm/).
 
 If you use this package in your research, please consider citing it:
 
