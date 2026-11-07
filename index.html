@@ -66,11 +66,44 @@
 <img src="logo.png" class="logo" alt=""><h1 id="explainer-">ExplaineR <a class="anchor" aria-label="anchor" href="#explainer-"></a>
 </h1>
 </div>
-<p><a href="https://doi.org/10.5281/zenodo.10201287" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10201287.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://www.r-pkg.org/badges/version/explainer" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/explainer" alt="Downloads"></a> <a href="https://huggingface.co/spaces/ramtinzm/ExplaineR" class="external-link"><img src="https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e" alt="Hugging Face Space"></a></p>
+<p><a href="https://doi.org/10.5281/zenodo.10201287" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10201287.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://www.r-pkg.org/badges/version/explainer" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=explainer" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/explainer" alt="Downloads"></a> <a href="https://huggingface.co/spaces/ramtinzm/ExplaineR" class="external-link"><img src="https://img.shields.io/badge/Hugging%20Face-ExplaineR-ffd21e" alt="Hugging Face Space"></a> <a href="https://www.kaggle.com/code/remyz5/explainer-shap-for-breast-cytology" class="external-link"><img src="https://img.shields.io/badge/Kaggle-Run%20notebook-20BEFF?logo=kaggle&amp;logoColor=white" alt="Run on Kaggle"></a></p>
+<p>ExplaineR is an open-source R package for explaining classification and regression models with SHAP (Shapley additive explanations). Use it to see which features contribute to individual predictions, explore subgroups with similar explanations, and evaluate how a model performs. The tutorials show how to use ExplaineR with models trained through <code>mlr3</code>.</p>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="choose-how-to-start">Choose how to start<a class="anchor" aria-label="anchor" href="#choose-how-to-start"></a>
 </h2>
-<p>It enables detailed interpretation of complex classification and regression models through Shapley analysis including data-driven characterization of subgroups of individuals. Furthermore, it facilitates multi-measure model evaluation, model fairness, and decision curve analysis. Additionally, it offers enhanced visualizations with interactive elements. Find out how to use the package by checking out the package tutorials.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>What you want to do</th>
+<th>Where to start</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Try a runnable example in the browser</td>
+<td><a href="https://www.kaggle.com/code/remyz5/explainer-shap-for-breast-cytology" class="external-link">Kaggle notebook with an interactive SHAP plot</a></td>
+</tr>
+<tr>
+<td>Install ExplaineR for your own data and models</td>
+<td><a href="#installation">Install from CRAN</a></td>
+</tr>
+<tr>
+<td>Explain a classifier and evaluate it on held-out data</td>
+<td><a href="https://persimune.github.io/explainer/articles/explainer_tutorial_binary_classification.html">Binary classification tutorial</a></td>
+</tr>
+<tr>
+<td>Explain predictions from a regression model</td>
+<td><a href="https://persimune.github.io/explainer/articles/explainer_tutorial_regression.html">Regression tutorial</a></td>
+</tr>
+<tr>
+<td>Explore a SHAP figure without running code</td>
+<td><a href="https://huggingface.co/spaces/ramtinzm/ExplaineR" class="external-link">Interactive Hugging Face showcase</a></td>
+</tr>
+</tbody>
+</table>
+<p>The Kaggle example trains a random forest on the original cell characteristics in the Wisconsin breast cytology dataset. It reports held-out performance and displays the widget returned by <code><a href="reference/eSHAP_plot.html">explainer::eSHAP_plot()</a></code>. Hover over a point to inspect the feature contribution and whether the prediction was correct.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
