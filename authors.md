@@ -2,7 +2,8 @@
 
 ## Authors
 
-- **Ramtin Zargari Marandi, PhD**. Author, maintainer.
+- **[Ramtin Zargari Marandi, PhD](https://www.linkedin.com/in/rzm/)**.
+  Author, maintainer.
   [](https://orcid.org/https://orcid.org/0000-0001-9233-1656)
 
 ## Citation
